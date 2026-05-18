@@ -1,0 +1,210 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useState, useEffect } from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
+import { toast } from 'sonner';
+import { InputGenerico, SwitchGenerico } from '@/components/layout/form';
+import { FieldError, FieldGroup } from '@/components/ui/field';
+import { DialogTrigger } from '@/components/ui/dialog';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Info, PenBox } from 'lucide-react';
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from '@/components/ui/hover-card';
+import { formatarData } from '@/lib/util';
+import { DialogCustom } from '@/components/layout/dialog-custom';
+import {
+  UsuarioUpdateRequest,
+  usuarioUpdateRequestInput,
+  UsuarioUpdateRequestInput,
+} from '../schema';
+import useRetornaUsuario from '../api/use-retorna-usuario';
+import useEditaUsuario from '../api/use-edita-usuario';
+import { PermissoesSelector } from './permissoes-selector';
+
+interface UsuarioEditaProps {
+  id: string;
+}
+
+export function UsuarioEdita({ id }: UsuarioEditaProps) {
+  const [open, setOpen] = useState(false);
+  const { isLoading, isError, error, data } = useRetornaUsuario({
+    enabled: open,
+    id,
+  });
+
+  const form = useForm<
+    UsuarioUpdateRequestInput,
+    unknown,
+    UsuarioUpdateRequest
+  >({
+    mode: 'onSubmit',
+    resolver: zodResolver<
+      UsuarioUpdateRequestInput,
+      unknown,
+      UsuarioUpdateRequest
+    >(usuarioUpdateRequestInput),
+    defaultValues: {
+      nome: '',
+      senha: '',
+      admin: false,
+      permissoes: [],
+    },
+  });
+
+  const { reset } = form;
+
+  useEffect(() => {
+    if (data?.data) {
+      reset(
+        {
+          nome: data.data.nome,
+          senha: '',
+          admin: data.data.admin,
+          permissoes: data.data.permissoes ?? [],
+        },
+        { keepDefaultValues: false },
+      );
+    }
+  }, [data, reset]);
+
+  const { mutateAsync, isPending } = useEditaUsuario(id);
+
+  const onSubmit = async (formData: UsuarioUpdateRequest) => {
+    const response = await mutateAsync({ ...formData, id });
+    if (response.status !== 204) {
+      toast.error(
+        'Erro ao editar usuário, verifique os dados e tente novamente.',
+      );
+      form.setError('root', { message: 'Erro ao editar usuário...' });
+      return;
+    }
+
+    toast.success('Usuário editado com sucesso.');
+    form.reset();
+    setOpen(false);
+  };
+
+  return (
+    <DialogCustom
+      titulo={`Usuário: ${data?.data?.nome}`}
+      idForm="form-edita-usuario"
+      descricao={
+        <div className="flex w-full justify-between">
+          <span className="w-full">
+            Gerencie os dados e permissões do usuário
+          </span>
+          <div className="flex flex-1 w-full">
+            <HoverCard>
+              <HoverCardTrigger asChild>
+                <div className="hover:bg-accent transition-all duration-200 p-0.5 rounded-full cursor-help">
+                  <Info className="h-4 w-4" />
+                </div>
+              </HoverCardTrigger>
+              <HoverCardContent className="flex flex-1 flex-col w-fit gap-2">
+                <div className="font-semibold text-lg">
+                  Informações do Registro
+                </div>
+                <div className="flex-1 divide-y divide-border rounded-lg border">
+                  <div className="flex items-center justify-between gap-4 px-2 py-1">
+                    <span className="text-sm text-muted-foreground">ID:</span>
+                    <span className="text-sm font-mono text-[10px]">
+                      {data?.data?.id}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between gap-4 px-2 py-1">
+                    <span className="text-sm text-muted-foreground">
+                      E-mail:
+                    </span>
+                    <span className="text-sm font-medium">
+                      {data?.data?.email}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between gap-2 px-2 py-1">
+                    <span className="text-sm text-muted-foreground">
+                      Criado em:
+                    </span>
+                    <span className="text-sm font-medium">
+                      {data?.data?.createdAt
+                        ? formatarData(data.data.createdAt)
+                        : '--'}
+                    </span>
+                  </div>
+                </div>
+              </HoverCardContent>
+            </HoverCard>
+          </div>
+        </div>
+      }
+      open={open}
+      setOpen={setOpen}
+      trigger={
+        <DialogTrigger asChild>
+          <PenBox className="mr-2 h-4 cursor-pointer hover:text-primary transition-colors" />
+        </DialogTrigger>
+      }
+      isPending={isPending}
+    >
+      <FormProvider {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          id="form-edita-usuario"
+          className="flex flex-col gap-2 h-full"
+        >
+          <FieldGroup className="flex flex-col min-h-0 flex-1 gap-6">
+            {isError && (
+              <div className="text-red-500">
+                Erro ao carregar usuário: {error?.message}
+              </div>
+            )}
+            {data && !isError && (
+              <>
+                <div className="space-y-4">
+                  <h3 className="text-sm font-semibold">
+                    Informações de Acesso
+                  </h3>
+                  <InputGenerico
+                    name="nome"
+                    label="Nome Completo"
+                    type="text"
+                  />
+                  <InputGenerico
+                    name="senha"
+                    label="Alterar Senha"
+                    type="password"
+                    placeholder="Deixe em branco para manter a atual"
+                  />
+                  <InputGenerico
+                    name="email"
+                    label="E-mail"
+                    type="email"
+                    value={data.data?.email}
+                    disabled
+                  />
+                  <div className="flex flex-col space-x-2 gap-2">
+                    <SwitchGenerico name="admin" label="Administrador" />
+                  </div>
+                </div>
+                <div className="border-t pt-4">
+                  <h3 className="text-sm font-semibold mb-4">
+                    Permissões de Usuário
+                  </h3>
+                  <PermissoesSelector name="permissoes" />
+                </div>
+              </>
+            )}
+            {isLoading && (
+              <>
+                {[...Array(4)].map((_, index) => (
+                  <Skeleton key={index} className="h-12 w-full" />
+                ))}
+              </>
+            )}
+          </FieldGroup>
+        </form>
+      </FormProvider>
+      <FieldError>{form.formState.errors.root?.message}</FieldError>
+    </DialogCustom>
+  );
+}
