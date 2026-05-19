@@ -77,7 +77,6 @@ export const usuarioFiltrosSimplesSchema = z.object({
 });
 
 export type UsuarioFiltrosSimples = z.infer<typeof usuarioFiltrosSimplesSchema>;
-export const USUARIO_CHAVE_URL = 'usuario_';
 
 const senhaValidator = z
   .string()

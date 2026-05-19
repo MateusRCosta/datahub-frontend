@@ -6,14 +6,10 @@ import { InputGenerico, SwitchGenerico } from '@/components/layout/form';
 import { FieldError, FieldGroup } from '@/components/ui/field';
 import { DialogTrigger } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Info, PenBox } from 'lucide-react';
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from '@/components/ui/hover-card';
+import { PenBox } from 'lucide-react';
 import { formatarData } from '@/lib/util';
 import { DialogCustom } from '@/components/layout/dialog-custom';
+import { RegistroInfoCard } from '@/components/layout/registro-info-card';
 import {
   UsuarioUpdateRequest,
   usuarioUpdateRequestInput,
@@ -96,44 +92,13 @@ export function UsuarioEdita({ id }: UsuarioEditaProps) {
             Gerencie os dados e permissões do usuário
           </span>
           <div className="flex flex-1 w-full">
-            <HoverCard>
-              <HoverCardTrigger asChild>
-                <div className="hover:bg-accent transition-all duration-200 p-0.5 rounded-full cursor-help">
-                  <Info className="h-4 w-4" />
-                </div>
-              </HoverCardTrigger>
-              <HoverCardContent className="flex flex-1 flex-col w-fit gap-2">
-                <div className="font-semibold text-lg">
-                  Informações do Registro
-                </div>
-                <div className="flex-1 divide-y divide-border rounded-lg border">
-                  <div className="flex items-center justify-between gap-4 px-2 py-1">
-                    <span className="text-sm text-muted-foreground">ID:</span>
-                    <span className="text-sm font-mono text-[10px]">
-                      {data?.data?.id}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between gap-4 px-2 py-1">
-                    <span className="text-sm text-muted-foreground">
-                      E-mail:
-                    </span>
-                    <span className="text-sm font-medium">
-                      {data?.data?.email}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between gap-2 px-2 py-1">
-                    <span className="text-sm text-muted-foreground">
-                      Criado em:
-                    </span>
-                    <span className="text-sm font-medium">
-                      {data?.data?.createdAt
-                        ? formatarData(data.data.createdAt)
-                        : '--'}
-                    </span>
-                  </div>
-                </div>
-              </HoverCardContent>
-            </HoverCard>
+            <RegistroInfoCard
+              dados={{
+                ID: data?.data?.id,
+                'Criado em': formatarData(data?.data?.createdAt),
+                'Atualizado em': formatarData(data?.data?.updatedAt),
+              }}
+            />
           </div>
         </div>
       }

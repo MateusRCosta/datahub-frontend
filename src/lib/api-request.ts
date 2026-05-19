@@ -21,6 +21,7 @@ export const apiRequest = async <T>({
     | number
     | boolean
     | Record<string, string | number | boolean>
+    | Record<string, string | number | boolean>[]
     | string[]
     | undefined
   >;
@@ -72,11 +73,10 @@ export const apiRequest = async <T>({
       credentials: 'include',
     });
 
-    if (responseRefresh.status === 204) {
+    if (responseRefresh.status === 200) {
       response = await executeRequest();
     } else if (typeof window !== 'undefined') {
-      // window.location.href = '/login';
-      console.log('caiu aqui');
+      window.location.href = '/login';
     }
   }
   const text = await response.text();

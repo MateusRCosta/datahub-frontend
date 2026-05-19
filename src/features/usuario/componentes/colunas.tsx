@@ -29,6 +29,19 @@ export const getColunas = ({
 
   baseCols.push(
     {
+      accessorKey: 'id',
+      header: () => {
+        return <div className="sr-only">Identificador</div>;
+      },
+      cell: ({ row }) => {
+        return (
+          <div className="flex flex-col">
+            <span className="font-medium">{row.original.id}</span>
+          </div>
+        );
+      },
+    },
+    {
       accessorKey: 'nome',
       header: () => {
         return <div className="">Nome</div>;

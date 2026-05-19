@@ -4,10 +4,13 @@ import {
   PaginationApiRequest,
   PaginationApiResponse,
 } from '@/types/api.schema';
-import { UsuarioFiltros, UsuariosResponse } from '../schema';
 import { useAuth } from '@/features/auth/provider/auth-provider';
+import {
+  BaseDadosFiltros,
+  BasesDadosApiResponse,
+} from '../schema/base-dados.schema';
 
-const retornaUsuarios = async ({
+const retornaBasesDados = async ({
   page,
   limit,
   orderBy,
@@ -15,32 +18,32 @@ const retornaUsuarios = async ({
   filtro,
   baseUrl,
 }: PaginationApiRequest<string> & {
-  filtro?: UsuarioFiltros;
+  filtro?: BaseDadosFiltros;
   baseUrl: string;
 }) => {
-  return apiRequest<PaginationApiResponse<UsuariosResponse[]>>({
+  return apiRequest<PaginationApiResponse<BasesDadosApiResponse[]>>({
     path: baseUrl,
     method: 'GET',
     query: { page, limit, orderBy, order, ...filtro },
   });
 };
 
-export default function useRetornaUsuarios({
+export default function useRetornaBasesDados({
   enabled,
   pagination,
   filtro,
 }: {
   enabled: boolean;
   pagination: PaginationApiRequest<string>;
-  filtro?: UsuarioFiltros;
+  filtro?: BaseDadosFiltros;
 }) {
   const { resolvePath, isLoading: authLoading } = useAuth();
-  const baseUrl = resolvePath('usuarios');
+  const baseUrl = resolvePath('bases');
   console.log('Base URL:', baseUrl);
   console.log('Filtros:', filtro);
   return useQuery({
     queryKey: [baseUrl, pagination, filtro],
-    queryFn: () => retornaUsuarios({ ...pagination, filtro, baseUrl }),
+    queryFn: () => retornaBasesDados({ ...pagination, filtro, baseUrl }),
     enabled: enabled && !authLoading,
   });
 }

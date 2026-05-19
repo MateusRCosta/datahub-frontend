@@ -1,5 +1,6 @@
 import {
   Controller,
+  FieldPath,
   FieldValues,
   FormProvider,
   SubmitHandler,
@@ -59,12 +60,12 @@ export function FormWrapper<T extends FieldValues, Y extends FieldValues>({
     </FormProvider>
   );
 }
-export function InputGenerico({
+export function InputGenerico<TFieldValues extends FieldValues = FieldValues>({
   name,
   label,
   ...rest
 }: {
-  name: string;
+  name: FieldPath<TFieldValues>;
   label?: string;
 } & React.InputHTMLAttributes<HTMLInputElement>) {
   const { control } = useFormContext();
@@ -73,29 +74,41 @@ export function InputGenerico({
       control={control}
       name={name}
       render={({
-        field: { onChange: fieldOnChange, ...field },
+        field: { onChange: fieldOnChange, value, ...field },
         fieldState,
-      }) => (
-        <Field data-invalid={fieldState.invalid}>
-          {label && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
-          <Input
-            id={name}
-            type={rest.type}
-            {...field}
-            {...rest}
-            onChange={(e) => {
-              const val = e.target.value;
-              if (rest.type === 'number') {
-                fieldOnChange(val === '' ? undefined : Number(val));
-              } else {
-                fieldOnChange(val);
-              }
-            }}
-            className={cn(`bg-field-background`, rest.className)}
-          />
-          <FieldError>{fieldState.error?.message}</FieldError>
-        </Field>
-      )}
+      }) => {
+        const isFileInput = rest.type === 'file';
+
+        return (
+          <Field data-invalid={fieldState.invalid}>
+            {label && (
+              <FieldLabel htmlFor={name} className="font-normal text-xs">
+                {label}
+              </FieldLabel>
+            )}
+            <Input
+              id={name}
+              type={rest.type}
+              {...field}
+              {...(!isFileInput ? { value } : {})}
+              {...rest}
+              onChange={(e) => {
+                const val = e.target.value;
+                if (isFileInput) {
+                  fieldOnChange(e.target.files?.[0]);
+                } else if (rest.type === 'number') {
+                  fieldOnChange(val === '' ? undefined : Number(val));
+                } else {
+                  fieldOnChange(val);
+                }
+                rest.onChange?.(e);
+              }}
+              className={cn(`bg-field-background text-sm`, rest.className)}
+            />
+            <FieldError>{fieldState.error?.message}</FieldError>
+          </Field>
+        );
+      }}
     />
   );
 }
@@ -134,7 +147,11 @@ export function SelectGenerico({
 
         return (
           <Field data-invalid={fieldState.invalid}>
-            {label && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
+            {label && (
+              <FieldLabel htmlFor={name} className="font-normal text-xs">
+                {label}
+              </FieldLabel>
+            )}
             <Select
               onValueChange={(val) => {
                 let finalValue: unknown;
@@ -153,7 +170,7 @@ export function SelectGenerico({
               value={stringValue}
               disabled={disabled}
             >
-              <SelectTrigger className="bg-field-background dark:bg-input/30">
+              <SelectTrigger className="bg-field-background dark:bg-input/30 text-sm">
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
               <SelectContent>
@@ -175,13 +192,13 @@ export function SelectGenerico({
   );
 }
 
-export function SwitchGenerico({
+export function SwitchGenerico<TFieldValues extends FieldValues = FieldValues>({
   name,
   label,
   disabled,
   className,
 }: {
-  name: string;
+  name: FieldPath<TFieldValues>;
   label?: string;
   disabled?: boolean;
   className?: string;
@@ -198,7 +215,10 @@ export function SwitchGenerico({
         >
           {label && (
             <div className="space-y-0.5">
-              <FieldLabel htmlFor={name} className="cursor-pointer">
+              <FieldLabel
+                htmlFor={name}
+                className="cursor-pointer font-normal text-xs"
+              >
                 {label}
               </FieldLabel>
             </div>

@@ -2,35 +2,35 @@ import { useMutation } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/api-request';
 import { ApiResponse } from '@/types/api.schema';
 import { getQueryClient } from '@/lib/query-client';
-import { UsuarioUpdateRequest } from '../schema';
 import { useAuth } from '@/features/auth/provider/auth-provider';
+import { BaseDadosEdicao } from '../schema/base-dados.schema';
 
-const editaUsuario = async ({
+const editaBaseDados = async ({
   id,
   baseUrl,
   ...data
-}: UsuarioUpdateRequest & { id: string; baseUrl: string }): Promise<
+}: BaseDadosEdicao & { id: number; baseUrl: string }): Promise<
   ApiResponse<string>
 > => {
   return apiRequest<string>({
     path: `${baseUrl}/${id}`,
-    method: 'PUT',
+    method: 'PATCH',
     body: data,
   });
 };
 
-export default function useEditaUsuario(id: string) {
+export default function useEditaBaseDados(id: number) {
   const queryClient = getQueryClient();
   const { resolvePath } = useAuth();
-  const baseUrl = resolvePath('usuarios');
+  const baseUrl = resolvePath('bases');
 
   return useMutation<
     ApiResponse<string>,
     Error,
-    UsuarioUpdateRequest & { id: string }
+    BaseDadosEdicao & { id: number }
   >({
     mutationKey: [`usuario-edita`, id],
-    mutationFn: (variables) => editaUsuario({ ...variables, baseUrl }),
+    mutationFn: (variables) => editaBaseDados({ ...variables, baseUrl }),
     onSuccess: (response) => {
       if (response.status !== 204) return;
       queryClient.invalidateQueries({ queryKey: [baseUrl], exact: false });

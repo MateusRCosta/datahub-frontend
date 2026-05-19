@@ -34,7 +34,7 @@ export default function useCriaUsuario({
     mutationFn: (variables) => criaUsuario({ ...variables, baseUrl }),
     onSuccess: (response) => {
       if (response.status !== 201) return;
-      queryClient.invalidateQueries({ queryKey: [`usuarios`], exact: false });
+      queryClient.invalidateQueries({ queryKey: [baseUrl], exact: false });
     },
   });
 }

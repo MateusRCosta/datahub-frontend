@@ -15,6 +15,7 @@ export type Role = (typeof ROLES)[keyof typeof ROLES];
 export type ResourceName = keyof typeof RESOURCE_CONFIG;
 
 export interface ResourceEntry {
+  path: string;
   /** Role de usuário comum (null = somente admin) */
   userRole: Role | null;
   /** Label para o sidebar */
@@ -31,24 +32,28 @@ export interface ResourceEntry {
  */
 export const RESOURCE_CONFIG = {
   usuarios: {
+    path: 'usuarios',
     userRole: null,
     label: 'Usuários',
     icon: User,
     adminOnly: true,
   },
   campanhas: {
+    path: 'campanhas',
     userRole: ROLES.EDITAR_CAMPANHAS,
     label: 'Campanhas',
     icon: Mail,
     adminOnly: false,
   },
   templates: {
+    path: 'templates',
     userRole: ROLES.EDITAR_CAMPANHAS,
     label: 'Templates',
     icon: File,
     adminOnly: false,
   },
   bases: {
+    path: 'bases-dados',
     userRole: ROLES.EDITAR_BASE_DADOS,
     label: 'Bases de Dados',
     icon: Database,
@@ -56,6 +61,7 @@ export const RESOURCE_CONFIG = {
   },
 
   integracoes: {
+    path: 'integracoes',
     userRole: ROLES.EDITAR_INTEGRACOES,
     label: 'Integrações',
     icon: Settings2,

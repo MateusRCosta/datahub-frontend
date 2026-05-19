@@ -1,10 +1,31 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from '@/components/ui/drawer';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { useState } from 'react';
 import type { ComponentType, ReactNode } from 'react';
@@ -93,11 +114,11 @@ export function Me({ open = false, onOpenChange }: MeProps) {
       const campos: { label: string; value: ReactNode }[] = [
         { label: 'Nome', value: usuario.nome },
         { label: 'E-mail', value: usuario.email },
-        { label: 'Perfil', value: usuario.admin ? 'Administrador' : 'Usuario' },
         {
-          label: 'Permissoes',
-          value: renderizaPermissoes(),
+          label: 'Tipo usuário',
+          value: usuario.admin ? 'Administrador' : 'Usuario',
         },
+        { label: 'Permissões', value: renderizaPermissoes() },
       ];
 
       return (
@@ -124,9 +145,9 @@ export function Me({ open = false, onOpenChange }: MeProps) {
         <Dialog open={open} onOpenChange={onOpenChange}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Usuario</DialogTitle>
+              <DialogTitle>Usuário</DialogTitle>
               <DialogDescription>
-                Informacoes basicas do seu usuario no sistema Hotdata
+                Informações básicas do seu usuário
               </DialogDescription>
             </DialogHeader>
             <div className="divide-y divide-border rounded-lg border">
@@ -161,9 +182,9 @@ export function Me({ open = false, onOpenChange }: MeProps) {
         <DrawerContent>
           <div className="mx-auto w-full max-w-sm">
             <DrawerHeader>
-              <DrawerTitle>Usuario</DrawerTitle>
+              <DrawerTitle>Usuário</DrawerTitle>
               <DrawerDescription>
-                Informacoes basicas do seu usuario no sistema Hotdata
+                Informações básicas do seu usuário
               </DrawerDescription>
             </DrawerHeader>
             <div className="divide-y divide-border rounded-lg border">

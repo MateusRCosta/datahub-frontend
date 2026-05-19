@@ -31,9 +31,15 @@ export function ProtectedPage({ roles, children }: ProtectedPageProps) {
   if (isLoading) {
     return (
       <div className="flex flex-col gap-4 p-6 w-full h-full">
-        <Skeleton className="h-8 w-64" />
-        <Skeleton className="h-4 w-96" />
-        <Skeleton className="h-4 w-96 self-end" />
+        <div className="flex flex-col w-full border-b-2 gap-4 pb-3">
+          <Skeleton className="h-8 w-64" />
+          <Skeleton className="h-4 w-96" />
+        </div>
+        <div className="flex gap-2 self-end">
+          <Skeleton className="h-8 w-24" />
+          <Skeleton className="h-8 w-64" />
+          <Skeleton className="h-8 w-24" />
+        </div>
         <Skeleton className="h-full w-full" />
       </div>
     );

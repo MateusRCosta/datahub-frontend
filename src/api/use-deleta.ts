@@ -11,7 +11,7 @@ const deleta = async ({
   baseUrl,
 }: {
   path: ResourceName;
-  id: string;
+  id: string | number;
   baseUrl: string;
 }): Promise<ApiResponse<string>> => {
   return apiRequest<string>({
@@ -26,7 +26,7 @@ export default function useDeleta({
   id,
 }: {
   path: ResourceName;
-  id: string;
+  id: string | number;
 }) {
   const queryClient = getQueryClient();
   const { resolvePath } = useAuth();
@@ -36,7 +36,7 @@ export default function useDeleta({
   return useMutation<
     ApiResponse<string>,
     Error,
-    { id: string; path: ResourceName }
+    { id: string | number; path: ResourceName }
   >({
     mutationKey: [`deleta-${path}`, id],
     mutationFn: (variables) => deleta({ ...variables, baseUrl }),

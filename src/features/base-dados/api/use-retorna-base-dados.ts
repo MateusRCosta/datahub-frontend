@@ -1,31 +1,31 @@
 import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/api-request';
-import { UsuarioResponse } from '../schema';
 import { useAuth } from '@/features/auth/provider/auth-provider';
+import { BaseDadosApiResponse } from '../schema/base-dados.schema';
 
-const retornaUsuario = async ({
+const retornaBaseDados = async ({
   id,
   baseUrl,
 }: {
-  id: string;
+  id: number;
   baseUrl: string;
 }) => {
-  return apiRequest<UsuarioResponse>({
+  return apiRequest<BaseDadosApiResponse>({
     path: `${baseUrl}/${id}`,
     method: 'GET',
   });
 };
 
-export default function useRetornaUsuario({
+export default function useRetornaBaseDados({
   id,
   enabled,
-}: { id: string } & { enabled: boolean }) {
+}: { id: number } & { enabled: boolean }) {
   const { resolvePath, isLoading: authLoading } = useAuth();
-  const baseUrl = resolvePath('usuarios');
+  const baseUrl = resolvePath('bases');
 
   return useQuery({
     queryKey: [baseUrl, id],
-    queryFn: () => retornaUsuario({ id, baseUrl }),
+    queryFn: () => retornaBaseDados({ id, baseUrl }),
     enabled: enabled && !authLoading,
   });
 }

@@ -26,7 +26,7 @@ interface Mensagens {
 }
 
 interface DialogDeletaProps {
-  id: string;
+  id: string | number;
   path: ResourceName;
   nome: string;
   objeto: string;
@@ -44,7 +44,7 @@ export function DialogDeleta({
   const { mutateAsync, isPending } = useDeleta({ path, id });
 
   const handleDeleta = async () => {
-    const resultado = await mutateAsync({ id, path });
+    const resultado = await mutateAsync({ path, id });
     if (resultado.status === 404) {
       toast.error(mensagens?.naoEncontrado ?? 'Registro não encontrado.');
       return;
@@ -81,6 +81,9 @@ export function DialogDeleta({
           )}
           <DialogFooter>
             <div className="w-full h-full flex flex-row justify-between gap-2">
+              <DialogClose asChild>
+                <Button variant="outline">Sair</Button>
+              </DialogClose>
               <Button
                 variant={'destructive'}
                 onClick={() => handleDeleta()}
@@ -88,9 +91,6 @@ export function DialogDeleta({
               >
                 Excluir
               </Button>
-              <DialogClose asChild>
-                <Button variant="outline">Sair</Button>
-              </DialogClose>
             </div>
           </DialogFooter>
         </DialogContent>

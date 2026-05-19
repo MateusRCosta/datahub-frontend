@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useMemo } from 'react';
 import { Me } from '../schema/me.schema';
 import useRetornaMe from '../api/use-retorna-me';
 import { getQueryClient } from '@/lib/query-client';
-import { Role, ResourceName } from '../config/resources';
+import { Role, ResourceName, RESOURCE_CONFIG } from '../config/resources';
 import { ApiResponse } from '@/types/api.schema';
 import { usePathname, useRouter } from 'next/navigation';
 
@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const resolvePath = (resource: ResourceName): string => {
-    return resource;
+    return RESOURCE_CONFIG[resource].path;
   };
 
   useEffect(() => {
