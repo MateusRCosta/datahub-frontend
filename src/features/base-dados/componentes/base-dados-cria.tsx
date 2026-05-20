@@ -67,6 +67,7 @@ export function BaseDadosCria({ pagination, filtros }: BaseDadosCreateProps) {
       toast.success('Base de dados criado com sucesso.');
       form.reset();
       setOpen(false);
+      return;
     }
 
     toast.error('Erro interno do servidor, tente novamente mais tarde.');

@@ -1,45 +1,36 @@
 import { useMutation } from '@tanstack/react-query';
-
 import { apiRequest } from '@/lib/api-request';
 import { ApiResponse } from '@/types/api.schema';
 import { getQueryClient } from '@/lib/query-client';
 import { useAuth } from '@/features/auth/provider/auth-provider';
-import { ResourceName } from '@/features/auth/config/resources';
+import { ClienteEdicao } from '../schema/cliente.schema';
 
-const deleta = async ({
+const editaCliente = async ({
   id,
   baseUrl,
-}: {
-  path: ResourceName;
-  id: string | number;
-  baseUrl: string;
-}): Promise<ApiResponse<string>> => {
+  ...data
+}: ClienteEdicao & { id: string; baseUrl: string }): Promise<
+  ApiResponse<string>
+> => {
   return apiRequest<string>({
     path: `${baseUrl}/${id}`,
-    method: 'DELETE',
-    headers: 'none',
+    method: 'PUT',
+    body: data,
   });
 };
 
-export default function useDeleta({
-  path,
-  id,
-}: {
-  path: ResourceName;
-  id: string | number;
-}) {
+export default function useEditaCliente(id: string) {
   const queryClient = getQueryClient();
   const { resolvePath } = useAuth();
-
-  const baseUrl = resolvePath(path as ResourceName);
+  const baseUrl = resolvePath('usuarios');
 
   return useMutation<
     ApiResponse<string>,
     Error,
-    { id: string | number; path: ResourceName }
+    ClienteEdicao & { id: string }
   >({
-    mutationKey: [`deleta-${path}`, id],
-    mutationFn: (variables) => deleta({ ...variables, baseUrl }),
+    mutationKey: [`cliente-edita`, id],
+    mutationFn: (variables) => editaCliente({ ...variables, baseUrl }),
     onSuccess: (response) => {
       if (response.status !== 204) return;
       queryClient.invalidateQueries({ queryKey: [baseUrl], exact: false });

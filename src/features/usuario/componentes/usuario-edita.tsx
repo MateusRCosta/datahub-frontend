@@ -7,7 +7,6 @@ import { FieldError, FieldGroup } from '@/components/ui/field';
 import { DialogTrigger } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
 import { PenBox } from 'lucide-react';
-import { formatarData } from '@/lib/util';
 import { DialogCustom } from '@/components/layout/dialog-custom';
 import { RegistroInfoCard } from '@/components/layout/registro-info-card';
 import {
@@ -18,6 +17,7 @@ import {
 import useRetornaUsuario from '../api/use-retorna-usuario';
 import useEditaUsuario from '../api/use-edita-usuario';
 import { PermissoesSelector } from './permissoes-selector';
+import { formataData, formataDataUI } from '@/lib/utils';
 
 interface UsuarioEditaProps {
   id: string;
@@ -95,8 +95,8 @@ export function UsuarioEdita({ id }: UsuarioEditaProps) {
             <RegistroInfoCard
               dados={{
                 ID: data?.data?.id,
-                'Criado em': formatarData(data?.data?.createdAt),
-                'Atualizado em': formatarData(data?.data?.updatedAt),
+                'Criado em': formataDataUI(data?.data?.createdAt),
+                'Atualizado em': formataDataUI(data?.data?.updatedAt),
               }}
             />
           </div>

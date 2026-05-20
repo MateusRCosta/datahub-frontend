@@ -15,6 +15,7 @@ import {
 } from '../schema/base-dados.schema';
 import { BaseDadosCria } from './base-dados-cria';
 import { BaseDadosFiltro } from './base-dados-filtro';
+import { SkeletonTabela } from '@/components/layout/skeleton-tabela';
 
 export function BaseDadosTabela() {
   const [pagination, setPagination] = useState<PaginationApiRequest<string>>({
@@ -24,13 +25,18 @@ export function BaseDadosTabela() {
     order: 'asc',
   });
   const { filtros, setFiltros } = useFiltros(baseDadosFiltrosSchema);
-  const { data } = useRetornaBasesDados({
+  const { data, isLoading } = useRetornaBasesDados({
     enabled: true,
     pagination,
     filtro: {
       ...filtros,
     },
   });
+
+  if (isLoading) {
+    return <SkeletonTabela />;
+  }
+
   const registros = data?.data?.data;
 
   const colunas = getColunas({ modoSelecao: false });
@@ -66,7 +72,7 @@ export function BaseDadosTabela() {
           data={registros || []}
           limit={pagination.limit}
           page={pagination.page}
-          pageCount={data?.data?.meta?.totalPage || 0}
+          pageCount={data?.data?.meta?.totalPages || 0}
           onPageChange={(page) => setPagination({ ...pagination, page })}
           onPageLimitChange={(limit) => setPagination({ ...pagination, limit })}
           totalItens={data?.data?.meta.total || 0}

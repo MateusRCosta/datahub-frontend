@@ -20,7 +20,7 @@ import useEditaBaseDados from '../api/use-edita-base-dados';
 import { PenBox } from 'lucide-react';
 import { DialogTrigger } from '@/components/ui/dialog';
 import { RegistroInfoCard } from '@/components/layout/registro-info-card';
-import { formatarData } from '@/lib/util';
+import { formataDataUI } from '@/lib/utils';
 
 interface BaseDadosAtualizaProps {
   id: number;
@@ -112,8 +112,8 @@ export function BaseDadosAtualiza({ id }: BaseDadosAtualizaProps) {
                 'Criado por': data?.data?.integracao?.nome
                   ? `Integração - ${data?.data?.integracao?.nome}`
                   : `Usuário - ${data?.data?.usuario?.nome}`,
-                'Criado em': formatarData(data?.data?.createdAt),
-                'Atualizado em': formatarData(data?.data?.updatedAt),
+                'Criado em': formataDataUI(data?.data?.createdAt),
+                'Atualizado em': formataDataUI(data?.data?.updatedAt),
               }}
             />
           </div>

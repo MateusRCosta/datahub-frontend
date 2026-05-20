@@ -66,7 +66,7 @@ export function UsuariosTable() {
           data={registros || []}
           limit={pagination.limit}
           page={pagination.page}
-          pageCount={data?.data?.meta?.totalPage || 0}
+          pageCount={data?.data?.meta?.totalPages || 0}
           onPageChange={(page) => setPagination({ ...pagination, page })}
           onPageLimitChange={(limit) => setPagination({ ...pagination, limit })}
           totalItens={data?.data?.meta.total || 0}

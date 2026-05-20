@@ -35,7 +35,7 @@ export const paginationApiResponse = <T extends z.ZodTypeAny>(dataSchema: T) =>
       page: z.number(),
       size: z.number(),
       total: z.number(),
-      totalPage: z.number(),
+      totalPages: z.number(),
       hasNext: z.boolean(),
     }),
     data: dataSchema,

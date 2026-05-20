@@ -1,4 +1,4 @@
-import { Database, File, Mail, Settings2, User } from 'lucide-react';
+import { Database, File, Mail, Settings2, User, Users2 } from 'lucide-react';
 
 export const ROLES = {
   EDITAR_BASE_DADOS: 'EDITAR_BASE_DADOS',
@@ -59,7 +59,13 @@ export const RESOURCE_CONFIG = {
     icon: Database,
     adminOnly: false,
   },
-
+  clientes: {
+    path: 'clientes',
+    userRole: ROLES.EDITAR_BASE_DADOS,
+    label: 'Clientes',
+    icon: Users2,
+    adminOnly: false,
+  },
   integracoes: {
     path: 'integracoes',
     userRole: ROLES.EDITAR_INTEGRACOES,

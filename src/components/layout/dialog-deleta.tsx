@@ -28,7 +28,7 @@ interface Mensagens {
 interface DialogDeletaProps {
   id: string | number;
   path: ResourceName;
-  nome: string;
+  nome?: string;
   objeto: string;
   mensagens?: Mensagens;
 }
@@ -68,7 +68,8 @@ export function DialogDeleta({
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              {objeto}: {nome}
+              {nome && `${objeto}: ${nome}`}
+              {!nome && `${objeto}`}
             </DialogTitle>
             <DialogDescription>
               Após a exclusão, não será possivel recuperar os dados.
@@ -76,7 +77,7 @@ export function DialogDeleta({
           </DialogHeader>
           {mensagens?.confirmacao ?? (
             <p>
-              Tem certeza que deseja excluir <strong>{nome}</strong>?
+              Tem certeza que deseja excluir{nome ? <strong> {nome}</strong> : ''}?
             </p>
           )}
           <DialogFooter>

@@ -20,8 +20,8 @@ export const apiRequest = async <T>({
     | string
     | number
     | boolean
-    | Record<string, string | number | boolean>
-    | Record<string, string | number | boolean>[]
+    | Record<string, string | number | boolean | unknown>
+    | Record<string, string | number | boolean | unknown>[]
     | string[]
     | undefined
   >;

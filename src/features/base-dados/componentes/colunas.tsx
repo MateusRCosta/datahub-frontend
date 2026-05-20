@@ -5,6 +5,7 @@ import { DialogDeleta } from '@/components/layout/dialog-deleta';
 import { TableModal } from '@/types/util.schema';
 import { BasesDadosApiResponse } from '../schema/base-dados.schema';
 import { BaseDadosAtualiza } from './base-dados-atualiza';
+import { ClienteTabela } from '../clientes/componentes/cliente-tabela';
 
 export const getColunas = ({
   modoSelecao,
@@ -68,10 +69,11 @@ export const getColunas = ({
       cell: ({ row }) => {
         return (
           <div className="flex items-center gap-1">
+            <ClienteTabela baseDadosId={row.original.id} estrutura={row.original.estrutura}/>
             <BaseDadosAtualiza id={row.original.id} />
             <DialogDeleta
               id={row.original.id}
-              path="usuarios"
+              path="bases"
               nome={row.original.nome}
               objeto={'Base de dados'}
               mensagens={{

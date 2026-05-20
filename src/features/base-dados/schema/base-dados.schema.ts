@@ -113,7 +113,6 @@ const _countSchema = z.object({
 
 export const basesDadosApiResponseSchema = baseDadosSchema
   .omit({
-    estrutura: true,
     createdAt: true,
     updatedAt: true,
     deletedAt: true,
@@ -123,7 +122,7 @@ export const basesDadosApiResponseSchema = baseDadosSchema
     usuario: usuarioBasicApiResponse.optional(),
     _count: _countSchema,
   });
-export type BasesDadosApiResponse = z.infer<typeof basesDadosApiResponseSchema>;
+export type  BasesDadosApiResponse = z.infer<typeof basesDadosApiResponseSchema>;
 
 export const baseDadosApiResponseSchema = baseDadosSchema
   .omit({

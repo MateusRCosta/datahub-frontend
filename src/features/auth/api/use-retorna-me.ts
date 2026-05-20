@@ -16,5 +16,6 @@ export default function useRetornaMe({ enabled }: { enabled: boolean }) {
     queryKey: ['me'],
     queryFn: retornaMe,
     enabled,
+    retry: false,
   });
 }

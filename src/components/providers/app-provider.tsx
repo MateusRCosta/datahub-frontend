@@ -14,8 +14,8 @@ export default function AppProvider({ children }: { children: ReactNode }) {
     <QueryClientProvider client={queryClient}>
       {env.NODE_ENV === 'development' && <ReactQueryDevtools />}
       <ThemeProvider
-        attribute="class"
-        storageKey="app-theme"
+        attribute='class'
+        storageKey='app-theme'
         enableSystem={true}
       >
         <Toaster />

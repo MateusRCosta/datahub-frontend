@@ -63,7 +63,6 @@ export function DataTable<TData, TValue>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
@@ -83,6 +82,9 @@ export function DataTable<TData, TValue>({
   function handlePageSizeChange(newSize: number) {
     onPageLimitChange?.(newSize);
   }
+
+  const totalPages = Math.max(pageCount, totalItens > 0 ? 1 : 0);
+  const currentPage = totalItens > 0 ? Math.min(page, totalPages) : 0;
 
   return (
     <div className="flex flex-col overflow-hidden rounded-md border w-full h-full min-h-0">
@@ -164,11 +166,11 @@ export function DataTable<TData, TValue>({
 
             <span className="text-xs text-muted-foreground px-1">
               <span className="font-semibold text-foreground">
-                {totalItens === 0 ? 1 : page}
+                {currentPage}
               </span>
               /
               <span className="font-semibold text-foreground">
-                {pageCount + 1}
+                {totalPages}
               </span>
             </span>
 
@@ -177,7 +179,7 @@ export function DataTable<TData, TValue>({
               size="icon"
               className="h-7 w-7"
               onClick={handleNext}
-              disabled={page >= pageCount}
+              disabled={page >= totalPages}
             >
               <ChevronRight className="h-4 w-4" />
             </Button>

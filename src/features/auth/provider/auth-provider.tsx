@@ -23,10 +23,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const queryClient = getQueryClient();
   const router = useRouter();
   const pathname = usePathname();
-  const { data, isLoading } = useRetornaMe({ enabled: true });
+  const { data, isLoading, isError } = useRetornaMe({ enabled: true });
 
   const usuario = data?.status === 200 ? data.data : null;
-  const naoAutenticado = !isLoading && data?.status === 401;
+  const rotaLogin = pathname?.startsWith('/login');
+  const naoAutenticado =
+    !isLoading && !rotaLogin && (isError || data?.status !== 200 || !usuario);
 
   const setUsuarioManual = (novoUsuario: Me | null) => {
     const meResponse: ApiResponse<Me> = {
@@ -58,9 +60,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (!naoAutenticado) return;
-    if (pathname?.startsWith('/login')) return;
     router.replace('/login');
-  }, [naoAutenticado, pathname, router]);
+  }, [naoAutenticado, router]);
 
   return (
     <AuthContext.Provider
