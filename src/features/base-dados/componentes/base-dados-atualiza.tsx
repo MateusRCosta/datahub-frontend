@@ -90,6 +90,7 @@ export function BaseDadosAtualiza({ id }: BaseDadosAtualizaProps) {
       toast.success('Base de dados editada com sucesso.');
       form.reset();
       setOpen(false);
+      return;
     }
 
     toast.error('Erro ao editar: tente novamente mais tarde.');

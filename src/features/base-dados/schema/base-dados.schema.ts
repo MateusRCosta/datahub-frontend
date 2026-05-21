@@ -22,6 +22,7 @@ export const enumSchema = z.enum([
   'UTC',
   'MM_DD_YYYY',
   'DD_MM_YYYY',
+  'YYYY_MM_DD',
   'EMAIL',
   'TELEFONE',
 ]);

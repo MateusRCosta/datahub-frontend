@@ -13,7 +13,7 @@ import SeletorColunas from '@/components/layout/seletor-colunas';
 
 interface ClienteTabelaProps {
   baseDadosId: number;
-  estrutura?: Estrutura;
+  estrutura: Estrutura;
 }
 
 export function ClienteTabela({ baseDadosId, estrutura }: ClienteTabelaProps) {
@@ -61,8 +61,7 @@ export function ClienteTabela({ baseDadosId, estrutura }: ClienteTabelaProps) {
 
   return (
     <DialogCustom
-      titulo={`Editar base de dados`}
-      idForm="form-cria-base-dados"
+      titulo={`Editar clientes`}
       descricao={<p className="w-full">Tabela de clientes</p>}
       open={open}
       setOpen={setOpen}

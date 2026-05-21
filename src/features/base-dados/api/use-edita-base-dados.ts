@@ -14,7 +14,7 @@ const editaBaseDados = async ({
 > => {
   return apiRequest<string>({
     path: `${baseUrl}/${id}`,
-    method: 'PATCH',
+    method: 'PUT',
     body: data,
   });
 };

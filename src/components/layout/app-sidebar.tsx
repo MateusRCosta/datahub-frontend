@@ -80,15 +80,17 @@ export function AppSidebar() {
 
     for (const [resource, configObj] of Object.entries(RESOURCE_CONFIG)) {
       const config = configObj as ResourceEntry;
+      if (!(config.show === false)) {
+        items.push({
+          id: resource,
+          label: config.label,
+          icon: config.icon,
+          path: resource as ResourceName,
+          visible: temPermissao(config.userRole),
+          adminOnly: config.adminOnly,
+        });
+      }
 
-      items.push({
-        id: resource,
-        label: config.label,
-        icon: config.icon,
-        path: resource as ResourceName,
-        visible: temPermissao(config.userRole),
-        adminOnly: config.adminOnly,
-      });
     }
 
     return items;

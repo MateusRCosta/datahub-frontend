@@ -3,7 +3,7 @@ import { z } from 'zod';
 const backendUrl =
   process.env.NEXT_PUBLIC_BACKEND_URL ??
   process.env.BACKEND_URL ??
-  'http://192.168.1.194:8000';
+  'http://localhost:8000';
 
 const envSchema = z.object({
   NODE_ENV: z

@@ -7,9 +7,9 @@ import {
   useFormContext,
   UseFormReturn,
 } from 'react-hook-form';
-import { Field, FieldError, FieldLabel } from '../ui/field';
+import { Field, FieldError, FieldGroup, FieldLabel } from '../ui/field';
 import { Input } from '../ui/input';
-import { cn } from '@/lib/utils';
+import { cn, formatUTC, getUTCTime } from '@/lib/utils';
 import {
   Select,
   SelectContent,
@@ -19,11 +19,14 @@ import {
 } from '../ui/select';
 import { useState } from 'react';
 import { Button } from '../ui/button';
-import { Search } from 'lucide-react';
+import { ChevronDownIcon, Search } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Switch } from '../ui/switch';
 import { Checkbox } from '../ui/checkbox';
 import { Textarea } from '../ui/textarea';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { Calendar } from '../ui/calendar';
+import { format } from 'date-fns';
 
 interface FormWrapperProps<
   T extends FieldValues,
@@ -63,10 +66,12 @@ export function FormWrapper<T extends FieldValues, Y extends FieldValues>({
 export function InputGenerico<TFieldValues extends FieldValues = FieldValues>({
   name,
   label,
+  ariaInvalid,
   ...rest
 }: {
   name: FieldPath<TFieldValues>;
   label?: string;
+  ariaInvalid?: boolean;
 } & React.InputHTMLAttributes<HTMLInputElement>) {
   const { control } = useFormContext();
   return (
@@ -80,7 +85,7 @@ export function InputGenerico<TFieldValues extends FieldValues = FieldValues>({
         const isFileInput = rest.type === 'file';
 
         return (
-          <Field data-invalid={fieldState.invalid}>
+          <Field data-invalid={ariaInvalid ?? fieldState.invalid}>
             {label && (
               <FieldLabel htmlFor={name} className="font-normal text-xs">
                 {label}
@@ -196,9 +201,11 @@ export function SwitchGenerico<TFieldValues extends FieldValues = FieldValues>({
   name,
   label,
   disabled,
+  ariaInvalid,
   className,
 }: {
   name: FieldPath<TFieldValues>;
+  ariaInvalid?: boolean;
   label?: string;
   disabled?: boolean;
   className?: string;
@@ -210,7 +217,7 @@ export function SwitchGenerico<TFieldValues extends FieldValues = FieldValues>({
       name={name}
       render={({ field: { onChange, value }, fieldState }) => (
         <Field
-          data-invalid={fieldState.invalid}
+          data-invalid={ariaInvalid ?? fieldState.invalid}
           className={cn(label, className)}
         >
           {label && (
@@ -228,6 +235,7 @@ export function SwitchGenerico<TFieldValues extends FieldValues = FieldValues>({
             checked={!!value}
             onCheckedChange={onChange}
             disabled={disabled}
+            aria-invalid={ariaInvalid}
           />
         </Field>
       )}
@@ -394,6 +402,116 @@ export function TextAreaGenerico({
           <FieldError>{fieldState.error?.message}</FieldError>
         </Field>
       )}
+    />
+  );
+}
+
+interface DatePickerTimeProps<TFieldValues extends FieldValues = FieldValues> {
+  name: FieldPath<TFieldValues>;
+  label?: string;
+  containerClassName?: string;
+  ariaInvalid?: boolean;
+}
+
+export function DatePickerTime<TFieldValues extends FieldValues = FieldValues>({
+  name,
+  label = 'Date',
+  containerClassName,
+  ariaInvalid,
+}: DatePickerTimeProps<TFieldValues>) {
+  const { control } = useFormContext();
+
+  return (
+    <Controller
+      control={control}
+      name={name}
+      render={({ field, fieldState }) => {
+        const rawDate = field.value ? new Date(field.value) : undefined;
+        const currentDate =
+          rawDate && !isNaN(rawDate.getTime()) ? rawDate : undefined;
+
+        const handleDateChange = (selectedDate?: Date) => {
+          if (!selectedDate) {
+            field.onChange(null);
+            return;
+          }
+
+          const mergedDate = currentDate ? new Date(currentDate) : new Date();
+
+          mergedDate.setUTCFullYear(
+            selectedDate.getFullYear(),
+            selectedDate.getMonth(),
+            selectedDate.getDate(),
+          );
+
+          field.onChange(mergedDate.toISOString());
+        };
+
+        const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+          const [hours, minutes, seconds] = e.target.value.split(':');
+
+          const mergedDate = currentDate ? new Date(currentDate) : new Date();
+
+          mergedDate.setUTCHours(
+            Number(hours),
+            Number(minutes),
+            Number(seconds ?? 0),
+          );
+
+          field.onChange(mergedDate.toISOString());
+        };
+
+        return (
+          <FieldGroup className={`flex flex-row ${containerClassName ?? ''}`}>
+            <Field data-invalid={ariaInvalid ?? fieldState.invalid}>
+              {label && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
+
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-48 justify-between font-normal"
+                  >
+                    {currentDate ? formatUTC(currentDate) : 'Selecione uma data'}
+
+                    <ChevronDownIcon />
+                  </Button>
+                </PopoverTrigger>
+
+                <PopoverContent
+                  className="w-auto overflow-hidden p-0"
+                  align="start"
+                >
+                  <Calendar
+                    mode="single"
+                    selected={currentDate}
+                    captionLayout="dropdown"
+                    defaultMonth={currentDate}
+                    onSelect={handleDateChange}
+                  />
+                </PopoverContent>
+              </Popover>
+            </Field>
+
+            <Field
+              data-invalid={ariaInvalid ?? fieldState.invalid}
+              className="w-36"
+            >
+              <FieldLabel>Tempo</FieldLabel>
+
+              <Input
+                type="time"
+                step="1"
+                value={currentDate ? getUTCTime(currentDate) : ''}
+                onChange={handleTimeChange}
+                className="appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+              />
+
+              <FieldError>{fieldState.error?.message}</FieldError>
+            </Field>
+          </FieldGroup>
+        );
+      }}
     />
   );
 }

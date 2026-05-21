@@ -4,11 +4,11 @@ import { ColumnDef } from '@tanstack/react-table';
 import { DialogDeleta } from '@/components/layout/dialog-deleta';
 import { ClientesResponse } from '../schema/cliente.schema';
 import { Estrutura } from '../../schema/base-dados.schema';
-import { formataData } from '@/lib/utils';
+import { ClienteAtualiza } from './cliente-atualiza';
 
 interface ConstroiColunasParams {
   colunasVisiveis: string[];
-  estrutura: Estrutura | undefined;
+  estrutura: Estrutura;
 }
 
 export function constroiClienteColunas({
@@ -44,10 +44,10 @@ export function constroiClienteColunas({
         const valor = getValue();
 
         if (valor == null) {
-          return <span className="text-muted-foreground">(sem valor)</span>;
+          return <span className="text-muted-foreground truncate w-1/3">(sem valor)</span>;
         }
 
-        return <span>{String(valor)}</span>;
+        return <span className='block max-w-32 truncate'>{String(valor)}</span>;
       },
     }));
 
@@ -58,6 +58,17 @@ export function constroiClienteColunas({
     header: () => <span className="sr-only">Ações</span>,
     cell: ({ row }) => (
       <div className="flex items-center gap-1">
+        <div className='relative inline-flex'>
+          {row.original.validacao.length > 0 && (
+            <div className='absolute -top-1 -right z-10'>
+              <div className='relative flex h-[6] w-[6]'>
+                <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75' />
+                <span className='relative inline-flex rounded-full h-[6] w-[6] bg-red-500' />
+              </div>
+            </div>
+          )}
+          <ClienteAtualiza id={row.original.id} estrutura={estrutura} />
+        </div>
         <DialogDeleta
           id={row.original.id}
           path="clientes"

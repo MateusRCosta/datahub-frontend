@@ -1,4 +1,5 @@
 import {
+  DatePickerTime,
   InputGenerico,
   SelectGenerico,
   SwitchGenerico,
@@ -10,5 +11,6 @@ export function useFormComponents<T extends FieldValues>() {
     Input: InputGenerico<T>,
     Select: SelectGenerico,
     Switch: SwitchGenerico<T>,
+    DatePicker: DatePickerTime<T>,
   };
 }

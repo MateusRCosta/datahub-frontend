@@ -9,7 +9,7 @@ const editaCliente = async ({
   id,
   baseUrl,
   ...data
-}: ClienteEdicao & { id: string; baseUrl: string }): Promise<
+}: ClienteEdicao & { id: number; baseUrl: string }): Promise<
   ApiResponse<string>
 > => {
   return apiRequest<string>({
@@ -19,15 +19,15 @@ const editaCliente = async ({
   });
 };
 
-export default function useEditaCliente(id: string) {
+export default function useEditaCliente(id: number) {
   const queryClient = getQueryClient();
   const { resolvePath } = useAuth();
-  const baseUrl = resolvePath('usuarios');
+  const baseUrl = resolvePath('clientes');
 
   return useMutation<
     ApiResponse<string>,
     Error,
-    ClienteEdicao & { id: string }
+    ClienteEdicao & { id: number }
   >({
     mutationKey: [`cliente-edita`, id],
     mutationFn: (variables) => editaCliente({ ...variables, baseUrl }),

@@ -3,11 +3,11 @@ import { apiRequest } from '@/lib/api-request';
 import { useAuth } from '@/features/auth/provider/auth-provider';
 import { ClienteResponse } from '../schema/cliente.schema';
 
-const retornaUsuario = async ({
+const retornaCliente = async ({
   id,
   baseUrl,
 }: {
-  id: string;
+  id: number;
   baseUrl: string;
 }) => {
   return apiRequest<ClienteResponse>({
@@ -16,16 +16,16 @@ const retornaUsuario = async ({
   });
 };
 
-export default function useRetornaUsuario({
+export default function useRetornaCliente({
   id,
   enabled,
-}: { id: string } & { enabled: boolean }) {
+}: { id: number } & { enabled: boolean }) {
   const { resolvePath, isLoading: authLoading } = useAuth();
-  const baseUrl = resolvePath('usuarios');
+  const baseUrl = resolvePath('clientes');
 
   return useQuery({
     queryKey: [baseUrl, id],
-    queryFn: () => retornaUsuario({ id, baseUrl }),
+    queryFn: () => retornaCliente({ id, baseUrl }),
     enabled: enabled && !authLoading,
   });
 }

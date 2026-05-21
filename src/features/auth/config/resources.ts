@@ -15,6 +15,9 @@ export type Role = (typeof ROLES)[keyof typeof ROLES];
 export type ResourceName = keyof typeof RESOURCE_CONFIG;
 
 export interface ResourceEntry {
+  /**Se aparece na navbar */
+  show?:false;
+  /**Path para requisições */
   path: string;
   /** Role de usuário comum (null = somente admin) */
   userRole: Role | null;
@@ -60,6 +63,7 @@ export const RESOURCE_CONFIG = {
     adminOnly: false,
   },
   clientes: {
+    show:false,
     path: 'clientes',
     userRole: ROLES.EDITAR_BASE_DADOS,
     label: 'Clientes',
