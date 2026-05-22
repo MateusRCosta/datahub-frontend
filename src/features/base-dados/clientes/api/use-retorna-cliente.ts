@@ -20,8 +20,8 @@ export default function useRetornaCliente({
   id,
   enabled,
 }: { id: number } & { enabled: boolean }) {
-  const { resolvePath, isLoading: authLoading } = useAuth();
-  const baseUrl = resolvePath('clientes');
+  const { resolvePathApi, isLoading: authLoading } = useAuth();
+  const baseUrl = resolvePathApi('clientes');
 
   return useQuery({
     queryKey: [baseUrl, id],

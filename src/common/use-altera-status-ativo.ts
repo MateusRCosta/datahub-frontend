@@ -1,45 +1,43 @@
 import { useMutation } from '@tanstack/react-query';
-
 import { apiRequest } from '@/lib/api-request';
-import { ApiResponse } from '@/types/api.schema';
+import { ApiResponse, StatusUpdate } from '@/types/api.schema';
 import { getQueryClient } from '@/lib/query-client';
 import { useAuth } from '@/features/auth/provider/auth-provider';
 import { ResourceName } from '@/features/auth/config/resources';
 
-const deleta = async ({
+const alteraStatusAtivo = async ({
+  status,
   id,
   baseUrl,
-}: {
-  path: ResourceName;
-  id: string | number;
-  baseUrl: string;
-}): Promise<ApiResponse<string>> => {
+}: StatusUpdate & { path: ResourceName; id: number; baseUrl: string }): Promise<
+  ApiResponse<string>
+> => {
   return apiRequest<string>({
-    path: `${baseUrl}/${id}`,
-    method: 'DELETE',
-    headers: 'none',
+    path: `${baseUrl}/${id}/status`,
+    method: 'PATCH',
+    body: { status },
   });
 };
 
-export default function useDeleta({
+export default function useAlteraStatusAtivo({
   path,
   id,
 }: {
   path: ResourceName;
-  id: string | number;
+  id: number;
 }) {
   const queryClient = getQueryClient();
-  const { resolvePath } = useAuth();
+  const { resolvePathApi } = useAuth();
 
-  const baseUrl = resolvePath(path as ResourceName);
+  const baseUrl = resolvePathApi(path as ResourceName);
 
   return useMutation<
     ApiResponse<string>,
     Error,
-    { id: string | number; path: ResourceName }
+    StatusUpdate & { id: number; path: ResourceName }
   >({
-    mutationKey: [`deleta-${path}`, id],
-    mutationFn: (variables) => deleta({ ...variables, baseUrl }),
+    mutationKey: [`alterar-${path}-status`, id],
+    mutationFn: (variables) => alteraStatusAtivo({ ...variables, baseUrl }),
     onSuccess: (response) => {
       if (response.status !== 204) return;
       queryClient.invalidateQueries({ queryKey: [baseUrl], exact: false });

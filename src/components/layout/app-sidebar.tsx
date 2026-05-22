@@ -19,7 +19,6 @@ import { useAuth } from '@/features/auth/provider/auth-provider';
 import {
   RESOURCE_CONFIG,
   ResourceEntry,
-  ResourceName,
 } from '@/features/auth/config/resources';
 import { LogOut, Menu, Sun, House, Moon, Settings, Loader } from 'lucide-react';
 import { useTheme } from 'next-themes';
@@ -32,14 +31,14 @@ interface MenuItem {
   id: string;
   label: string;
   icon: React.ComponentType<{ className?: string }>;
-  path?: ResourceName;
+  path?: string;
   visible: boolean;
   adminOnly: boolean;
 }
 
 export function AppSidebar() {
   const { temPermissao } = useAuth();
-  const [open, setOpen] = useState(false);
+  const [openMe, setOpenMe] = useState(false);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -47,7 +46,7 @@ export function AppSidebar() {
 
   const currentPage = pathname.split('/')[1] || 'home';
 
-  const handleNavigate = (path?: ResourceName) => {
+  const handleNavigate = (path?: string) => {
     const destino = path ? (`/${path}` as Route) : ('/' as Route);
     router.push(destino);
   };
@@ -85,18 +84,17 @@ export function AppSidebar() {
           id: resource,
           label: config.label,
           icon: config.icon,
-          path: resource as ResourceName,
+          path: config.pathFront,
           visible: temPermissao(config.userRole),
           adminOnly: config.adminOnly,
         });
       }
-
     }
 
     return items;
   }, [temPermissao]);
 
-  const { toggleSidebar } = useSidebar();
+  const { toggleSidebar, open } = useSidebar();
 
   const menuPrincipal = menuItems.filter(
     (item) => item.visible && !item.adminOnly,
@@ -104,17 +102,17 @@ export function AppSidebar() {
   const menuAdmin = menuItems.filter((item) => item.visible && item.adminOnly);
 
   return (
-    <Sidebar collapsible='icon' className='border-0'>
-      <SidebarContent className='bg-primary'>
+    <Sidebar collapsible="icon" className="border-0">
+      <SidebarContent className="bg-primary">
         {/* Header */}
-        <SidebarGroup className='border-b border-white rounded-b-none'>
+        <SidebarGroup className="border-b border-white rounded-b-none">
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton
                 onClick={() => toggleSidebar()}
-                className='flex items-center gap-2 text-white font-medium'
+                className="flex items-center gap-2 text-white font-medium"
               >
-                <Menu className='h-4 w-4' />
+                <Menu className="h-4 w-4" />
                 <span>Hotdata</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -125,28 +123,61 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {menuPrincipal.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <SidebarMenuItem key={item.id}>
-                    <SidebarMenuButton
-                      isActive={currentPage === item.id}
-                      onClick={() => handleNavigate(item.path)}
-                      className='text-white font-medium'
-                    >
-                      <Icon className='h-4 w-4' />
-                      <span>{item.label}</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                );
-              })}
+              {menuPrincipal
+                .filter((mp) => !mp.path?.includes('integracoes'))
+                .map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <SidebarMenuItem key={item.id}>
+                      <SidebarMenuButton
+                        isActive={currentPage === item.id}
+                        onClick={() => handleNavigate(item.path)}
+                        className="text-white font-medium"
+                      >
+                        <Icon className="h-4 w-4" />
+                        <span>{item.label}</span>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
             </SidebarMenu>
           </SidebarGroupContent>
+          {menuPrincipal.filter((mp) => mp.path?.includes('integracoes'))
+            .length > 0 && (
+            <SidebarGroupContent>
+              {open && (
+                <SidebarGroupLabel className="text-white font-medium">
+                  Integrações
+                </SidebarGroupLabel>
+              )}
+              <SidebarMenu>
+                {menuPrincipal
+                  .filter((mp) => mp.path?.includes('integracoes'))
+                  .map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <SidebarMenuItem key={item.id}>
+                        <SidebarMenuButton
+                          isActive={currentPage === item.id}
+                          onClick={() => handleNavigate(item.path)}
+                          className="text-white font-medium"
+                        >
+                          <Icon className="h-4 w-4" />
+                          <span>{item.label}</span>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    );
+                  })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          )}
           {menuAdmin.length > 0 && (
             <SidebarGroupContent>
-              <SidebarGroupLabel className='text-white font-medium'>
-                Administração
-              </SidebarGroupLabel>
+              {open && (
+                <SidebarGroupLabel className="text-white font-medium">
+                  Administração
+                </SidebarGroupLabel>
+              )}
               <SidebarMenu>
                 {menuAdmin.map((item) => {
                   const Icon = item.icon;
@@ -155,9 +186,9 @@ export function AppSidebar() {
                       <SidebarMenuButton
                         isActive={currentPage === item.id}
                         onClick={() => handleNavigate(item.path)}
-                        className='text-white font-medium'
+                        className="text-white font-medium"
                       >
-                        <Icon className='h-4 w-4' />
+                        <Icon className="h-4 w-4" />
                         <span>{item.label}</span>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -169,36 +200,36 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className='bg-primary border-t rounded-b-none border-white'>
+      <SidebarFooter className="bg-primary border-t rounded-b-none border-white">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
               onClick={handleAlteraTema}
-              className='text-white'
+              className="text-white"
             >
-              <Sun className='h-4 w-4 dark:hidden' />
-              <Moon className='h-4 w-4 hidden dark:block' />
+              <Sun className="h-4 w-4 dark:hidden" />
+              <Moon className="h-4 w-4 hidden dark:block" />
               <span>Alterar Tema</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton
-              onClick={() => setOpen(!open)}
-              className='text-white'
+              onClick={() => setOpenMe(!openMe)}
+              className="text-white"
             >
-              <Settings className='h-4 w-4' />
+              <Settings className="h-4 w-4" />
               <span>Configurações</span>
             </SidebarMenuButton>
-            <Me open={open} onOpenChange={() => setOpen(false)} />
+            <Me open={openMe} onOpenChange={() => setOpenMe(false)} />
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton
               onClick={handleLogout}
-              className='text-vermelho'
+              className="text-vermelho"
               disabled={isPending}
             >
-              {isPending && <Loader className='mr-2 h-4 w-4 animate-spin' />}
-              <LogOut className='h-4 w-4' />
+              {isPending && <Loader className="mr-2 h-4 w-4 animate-spin" />}
+              <LogOut className="h-4 w-4" />
               <span>Sair</span>
             </SidebarMenuButton>
           </SidebarMenuItem>

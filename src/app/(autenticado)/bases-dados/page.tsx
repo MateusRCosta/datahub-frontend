@@ -5,7 +5,7 @@ import { BaseDadosTabela } from '@/features/base-dados/componentes/base-dados-ta
 
 export default function UsuariosPage() {
   return (
-    <ProtectedPage roles={getRolesParaRecurso('bases')}>
+    <ProtectedPage roles={getRolesParaRecurso('basesDados')}>
       <Cabecalho
         titulo="Bases de dados"
         descricao="Gerencie as bases de dados do sistema"

@@ -4,7 +4,6 @@ import { ROLES } from '@/features/auth/schema/roles';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { useController } from 'react-hook-form';
-import { User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useMemo } from 'react';
 
@@ -15,24 +14,24 @@ interface PermissoesSelectorProps {
 
 const ROLES_COMUM = [
   {
-    id: ROLES.EDITAR_BASE_DADOS,
-    label: 'Editar base de dados',
-    description: 'Gerenciar bases de dados',
+    id: ROLES.GERENCIAR_BASE_DADOS,
+    label: 'Gerenciar base de dados',
+    description: 'Gerenciar bases de dados: listar, criar, editar e excluir',
   },
   {
-    id: ROLES.EDITAR_CAMPANHAS,
-    label: 'Editar campanhas e templates',
-    description: 'Gerenciar campanhas e templates',
+    id: ROLES.GERENCIAR_CAMPANHAS,
+    label: 'Gerenciar campanhas e templates',
+    description: 'Gerenciar campanhas e templates: listar, criar, editar e excluir',
   },
   {
-    id: ROLES.EDITAR_INTEGRACOES,
-    label: 'Editar integrações',
-    description: 'Gerenciar integrações',
+    id: ROLES.GERENCIAR_INTEGRACOES,
+    label: 'Gerenciar integrações',
+    description: 'Gerenciar integrações: listar, criar, editar e excluir',
   },
   {
-    id: ROLES.VISUALIZAR_RELATORIOS,
-    label: 'Vizualizar relatórios',
-    description: 'Gerenciar relatórios',
+    id: ROLES.GERENCIAR_VISUALIZACOES,
+    label: 'Gerenciar visualizações',
+    description: 'Gerenciar visualizações: listar, criar, editar e excluir',
   },
 ];
 

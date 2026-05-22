@@ -1,14 +1,14 @@
 import z from 'zod';
 
 export const permissoesSchema = z.enum([
-  'EDITAR_BASE_DADOS',
-  'EDITAR_CAMPANHAS',
-  'EDITAR_INTEGRACOES',
-  'VISUALIZAR_RELATORIOS',
+  'GERENCIAR_BASE_DADOS',
+  'GERENCIAR_CAMPANHAS',
+  'GERENCIAR_INTEGRACOES',
+  'GERENCIAR_VISUALIZACOES',
 ]);
 
 export const usuarioSchema = z.object({
-  id: z.uuidv7(),
+  id: z.number(),
   nome: z
     .string()
     .min(3, 'Nome deve ter no mínimo 3 caracteres')

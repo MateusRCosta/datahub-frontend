@@ -37,8 +37,8 @@ export default function useCriaBaseDados({
   pagination: PaginationApiRequest<string>;
 }) {
   const queryClient = getQueryClient();
-  const { resolvePath } = useAuth();
-  const baseUrl = resolvePath('bases');
+  const { resolvePathApi } = useAuth();
+  const baseUrl = resolvePathApi('basesDados');
 
   return useMutation<ApiResponse<string>, Error, BaseDadosCriacao>({
     mutationKey: [`usuario-create`],

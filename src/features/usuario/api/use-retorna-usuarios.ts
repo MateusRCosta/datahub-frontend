@@ -34,8 +34,8 @@ export default function useRetornaUsuarios({
   pagination: PaginationApiRequest<string>;
   filtro?: UsuarioFiltros;
 }) {
-  const { resolvePath, isLoading: authLoading } = useAuth();
-  const baseUrl = resolvePath('usuarios');
+  const { resolvePathApi, isLoading: authLoading } = useAuth();
+  const baseUrl = resolvePathApi('usuarios');
   console.log('Base URL:', baseUrl);
   console.log('Filtros:', filtro);
   return useQuery({

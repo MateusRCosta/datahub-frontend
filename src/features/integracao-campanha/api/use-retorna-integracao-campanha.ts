@@ -1,31 +1,31 @@
 import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/api-request';
 import { useAuth } from '@/features/auth/provider/auth-provider';
-import { BaseDadosApiResponse } from '../schema/base-dados.schema';
+import { IntegracaoCampanhaApiResponse } from '../schema/integracao-campanha.schema';
 
-const retornaBaseDados = async ({
+const retornaIntegracaoCampanha = async ({
   id,
   baseUrl,
 }: {
   id: number;
   baseUrl: string;
 }) => {
-  return apiRequest<BaseDadosApiResponse>({
+  return apiRequest<IntegracaoCampanhaApiResponse>({
     path: `${baseUrl}/${id}`,
     method: 'GET',
   });
 };
 
-export default function useRetornaBaseDados({
+export default function useRetornaIntegracaoCampanha({
   id,
   enabled,
 }: { id: number } & { enabled: boolean }) {
   const { resolvePathApi, isLoading: authLoading } = useAuth();
-  const baseUrl = resolvePathApi('basesDados');
+  const baseUrl = resolvePathApi('integracoesCampanha');
 
   return useQuery({
     queryKey: [baseUrl, id],
-    queryFn: () => retornaBaseDados({ id, baseUrl }),
+    queryFn: () => retornaIntegracaoCampanha({ id, baseUrl }),
     enabled: enabled && !authLoading,
   });
 }

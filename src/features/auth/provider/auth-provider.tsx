@@ -14,7 +14,8 @@ interface AuthContextData {
   isLoading: boolean;
   isAdmin: boolean;
   temPermissao: (roles: Role | Role[] | null) => boolean;
-  resolvePath: (resource: ResourceName) => string;
+  resolvePathApi: (resource: ResourceName) => string;
+  resolvePathFront: (resource: ResourceName) => string;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -54,9 +55,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return rolesArray.some((role) => usuario.permissoes.includes(role));
   };
 
-  const resolvePath = (resource: ResourceName): string => {
-    return RESOURCE_CONFIG[resource].path;
+  const resolvePathApi = (resource: ResourceName): string => {
+    return RESOURCE_CONFIG[resource].pathApi;
   };
+
+  const resolvePathFront = (resource: ResourceName): string => {
+    return RESOURCE_CONFIG[resource].pathFront;
+  }
 
   useEffect(() => {
     if (!naoAutenticado) return;
@@ -69,7 +74,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         usuario,
         isAdmin,
         temPermissao,
-        resolvePath,
+        resolvePathApi,
+        resolvePathFront,
         isLoading,
         setUsuario: setUsuarioManual,
       }}

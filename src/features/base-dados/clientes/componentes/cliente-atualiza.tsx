@@ -9,13 +9,18 @@ import { PenBox } from 'lucide-react';
 import { DialogCustom } from '@/components/layout/dialog-custom';
 import { RegistroInfoCard } from '@/components/layout/registro-info-card';
 
-import { ClienteEdicao, clienteEdicaoSchema } from '../schema/cliente.schema';
+import {
+  ClienteEdicao,
+  Validacao,
+  criaClienteEdicaoSchema,
+} from '../schema/cliente.schema';
 import z from 'zod';
 import { Estrutura } from '../../schema/base-dados.schema';
 import { formataDataUI } from '@/lib/utils';
 import useRetornaCliente from '../api/use-retorna-cliente';
 import useEditaCliente from '../api/use-edita-cliente';
 import { useFormComponents } from '@/hooks/use-form-components';
+import { retornaMensagemValidacao } from '../constants';
 
 interface ClienteAtualizaProps {
   id: number;
@@ -30,16 +35,28 @@ export function ClienteAtualiza({ id, estrutura }: ClienteAtualizaProps) {
     id,
   });
   const defaultValues = useMemo(() => {
-    return estrutura.reduce<Record<string, string>>((acc, est) => {
-      acc[est.cabecalho] = '';
-      return acc;
-    }, {});
+    return estrutura.reduce<Record<string, string | boolean | undefined>>(
+      (acc, est) => {
+        if (est.tipo === 'BOOLEANO') {
+          acc[est.cabecalho] = false;
+          return acc;
+        }
+
+        acc[est.cabecalho] = '';
+        return acc;
+      },
+      {},
+    );
   }, [estrutura]);
+  const clienteEdicaoSchema = useMemo(
+    () => criaClienteEdicaoSchema(estrutura),
+    [estrutura],
+  );
 
   const form = useForm<
     z.input<typeof clienteEdicaoSchema>,
     unknown,
-    ClienteEdicao
+    z.output<typeof clienteEdicaoSchema>
   >({
     mode: 'onSubmit',
     resolver: zodResolver(clienteEdicaoSchema),
@@ -48,22 +65,47 @@ export function ClienteAtualiza({ id, estrutura }: ClienteAtualizaProps) {
     },
   });
 
-  const { reset } = form;
+  const { clearErrors, reset, setError } = form;
 
   useEffect(() => {
     if (data?.data) {
+      const dadosRaw = { ...defaultValues, ...data.data.dados };
+      const dados = estrutura.reduce<Record<string, string | number | boolean>>(
+        (acc, campo) => {
+          const valor = dadosRaw[campo.cabecalho];
+
+          if (valor !== null && valor !== undefined) {
+            acc[campo.cabecalho] = valor;
+            return acc;
+          }
+
+          acc[campo.cabecalho] = campo.tipo === 'BOOLEANO' ? false : '';
+          return acc;
+        }, {}
+      );
+
       reset(
         {
-          dados: data.data.dados,
+          dados,
         },
         { keepDefaultValues: false },
       );
+
+      clearErrors('dados');
+      data.data.validacao.forEach((validacao) => {
+        setError(`dados.${validacao.cabecalho}`, {
+          type: validacao.codigo,
+          message:
+            'Campo inválido: ' +
+            retornaMensagemValidacao(validacao, dados[validacao.cabecalho]),
+        });
+      });
     }
-  }, [data, reset]);
+  }, [clearErrors, data, defaultValues, reset, setError, estrutura]);
 
   const { mutateAsync, isPending } = useEditaCliente(id);
 
-  const onSubmit = async (formData: ClienteEdicao) => {
+  const onSubmit = async (formData: z.output<typeof clienteEdicaoSchema>) => {
     const response = await mutateAsync({ ...formData, id });
     if (response.status !== 204) {
       toast.error(
@@ -121,87 +163,36 @@ export function ClienteAtualiza({ id, estrutura }: ClienteAtualizaProps) {
               <div className="space-y-4">
                 <h3 className="text-sm font-semibold">Informações</h3>
                 {data.data?.dados &&
-                  Object.entries(data.data.dados).map(
-                    ([chave, valor], _index) => {
-                      const estruturaAtual = estrutura.filter(
-                        (est) => est.cabecalho === chave,
-                      )[0];
-                      const tipo = estruturaAtual.tipo;
-                      const label = estruturaAtual.rotulo ?? chave;
+                  estrutura.map((estruturaAtual) => {
+                    const chave = estruturaAtual.cabecalho;
+                    const tipo = estruturaAtual.tipo;
+                    const label = estruturaAtual.rotulo ?? chave;
 
-                      const erros =
-                        data.data?.validacao.filter(
-                          (e) => e.cabecalho === chave,
-                        ) ?? [];
-                      const temErros = erros.length > 0;
-                      const mensagem = erros.map((e) => {
-                        switch (e.codigo) {
-                          case 'INVALID_BOOLEAN':
-                            return `valor booleano "${valor}" não aceito`;
-                          case 'EMAIL_INVALIDO':
-                            return `e-mail inválido`;
-                          case 'INVALID_DATE':
-                            return `data inválida`;
-                          case 'INVALID_NUMBER':
-                            return `número inválido`;
-                          case 'TELEFONE_INVALIDO':
-                            return `telefone inválido`;
-                          case 'REQUIRED':
-                            return `valor é obrigatório`;
-                        }
-                      });
-
-                      if (tipo === 'BOOLEANO') {
-                        return (
-                          <Fragment key={`dados.${chave}`}>
-                            <Switch
-                              name={`dados.${chave}`}
-                              label={label}
-                              ariaInvalid={temErros}
-                            />
-                            {erros.length > 0 && (
-                              <FieldError>
-                                Valor inválido: {mensagem.join(', ')}
-                              </FieldError>
-                            )}
-                          </Fragment>
-                        );
-                      }
-
-                      if (tipo === 'UTC') {
-                        return (
-                          <Fragment key={`dados.${chave}`}>
-                            <DatePicker
-                              name={`dados.${chave}`}
-                              label={label}
-                              ariaInvalid={temErros}
-                            />
-                            {erros.length > 0 && (
-                              <FieldError>
-                                Valor inválido: {mensagem.join(', ')}
-                              </FieldError>
-                            )}
-                          </Fragment>
-                        );
-                      }
+                    if (tipo === 'BOOLEANO') {
                       return (
                         <Fragment key={`dados.${chave}`}>
-                          <Input
-                            name={`dados.${chave}`}
-                            label={label}
-                            type="text"
-                            aria-invalid={temErros}
-                            ariaInvalid={temErros}
-                          />
-                          {erros.length > 0 && (
-                            <FieldError>
-                              Valor inválido: {mensagem.join(', ')}
-                            </FieldError>
-                          )}
+                          <Switch name={`dados.${chave}`} label={label} />
                         </Fragment>
                       );
-                    },
-                  )}
+                    }
+
+                    if (tipo === 'UTC') {
+                      return (
+                        <Fragment key={`dados.${chave}`}>
+                          <DatePicker name={`dados.${chave}`} label={label} />
+                        </Fragment>
+                      );
+                    }
+                    return (
+                      <Fragment key={`dados.${chave}`}>
+                        <Input
+                          name={`dados.${chave}`}
+                          label={label}
+                          type={tipo === 'NUMERO' ? 'number' : 'text'}
+                        />
+                      </Fragment>
+                    );
+                  })}
               </div>
             )}
             {isLoading && (

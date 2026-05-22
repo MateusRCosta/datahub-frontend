@@ -17,10 +17,10 @@ import {
 import useRetornaUsuario from '../api/use-retorna-usuario';
 import useEditaUsuario from '../api/use-edita-usuario';
 import { PermissoesSelector } from './permissoes-selector';
-import { formataData, formataDataUI } from '@/lib/utils';
+import { formataDataUI } from '@/lib/utils';
 
 interface UsuarioEditaProps {
-  id: string;
+  id: number;
 }
 
 export function UsuarioEdita({ id }: UsuarioEditaProps) {

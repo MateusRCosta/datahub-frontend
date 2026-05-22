@@ -9,7 +9,7 @@ const editaUsuario = async ({
   id,
   baseUrl,
   ...data
-}: UsuarioUpdateRequest & { id: string; baseUrl: string }): Promise<
+}: UsuarioUpdateRequest & { id: number; baseUrl: string }): Promise<
   ApiResponse<string>
 > => {
   return apiRequest<string>({
@@ -19,15 +19,15 @@ const editaUsuario = async ({
   });
 };
 
-export default function useEditaUsuario(id: string) {
+export default function useEditaUsuario(id: number) {
   const queryClient = getQueryClient();
-  const { resolvePath } = useAuth();
-  const baseUrl = resolvePath('usuarios');
+  const { resolvePathApi } = useAuth();
+  const baseUrl = resolvePathApi('usuarios');
 
   return useMutation<
     ApiResponse<string>,
     Error,
-    UsuarioUpdateRequest & { id: string }
+    UsuarioUpdateRequest & { id: number }
   >({
     mutationKey: [`usuario-edita`, id],
     mutationFn: (variables) => editaUsuario({ ...variables, baseUrl }),

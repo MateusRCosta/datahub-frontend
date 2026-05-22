@@ -34,8 +34,8 @@ export default function useRetornaClientes({
   pagination: PaginationApiRequest<string>;
   baseDadosId: number;
 }) {
-  const { resolvePath, isLoading: authLoading } = useAuth();
-  const baseUrl = resolvePath('clientes');
+  const { resolvePathApi, isLoading: authLoading } = useAuth();
+  const baseUrl = resolvePathApi('clientes');
   return useQuery({
     queryKey: [baseUrl, pagination, baseDadosId],
     queryFn: () => retornaClientes({ ...pagination, baseUrl, baseDadosId }),

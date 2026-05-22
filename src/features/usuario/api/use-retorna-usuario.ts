@@ -7,7 +7,7 @@ const retornaUsuario = async ({
   id,
   baseUrl,
 }: {
-  id: string;
+  id: number;
   baseUrl: string;
 }) => {
   return apiRequest<UsuarioResponse>({
@@ -19,9 +19,9 @@ const retornaUsuario = async ({
 export default function useRetornaUsuario({
   id,
   enabled,
-}: { id: string } & { enabled: boolean }) {
-  const { resolvePath, isLoading: authLoading } = useAuth();
-  const baseUrl = resolvePath('usuarios');
+}: { id: number } & { enabled: boolean }) {
+  const { resolvePathApi, isLoading: authLoading } = useAuth();
+  const baseUrl = resolvePathApi('usuarios');
 
   return useQuery({
     queryKey: [baseUrl, id],

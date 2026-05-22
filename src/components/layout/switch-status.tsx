@@ -1,4 +1,4 @@
-import useAlteraStatusAtivo from '@/api/use-altera-status-ativo';
+import useAlteraStatusAtivo from '@/common/use-altera-status-ativo';
 import { Switch } from '@/components/ui/switch';
 import { ResourceName } from '@/features/auth/config/resources';
 import { toast } from 'sonner';
@@ -11,7 +11,7 @@ interface Mensagens {
 }
 
 interface SwitchStatusProps {
-  id: string;
+  id: number;
   path: ResourceName;
   status: boolean;
   mensagens?: Mensagens;

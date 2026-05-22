@@ -21,8 +21,8 @@ const editaBaseDados = async ({
 
 export default function useEditaBaseDados(id: number) {
   const queryClient = getQueryClient();
-  const { resolvePath } = useAuth();
-  const baseUrl = resolvePath('bases');
+  const { resolvePathApi } = useAuth();
+  const baseUrl = resolvePathApi('basesDados');
 
   return useMutation<
     ApiResponse<string>,

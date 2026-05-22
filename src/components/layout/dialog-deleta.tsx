@@ -1,6 +1,6 @@
 'use client';
 
-import useDeleta from '@/api/use-deleta';
+import useDeleta from '@/common/use-deleta';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,

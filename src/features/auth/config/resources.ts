@@ -1,10 +1,10 @@
-import { Database, File, Mail, Settings2, User, Users2 } from 'lucide-react';
+import { Database, File, FileCog2, Mail, ServerCog, Settings2, User, Users2 } from 'lucide-react';
 
 export const ROLES = {
-  EDITAR_BASE_DADOS: 'EDITAR_BASE_DADOS',
-  VISUALIZAR_RELATORIOS: 'VISUALIZAR_RELATORIOS',
-  EDITAR_CAMPANHAS: 'EDITAR_CAMPANHAS',
-  EDITAR_INTEGRACOES: 'EDITAR_INTEGRACOES',
+  GERENCIAR_BASE_DADOS: 'GERENCIAR_BASE_DADOS',
+  GERENCIAR_VISUALIZACOES: 'GERENCIAR_VISUALIZACOES',
+  GERENCIAR_CAMPANHAS: 'GERENCIAR_CAMPANHAS',
+  GERENCIAR_INTEGRACOES: 'GERENCIAR_INTEGRACOES',
 } as const;
 
 export type Role = (typeof ROLES)[keyof typeof ROLES];
@@ -18,7 +18,9 @@ export interface ResourceEntry {
   /**Se aparece na navbar */
   show?:false;
   /**Path para requisições */
-  path: string;
+  pathApi: string;
+  /**Path para caminho interno */
+  pathFront: string;
   /** Role de usuário comum (null = somente admin) */
   userRole: Role | null;
   /** Label para o sidebar */
@@ -35,48 +37,62 @@ export interface ResourceEntry {
  */
 export const RESOURCE_CONFIG = {
   usuarios: {
-    path: 'usuarios',
+    pathApi: 'usuarios',
+    pathFront: 'usuarios',
     userRole: null,
     label: 'Usuários',
     icon: User,
     adminOnly: true,
   },
   campanhas: {
-    path: 'campanhas',
-    userRole: ROLES.EDITAR_CAMPANHAS,
+    pathApi: 'campanhas',
+    pathFront: 'campanhas',
+    userRole: ROLES.GERENCIAR_CAMPANHAS,
     label: 'Campanhas',
     icon: Mail,
     adminOnly: false,
   },
   templates: {
-    path: 'templates',
-    userRole: ROLES.EDITAR_CAMPANHAS,
+    pathApi: 'templates',
+    pathFront: 'templates',
+    userRole: ROLES.GERENCIAR_CAMPANHAS,
     label: 'Templates',
     icon: File,
     adminOnly: false,
   },
-  bases: {
-    path: 'bases-dados',
-    userRole: ROLES.EDITAR_BASE_DADOS,
+  basesDados: {
+    pathApi: 'bases-dados',
+    pathFront: 'bases-dados',
+    userRole: ROLES.GERENCIAR_BASE_DADOS,
     label: 'Bases de Dados',
     icon: Database,
     adminOnly: false,
   },
   clientes: {
     show:false,
-    path: 'clientes',
-    userRole: ROLES.EDITAR_BASE_DADOS,
+    pathApi: 'clientes',
+    pathFront: 'clientes',
+    userRole: ROLES.GERENCIAR_BASE_DADOS,
     label: 'Clientes',
     icon: Users2,
     adminOnly: false,
   },
   integracoes: {
-    path: 'integracoes',
-    userRole: ROLES.EDITAR_INTEGRACOES,
-    label: 'Integrações',
-    icon: Settings2,
+    pathApi: 'integracoes',
+    pathFront: 'integracoes',
+    userRole: ROLES.GERENCIAR_INTEGRACOES,
+    label: 'Integrações de coletas',
+    icon: ServerCog,
     adminOnly: false,
   },
+  integracoesCampanha: {
+    pathApi: 'integracoes-campanhas',
+    pathFront: 'integracoes-campanhas',
+    userRole: ROLES.GERENCIAR_INTEGRACOES,
+    label: 'Integrações de campanhas',
+    icon: FileCog2,
+    adminOnly: false
+  }
 } as const satisfies Record<string, ResourceEntry>;
 
 /**
@@ -91,7 +107,7 @@ export function getRolesParaRecurso(resource: ResourceName): Role[] {
 
 /**
  * Retorna todos os recursos associados a uma role.
- * Útil quando uma role dá acesso a múltiplos recursos (ex: EDITAR_CAMPANHAS → campanhas e templates).
+ * Útil quando uma role dá acesso a múltiplos recursos (ex: GERENCIAR_CAMPANHAS → campanhas e templates).
  */
 export function getRecursosParaRole(role: Role): ResourceName[] {
   return Object.entries(RESOURCE_CONFIG)
