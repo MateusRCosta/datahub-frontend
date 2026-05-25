@@ -26,7 +26,6 @@ import { Checkbox } from '../ui/checkbox';
 import { Textarea } from '../ui/textarea';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { Calendar } from '../ui/calendar';
-import { format } from 'date-fns';
 
 interface FormWrapperProps<
   T extends FieldValues,
@@ -371,6 +370,8 @@ export function InputSelecaoModal({
     </>
   );
 }
+
+export { JsonEditorGenerico } from './json-editor-generico';
 
 export function TextAreaGenerico({
   name,

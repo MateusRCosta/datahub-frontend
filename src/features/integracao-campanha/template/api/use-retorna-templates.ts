@@ -6,11 +6,11 @@ import {
 } from '@/types/api.schema';
 import { useAuth } from '@/features/auth/provider/auth-provider';
 import {
-  IntegracaoCampanhaFiltros,
-  IntegracoesCampanhasApiResponse,
-} from '../schema/integracao-campanha.schema';
+  TemplateFiltros,
+  TemplatesApiResponse,
+} from '../schema/template.schema';
 
-const retornaIntegracoesCampanhas = async ({
+const retornaTemplates = async ({
   page,
   limit,
   orderBy,
@@ -18,38 +18,31 @@ const retornaIntegracoesCampanhas = async ({
   filtro,
   baseUrl,
 }: PaginationApiRequest<string> & {
-  filtro?: IntegracaoCampanhaFiltros;
+  filtro?: TemplateFiltros;
   baseUrl: string;
 }) => {
-  return apiRequest<PaginationApiResponse<IntegracoesCampanhasApiResponse[]>>({
+  return apiRequest<PaginationApiResponse<TemplatesApiResponse[]>>({
     path: baseUrl,
     method: 'GET',
     query: { page, limit, orderBy, order, ...filtro },
   });
 };
 
-export default function useIntegracoesCampanhas({
+export default function useRetornaTemplates({
   enabled,
   pagination,
   filtro,
-  contexto,
 }: {
   enabled: boolean;
   pagination: PaginationApiRequest<string>;
-  filtro?: IntegracaoCampanhaFiltros;
-  contexto?: 'templates';
+  filtro?: TemplateFiltros;
 }) {
   const { resolvePathApi, isLoading: authLoading } = useAuth();
-  const integracoesCampanhaPath = resolvePathApi('integracoesCampanha');
-  const baseUrl =
-    contexto === 'templates'
-      ? `${integracoesCampanhaPath}/templates`
-      : integracoesCampanhaPath;
+  const baseUrl = resolvePathApi('templates');
 
   return useQuery({
     queryKey: [baseUrl, pagination, filtro],
-    queryFn: () =>
-      retornaIntegracoesCampanhas({ ...pagination, filtro, baseUrl }),
+    queryFn: () => retornaTemplates({ ...pagination, filtro, baseUrl }),
     enabled: enabled && !authLoading,
   });
 }

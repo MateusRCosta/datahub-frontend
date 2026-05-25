@@ -15,16 +15,7 @@ export const apiRequest = async <T>({
   url?: string;
   path: string;
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
-  body?: Record<
-    string,
-    | string
-    | number
-    | boolean
-    | Record<string, string | number | boolean | unknown>
-    | Record<string, string | number | boolean | unknown>[]
-    | string[]
-    | undefined
-  >;
+  body?: Record<string, unknown>;
   headers?: HeadersInit | 'none' | undefined;
   credentials?: RequestCredentials;
   query?: Record<string, string | number | boolean | undefined | Date | null>;

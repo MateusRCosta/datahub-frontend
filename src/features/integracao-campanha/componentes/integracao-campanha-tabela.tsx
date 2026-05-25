@@ -14,10 +14,21 @@ import {
   integracaoCampanhaFiltroSimplesChavesObjeto,
   integracaoCampanhaFiltroSimplesChavesOptions,
   integracaoCampanhaFiltrosSchema,
+  IntegracoesCampanhasApiResponse,
 } from '../schema/integracao-campanha.schema';
 import { IntegracaoCampanhaCria } from './integracao-campanha-cria';
 
-export function IntegracaoCampanhaTabela() {
+type IntegracaoCampanhaTabelaProps = {
+  contexto?: 'templates';
+  modoSelecao?: boolean;
+  onSelecionar?: (integracaoCampanha: IntegracoesCampanhasApiResponse) => void;
+};
+
+export function IntegracaoCampanhaTabela({
+  contexto,
+  modoSelecao = false,
+  onSelecionar,
+}: IntegracaoCampanhaTabelaProps) {
   const [pagination, setPagination] = useState<PaginationApiRequest<string>>({
     page: 1,
     limit: 10,
@@ -28,6 +39,7 @@ export function IntegracaoCampanhaTabela() {
   const { data, isLoading } = useRetornaIntegracoesCampanhas({
     enabled: true,
     pagination,
+    contexto,
     filtro: {
       ...filtros,
     },
@@ -39,17 +51,19 @@ export function IntegracaoCampanhaTabela() {
 
   const registros = data?.data?.data;
 
-  const colunas = getColunas({ modoSelecao: false });
+  const colunas = getColunas({ modoSelecao, onSelecionar });
 
   return (
-    <div className="flex flex-col w-full flex-1 min-h-0 mx-auto gap-2">
+    <div className="flex flex-col w-full flex-1 min-h-0 h-full mx-auto gap-2">
       <div
         className="flex flex-col md:flex-row gap-2 shrink-0 self-end"
         onClick={(e) => {
           e.stopPropagation();
         }}
       >
-        <IntegracaoCampanhaCria pagination={pagination} filtros={filtros} />
+        {!modoSelecao && (
+          <IntegracaoCampanhaCria pagination={pagination} filtros={filtros} />
+        )}
         {
           <Filtro
             childrenComplexo={
@@ -79,6 +93,7 @@ export function IntegracaoCampanhaTabela() {
           onPageChange={(page) => setPagination({ ...pagination, page })}
           onPageLimitChange={(limit) => setPagination({ ...pagination, limit })}
           totalItens={data?.data?.meta.total || 0}
+          onSelecionar={onSelecionar}
         />
       </div>
     </div>
