@@ -1,4 +1,4 @@
-import { Validacao } from "./schema/cliente.schema";
+import { Validacao } from './schema/cliente.schema';
 
 export const retornaMensagemValidacao = (
   validacao: Validacao,

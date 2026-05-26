@@ -77,30 +77,30 @@ export function AlteraSenha({ onOpenChange, open = false }: alteraSenhaProps) {
             senha
           </DialogDescription>
         </DialogHeader>
-        <FormWrapper form={form} onSubmit={onSubmit} id="form-altera-senha">
+        <FormWrapper form={form} onSubmit={onSubmit} id='form-altera-senha'>
           <FieldGroup>
-            <InputGenerico name="senha" label="Senha atual" type="password" />
+            <InputGenerico name='senha' label='Senha atual' type='password' />
             <InputGenerico
-              name="novaSenha"
-              label="Nova senha"
-              type="password"
+              name='novaSenha'
+              label='Nova senha'
+              type='password'
             />
             <InputGenerico
-              name="confirmaSenha"
-              label="Confirma nova senha"
-              type="password"
+              name='confirmaSenha'
+              label='Confirma nova senha'
+              type='password'
             />
           </FieldGroup>
           <FieldError>{form.formState.errors.root?.message}</FieldError>
         </FormWrapper>
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline" disabled={isPending}>
+            <Button variant='outline' disabled={isPending}>
               Sair
             </Button>
           </DialogClose>
-          <Button form="form-altera-senha" type="submit" disabled={isPending}>
-            {isPending && <Loader className="mr-2 h-4 w-4 animate-spin" />}
+          <Button form='form-altera-senha' type='submit' disabled={isPending}>
+            {isPending && <Loader className='mr-2 h-4 w-4 animate-spin' />}
             {isPending ? 'Alterando...' : 'Alterar'}
           </Button>
         </DialogFooter>

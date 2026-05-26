@@ -37,13 +37,13 @@ export function DialogCustom({
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
       {trigger}
-      <DialogContent className="min-w-[90dvw] max-w-[90dvw] md:min-w-[85dvw] md:max-w-[85dvw] max-h-[90dvh] h-full overflow-hidden flex flex-col">
+      <DialogContent className='min-w-[90dvw] max-w-[90dvw] md:min-w-[85dvw] md:max-w-[85dvw] max-h-[90dvh] h-full overflow-hidden flex flex-col'>
         <DialogHeader>
           <DialogTitle>{titulo}</DialogTitle>
           <DialogDescription asChild>{descricao}</DialogDescription>
         </DialogHeader>
-        <div className="flex-1 min-h-0 w-full flex flex-col overflow-hidden">
-          <div className="flex-1 min-h-0 overflow-y-auto">{children}</div>
+        <div className='flex-1 min-h-0 w-full flex flex-col overflow-hidden'>
+          <div className='flex-1 min-h-0 overflow-y-auto'>{children}</div>
         </div>
         {temFooter && (
           <DialogFooter>
@@ -53,8 +53,8 @@ export function DialogCustom({
               </Button>
             </DialogClose>
             {idForm && (
-              <Button disabled={isPending} type="submit" form={idForm}>
-                {false && <Loader className="mr-2 h-4 w-4 animate-spin" />}
+              <Button disabled={isPending} type='submit' form={idForm}>
+                {false && <Loader className='mr-2 h-4 w-4 animate-spin' />}
                 Salvar
               </Button>
             )}

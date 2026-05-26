@@ -16,12 +16,12 @@ export const getColunas = ({
     {
       accessorKey: 'id',
       header: () => {
-        return <div className="sr-only">Identificador</div>;
+        return <div className='sr-only'>Identificador</div>;
       },
       cell: ({ row }) => {
         return (
-          <div className="flex flex-col">
-            <span className="font-medium">{row.original.id}</span>
+          <div className='flex flex-col'>
+            <span className='font-medium'>{row.original.id}</span>
           </div>
         );
       },
@@ -33,9 +33,9 @@ export const getColunas = ({
       },
       cell: ({ row }) => {
         return (
-          <div className="flex flex-col">
-            <span className="font-medium">{row.original.nome}</span>
-            <span className="text-xs text-muted-foreground">
+          <div className='flex flex-col'>
+            <span className='font-medium'>{row.original.nome}</span>
+            <span className='text-xs text-muted-foreground'>
               {row.original.usuario
                 ? `Criado pelo usuário: ${row.original.usuario.nome}`
                 : ''}
@@ -51,7 +51,7 @@ export const getColunas = ({
       },
       cell: ({ row }) => {
         return (
-          <span className="font-medium">
+          <span className='font-medium'>
             {row.original.provedor.toUpperCase()}
           </span>
         );
@@ -64,11 +64,11 @@ export const getColunas = ({
       {
         accessorKey: 'status',
         header: () => {
-          return <div className="">Status</div>;
+          return <div className=''>Status</div>;
         },
         cell: ({ row }) => {
           return (
-            <div className="flex items-right">
+            <div className='flex items-right'>
               <SwitchStatus
                 status={row.original.status}
                 id={row.original.id}
@@ -85,15 +85,15 @@ export const getColunas = ({
       {
         id: 'acoes',
         header: () => {
-          return <span className="sr-only">Ações</span>;
+          return <span className='sr-only'>Ações</span>;
         },
         cell: ({ row }) => {
           return (
-            <div className="flex items-center gap-1">
+            <div className='flex items-center gap-1'>
               <IntegracaoCampanhaAtualiza id={row.original.id} />
               <DialogDeleta
                 id={row.original.id}
-                path="integracoesCampanha"
+                path='integracoesCampanha'
                 nome={row.original.nome}
                 objeto={'Integração de campanha'}
                 mensagens={{

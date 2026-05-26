@@ -1,4 +1,13 @@
-import { Database, File, FileCog2, Mail, ServerCog, Settings2, User, Users2 } from 'lucide-react';
+import {
+  Database,
+  File,
+  FileCog2,
+  Mail,
+  ServerCog,
+  Settings2,
+  User,
+  Users2,
+} from 'lucide-react';
 
 export const ROLES = {
   GERENCIAR_BASE_DADOS: 'GERENCIAR_BASE_DADOS',
@@ -16,7 +25,7 @@ export type ResourceName = keyof typeof RESOURCE_CONFIG;
 
 export interface ResourceEntry {
   /**Se aparece na navbar */
-  show?:false;
+  show?: false;
   /**Path para requisições */
   pathApi: string;
   /**Path para caminho interno */
@@ -69,7 +78,7 @@ export const RESOURCE_CONFIG = {
     adminOnly: false,
   },
   clientes: {
-    show:false,
+    show: false,
     pathApi: 'clientes',
     pathFront: 'clientes',
     userRole: ROLES.GERENCIAR_BASE_DADOS,
@@ -91,8 +100,8 @@ export const RESOURCE_CONFIG = {
     userRole: ROLES.GERENCIAR_INTEGRACOES,
     label: 'Integrações de campanhas',
     icon: FileCog2,
-    adminOnly: false
-  }
+    adminOnly: false,
+  },
 } as const satisfies Record<string, ResourceEntry>;
 
 /**

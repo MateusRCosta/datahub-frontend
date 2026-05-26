@@ -69,55 +69,55 @@ export function UsuarioCreate({ pagination, filtros }: UsuarioCreateProps) {
   };
 
   if (isLoading) {
-    return <Skeleton className="h-10 w-37.5" />;
+    return <Skeleton className='h-10 w-37.5' />;
   }
 
   return (
     <DialogCustom
       titulo={`Novo Usuário`}
-      idForm="form-cria-usuario"
+      idForm='form-cria-usuario'
       descricao={<p>Crie um novo usuário.</p>}
       open={open}
       setOpen={setOpen}
       trigger={
-        <Button type="button" onClick={() => setOpen(true)}>
+        <Button type='button' onClick={() => setOpen(true)}>
           Criar Usuário
         </Button>
       }
       isPending={isPending}
     >
-      <div className="flex flex-col h-full">
+      <div className='flex flex-col h-full'>
         <FormProvider {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            id="form-cria-usuario"
-            className="flex flex-col gap-2 h-full"
+            id='form-cria-usuario'
+            className='flex flex-col gap-2 h-full'
           >
-            <FieldGroup className="flex flex-col min-h-0 flex-1 gap-6">
-              <div className="space-y-4">
-                <h3 className="text-sm font-semibold">Informações de Acesso</h3>
-                <InputGenerico name="nome" label="Nome Completo" type="text" />
-                <InputGenerico name="email" label="E-mail" type="email" />
+            <FieldGroup className='flex flex-col min-h-0 flex-1 gap-6'>
+              <div className='space-y-4'>
+                <h3 className='text-sm font-semibold'>Informações de Acesso</h3>
+                <InputGenerico name='nome' label='Nome Completo' type='text' />
+                <InputGenerico name='email' label='E-mail' type='email' />
                 <InputGenerico
-                  name="senha"
-                  label="Senha Inicial"
-                  type="password"
+                  name='senha'
+                  label='Senha Inicial'
+                  type='password'
                 />
-                <div className="flex flex-col space-x-2 gap-2">
+                <div className='flex flex-col space-x-2 gap-2'>
                   <label
-                    htmlFor="admin"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    htmlFor='admin'
+                    className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
                   >
                     Administrador
                   </label>
-                  <Switch name="admin" />
+                  <Switch name='admin' />
                 </div>
               </div>
-              <div className="flex flex-col h-full border-t pt-4">
-                <h3 className="text-sm font-semibold mb-4">
+              <div className='flex flex-col h-full border-t pt-4'>
+                <h3 className='text-sm font-semibold mb-4'>
                   Permissões de Usuário
                 </h3>
-                <PermissoesSelector name="permissoes" />
+                <PermissoesSelector name='permissoes' />
               </div>
             </FieldGroup>
           </form>

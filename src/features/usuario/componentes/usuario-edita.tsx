@@ -85,13 +85,13 @@ export function UsuarioEdita({ id }: UsuarioEditaProps) {
   return (
     <DialogCustom
       titulo={`Usuário: ${data?.data?.nome}`}
-      idForm="form-edita-usuario"
+      idForm='form-edita-usuario'
       descricao={
-        <div className="flex w-full justify-between">
-          <span className="w-full">
+        <div className='flex w-full justify-between'>
+          <span className='w-full'>
             Gerencie os dados e permissões do usuário
           </span>
-          <div className="flex flex-1 w-full">
+          <div className='flex flex-1 w-full'>
             <RegistroInfoCard
               dados={{
                 ID: data?.data?.id,
@@ -106,7 +106,7 @@ export function UsuarioEdita({ id }: UsuarioEditaProps) {
       setOpen={setOpen}
       trigger={
         <DialogTrigger asChild>
-          <PenBox className="mr-2 h-4 cursor-pointer hover:text-primary transition-colors" />
+          <PenBox className='mr-2 h-4 cursor-pointer hover:text-primary transition-colors' />
         </DialogTrigger>
       }
       isPending={isPending}
@@ -114,55 +114,55 @@ export function UsuarioEdita({ id }: UsuarioEditaProps) {
       <FormProvider {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          id="form-edita-usuario"
-          className="flex flex-col gap-2 h-full"
+          id='form-edita-usuario'
+          className='flex flex-col gap-2 h-full'
         >
-          <FieldGroup className="flex flex-col min-h-0 flex-1 gap-6">
+          <FieldGroup className='flex flex-col min-h-0 flex-1 gap-6'>
             {isError && (
-              <div className="text-red-500">
+              <div className='text-red-500'>
                 Erro ao carregar usuário: {error?.message}
               </div>
             )}
             {data && !isError && (
               <>
-                <div className="space-y-4">
-                  <h3 className="text-sm font-semibold">
+                <div className='space-y-4'>
+                  <h3 className='text-sm font-semibold'>
                     Informações de Acesso
                   </h3>
                   <InputGenerico
-                    name="nome"
-                    label="Nome Completo"
-                    type="text"
+                    name='nome'
+                    label='Nome Completo'
+                    type='text'
                   />
                   <InputGenerico
-                    name="senha"
-                    label="Alterar Senha"
-                    type="password"
-                    placeholder="Deixe em branco para manter a atual"
+                    name='senha'
+                    label='Alterar Senha'
+                    type='password'
+                    placeholder='Deixe em branco para manter a atual'
                   />
                   <InputGenerico
-                    name="email"
-                    label="E-mail"
-                    type="email"
+                    name='email'
+                    label='E-mail'
+                    type='email'
                     value={data.data?.email}
                     disabled
                   />
-                  <div className="flex flex-col space-x-2 gap-2">
-                    <SwitchGenerico name="admin" label="Administrador" />
+                  <div className='flex flex-col space-x-2 gap-2'>
+                    <SwitchGenerico name='admin' label='Administrador' />
                   </div>
                 </div>
-                <div className="border-t pt-4">
-                  <h3 className="text-sm font-semibold mb-4">
+                <div className='border-t pt-4'>
+                  <h3 className='text-sm font-semibold mb-4'>
                     Permissões de Usuário
                   </h3>
-                  <PermissoesSelector name="permissoes" />
+                  <PermissoesSelector name='permissoes' />
                 </div>
               </>
             )}
             {isLoading && (
               <>
                 {[...Array(4)].map((_, index) => (
-                  <Skeleton key={index} className="h-12 w-full" />
+                  <Skeleton key={index} className='h-12 w-full' />
                 ))}
               </>
             )}

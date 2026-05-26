@@ -63,7 +63,7 @@ export function DialogDeleta({
     <>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Trash2 className="text-destructive mr-2 h-4" />
+          <Trash2 className='text-destructive mr-2 h-4' />
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
@@ -77,13 +77,14 @@ export function DialogDeleta({
           </DialogHeader>
           {mensagens?.confirmacao ?? (
             <p>
-              Tem certeza que deseja excluir{nome ? <strong> {nome}</strong> : ''}?
+              Tem certeza que deseja excluir
+              {nome ? <strong> {nome}</strong> : ''}?
             </p>
           )}
           <DialogFooter>
-            <div className="w-full h-full flex flex-row justify-between gap-2">
+            <div className='w-full h-full flex flex-row justify-between gap-2'>
               <DialogClose asChild>
-                <Button variant="outline">Sair</Button>
+                <Button variant='outline'>Sair</Button>
               </DialogClose>
               <Button
                 variant={'destructive'}

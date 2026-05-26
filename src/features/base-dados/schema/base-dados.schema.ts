@@ -123,7 +123,7 @@ export const basesDadosApiResponseSchema = baseDadosSchema
     usuario: usuarioBasicApiResponse.optional(),
     _count: _countSchema,
   });
-export type  BasesDadosApiResponse = z.infer<typeof basesDadosApiResponseSchema>;
+export type BasesDadosApiResponse = z.infer<typeof basesDadosApiResponseSchema>;
 
 export const baseDadosApiResponseSchema = baseDadosSchema
   .omit({

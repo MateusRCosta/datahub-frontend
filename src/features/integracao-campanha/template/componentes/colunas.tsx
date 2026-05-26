@@ -15,10 +15,10 @@ export const getColunas = ({
     {
       accessorKey: 'id',
       header: () => {
-        return <div className="sr-only">Identificador</div>;
+        return <div className='sr-only'>Identificador</div>;
       },
       cell: ({ row }) => {
-        return <span className="font-medium">{row.original.id}</span>;
+        return <span className='font-medium'>{row.original.id}</span>;
       },
     },
     {
@@ -28,9 +28,9 @@ export const getColunas = ({
       },
       cell: ({ row }) => {
         return (
-          <div className="flex flex-col">
-            <span className="font-medium">{row.original.nome}</span>
-            <span className="text-xs text-muted-foreground">
+          <div className='flex flex-col'>
+            <span className='font-medium'>{row.original.nome}</span>
+            <span className='text-xs text-muted-foreground'>
               {row.original.integracaoCampanha
                 ? `Criado pelo usuário: ${row.original.integracaoCampanha.nome}`
                 : ''}
@@ -46,7 +46,7 @@ export const getColunas = ({
       },
       cell: ({ row }) => {
         return (
-          <span className="font-medium">
+          <span className='font-medium'>
             {row.original.integracaoCampanha.provedor.toUpperCase()}
           </span>
         );
@@ -58,17 +58,17 @@ export const getColunas = ({
     baseCols.push({
       id: 'acoes',
       header: () => {
-        return <span className="sr-only">Ações</span>;
+        return <span className='sr-only'>Ações</span>;
       },
       cell: ({ row }) => {
         return (
-          <div className="flex items-center gap-1">
+          <div className='flex items-center gap-1'>
             <TemplateAtualiza id={row.original.id} />
             <DialogDeleta
               id={row.original.id}
-              path="templates"
+              path='templates'
               nome={row.original.nome}
-              objeto="Template"
+              objeto='Template'
               mensagens={{
                 naoEncontrado: `O template "${row.original.nome}" não foi encontrado.`,
                 sucesso: `O template "${row.original.nome}" foi excluído com sucesso.`,

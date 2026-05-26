@@ -30,11 +30,11 @@ export function ProtectedPage({ roles, children }: ProtectedPageProps) {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col gap-4 p-6 w-full h-full">
-        <Skeleton className="h-8 w-64" />
-        <Skeleton className="h-4 w-96" />
-        <Skeleton className="h-4 w-96 self-end" />
-        <Skeleton className="h-full w-full" />
+      <div className='flex flex-col gap-4 p-6 w-full h-full'>
+        <Skeleton className='h-8 w-64' />
+        <Skeleton className='h-4 w-96' />
+        <Skeleton className='h-4 w-96 self-end' />
+        <Skeleton className='h-full w-full' />
       </div>
     );
   }

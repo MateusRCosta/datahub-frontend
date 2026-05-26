@@ -81,7 +81,8 @@ export function ClienteAtualiza({ id, estrutura }: ClienteAtualizaProps) {
 
           acc[campo.cabecalho] = campo.tipo === 'BOOLEANO' ? false : '';
           return acc;
-        }, {}
+        },
+        {},
       );
 
       reset(
@@ -123,11 +124,11 @@ export function ClienteAtualiza({ id, estrutura }: ClienteAtualizaProps) {
   return (
     <DialogCustom
       titulo={`Cliente: ${data?.data?.id}`}
-      idForm="form-atualiza-cliente"
+      idForm='form-atualiza-cliente'
       descricao={
-        <div className="flex w-full justify-between">
-          <span className="w-full">Gerencie os dados do cliente</span>
-          <div className="flex flex-1 w-full">
+        <div className='flex w-full justify-between'>
+          <span className='w-full'>Gerencie os dados do cliente</span>
+          <div className='flex flex-1 w-full'>
             <RegistroInfoCard
               dados={{
                 ID: data?.data?.id,
@@ -142,7 +143,7 @@ export function ClienteAtualiza({ id, estrutura }: ClienteAtualizaProps) {
       setOpen={setOpen}
       trigger={
         <DialogTrigger asChild>
-          <PenBox className="mr-2 h-4 cursor-pointer hover:text-primary transition-colors" />
+          <PenBox className='mr-2 h-4 cursor-pointer hover:text-primary transition-colors' />
         </DialogTrigger>
       }
       isPending={isPending}
@@ -150,18 +151,18 @@ export function ClienteAtualiza({ id, estrutura }: ClienteAtualizaProps) {
       <FormProvider {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          id="form-atualiza-cliente"
-          className="flex flex-col gap-2 h-full"
+          id='form-atualiza-cliente'
+          className='flex flex-col gap-2 h-full'
         >
-          <FieldGroup className="flex flex-col min-h-0 flex-1 gap-6">
+          <FieldGroup className='flex flex-col min-h-0 flex-1 gap-6'>
             {isError && (
-              <div className="text-red-500">
+              <div className='text-red-500'>
                 Erro ao carregar cliente: {error?.message}
               </div>
             )}
             {data && !isError && (
-              <div className="space-y-4">
-                <h3 className="text-sm font-semibold">Informações</h3>
+              <div className='space-y-4'>
+                <h3 className='text-sm font-semibold'>Informações</h3>
                 {data.data?.dados &&
                   estrutura.map((estruturaAtual) => {
                     const chave = estruturaAtual.cabecalho;
@@ -198,7 +199,7 @@ export function ClienteAtualiza({ id, estrutura }: ClienteAtualizaProps) {
             {isLoading && (
               <>
                 {[...Array(estrutura.length)].map((_, index) => (
-                  <Skeleton key={index} className="h-12 w-full" />
+                  <Skeleton key={index} className='h-12 w-full' />
                 ))}
               </>
             )}

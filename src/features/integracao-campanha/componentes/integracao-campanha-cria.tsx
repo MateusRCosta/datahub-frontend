@@ -83,14 +83,14 @@ export function IntegracaoCampanhaCria({
 
   return (
     <DialogCustom
-      titulo="Nova integração de campanha"
-      idForm="form-cria-integracao-campanha"
+      titulo='Nova integração de campanha'
+      idForm='form-cria-integracao-campanha'
       descricao={<p>Crie uma nova integração para campanhas.</p>}
       open={open}
       setOpen={setOpen}
       trigger={
         <Button
-          type="button"
+          type='button'
           onClick={() => {
             form.reset();
             setOpen(true);
@@ -101,30 +101,30 @@ export function IntegracaoCampanhaCria({
       }
       isPending={isPending}
     >
-      <div className="flex flex-col h-full">
+      <div className='flex flex-col h-full'>
         <FormProvider {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            id="form-cria-integracao-campanha"
-            className="flex flex-col gap-2 h-full"
+            id='form-cria-integracao-campanha'
+            className='flex flex-col gap-2 h-full'
           >
-            <FieldGroup className="flex flex-col min-h-0 flex-1 gap-6">
-              <div className="space-y-4">
-                <h3 className="text-sm font-semibold">Informações básicas</h3>
+            <FieldGroup className='flex flex-col min-h-0 flex-1 gap-6'>
+              <div className='space-y-4'>
+                <h3 className='text-sm font-semibold'>Informações básicas</h3>
                 <Input
-                  name="nome"
-                  label="Nome"
-                  placeholder="Digite o nome da integração"
+                  name='nome'
+                  label='Nome'
+                  placeholder='Digite o nome da integração'
                 />
                 <Select
-                  name="provedor"
-                  label="Provedor"
+                  name='provedor'
+                  label='Provedor'
                   options={provedorOptions}
                   onValueChange={atualizaConfigProvedor}
                 />
               </div>
-              <div className="space-y-4">
-                <h3 className="text-sm font-semibold">Configuração</h3>
+              <div className='space-y-4'>
+                <h3 className='text-sm font-semibold'>Configuração</h3>
                 <IntegracaoCampanhaConfigForm />
               </div>
             </FieldGroup>

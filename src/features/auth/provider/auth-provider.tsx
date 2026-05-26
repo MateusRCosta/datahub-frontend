@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const resolvePathFront = (resource: ResourceName): string => {
     return RESOURCE_CONFIG[resource].pathFront;
-  }
+  };
 
   useEffect(() => {
     if (!naoAutenticado) return;

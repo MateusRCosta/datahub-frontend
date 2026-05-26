@@ -6,43 +6,43 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 const formataDataIso = (value: string): Date | null => {
-    const date = new Date(value);
-    return Number.isNaN(date.getTime()) ? null : date;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
 };
 
 const formataDataPadraoBrasil = (value: string): Date | null => {
-    const match = value.match(/^(\d{2})[-/](\d{2})[-/](\d{4})$/);
-    if (!match) return null;
-    const [, day, month, year] = match;
-    const parsed = new Date(`${year}-${month}-${day}`);
-    return Number.isNaN(parsed.getTime()) ? null : parsed;
+  const match = value.match(/^(\d{2})[-/](\d{2})[-/](\d{4})$/);
+  if (!match) return null;
+  const [, day, month, year] = match;
+  const parsed = new Date(`${year}-${month}-${day}`);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
 };
 
 export const formataData = (valor: unknown): Date | null => {
-    if (valor instanceof Date) {
-        return Number.isNaN(valor.getTime()) ? null : valor;
-    }
+  if (valor instanceof Date) {
+    return Number.isNaN(valor.getTime()) ? null : valor;
+  }
 
-    if (typeof valor !== "string") {
-        return null;
-    }
+  if (typeof valor !== 'string') {
+    return null;
+  }
 
-    const trimmed = valor.trim();
-    if (!trimmed) {
-        return null;
-    }
+  const trimmed = valor.trim();
+  if (!trimmed) {
+    return null;
+  }
 
-    return formataDataPadraoBrasil(trimmed) ?? formataDataIso(trimmed);
+  return formataDataPadraoBrasil(trimmed) ?? formataDataIso(trimmed);
 };
 
 export const formataDataUI = (valor: unknown): string => {
-    const data = formataData(valor);
-    if (!data) return '--';
+  const data = formataData(valor);
+  if (!data) return '--';
 
-    const date = data.toLocaleDateString('pt-BR');
-    const time = data.toLocaleTimeString('pt-BR');
+  const date = data.toLocaleDateString('pt-BR');
+  const time = data.toLocaleTimeString('pt-BR');
 
-    return `${date} ${time}`
+  return `${date} ${time}`;
 };
 
 export function formatUTC(date: Date) {

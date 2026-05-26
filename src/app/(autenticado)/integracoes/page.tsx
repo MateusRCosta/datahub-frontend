@@ -7,10 +7,10 @@ export default function IntegracoesPage() {
   return (
     <ProtectedPage roles={getRolesParaRecurso('integracoes')}>
       <Cabecalho
-        titulo="Integrações de coletas"
-        descricao="Gerencie as integrações usadas para coleta de dados"
+        titulo='Integrações de coletas'
+        descricao='Gerencie as integrações usadas para coleta de dados'
       />
-      <div className="flex flex-col w-full flex-1 min-h-0 gap-2 p-6">
+      <div className='flex flex-col w-full flex-1 min-h-0 gap-2 p-6'>
         <IntegracaoTabela />
       </div>
     </ProtectedPage>

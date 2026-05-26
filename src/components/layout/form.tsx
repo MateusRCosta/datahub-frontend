@@ -86,7 +86,7 @@ export function InputGenerico<TFieldValues extends FieldValues = FieldValues>({
         return (
           <Field data-invalid={ariaInvalid ?? fieldState.invalid}>
             {label && (
-              <FieldLabel htmlFor={name} className="font-normal text-xs">
+              <FieldLabel htmlFor={name} className='font-normal text-xs'>
                 {label}
               </FieldLabel>
             )}
@@ -152,7 +152,7 @@ export function SelectGenerico({
         return (
           <Field data-invalid={fieldState.invalid}>
             {label && (
-              <FieldLabel htmlFor={name} className="font-normal text-xs">
+              <FieldLabel htmlFor={name} className='font-normal text-xs'>
                 {label}
               </FieldLabel>
             )}
@@ -174,7 +174,7 @@ export function SelectGenerico({
               value={stringValue}
               disabled={disabled}
             >
-              <SelectTrigger className="bg-field-background dark:bg-input/30 text-sm">
+              <SelectTrigger className='bg-field-background dark:bg-input/30 text-sm'>
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
               <SelectContent>
@@ -220,10 +220,10 @@ export function SwitchGenerico<TFieldValues extends FieldValues = FieldValues>({
           className={cn(label, className)}
         >
           {label && (
-            <div className="space-y-0.5">
+            <div className='space-y-0.5'>
               <FieldLabel
                 htmlFor={name}
-                className="cursor-pointer font-normal text-xs"
+                className='cursor-pointer font-normal text-xs'
               >
                 {label}
               </FieldLabel>
@@ -289,7 +289,7 @@ export function CheckboxGenerico({
             />
             <FieldLabel
               htmlFor={`${name}-${itemValue || ''}`}
-              className="cursor-pointer text-xs text-foreground font-normal"
+              className='cursor-pointer text-xs text-foreground font-normal'
             >
               {label}
             </FieldLabel>
@@ -327,13 +327,13 @@ export function InputSelecaoModal({
         render={({ fieldState }) => (
           <Field data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor={name}>{label}</FieldLabel>
-            <div className="flex gap-2 w-full">
+            <div className='flex gap-2 w-full'>
               <Input
                 id={name}
                 value={nomeDisplay || ''}
                 readOnly
                 onClick={() => setIsModalOpen(true)}
-                placeholder="Clique para selecionar..."
+                placeholder='Clique para selecionar...'
                 className={cn(
                   'bg-field-background cursor-pointer flex-1',
                   rest.className,
@@ -341,11 +341,11 @@ export function InputSelecaoModal({
                 {...rest}
               />
               <Button
-                type="button"
-                variant="outline"
+                type='button'
+                variant='outline'
                 onClick={() => setIsModalOpen(true)}
               >
-                <Search className="w-4 h-4" />
+                <Search className='w-4 h-4' />
               </Button>
             </div>
             <FieldError>{fieldState.error?.message}</FieldError>
@@ -356,13 +356,13 @@ export function InputSelecaoModal({
       {/* Modal que renderiza a Tabela apenas quando aberto */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent
-          className="min-w-[50dvw] max-w-[85dvw] md:min-w-[50dvw] md:max-w-[50dvw] max-h-[70dvh] md:max-h-[50dvh] h-full flex flex-col"
+          className='min-w-[50dvw] max-w-[85dvw] md:min-w-[50dvw] md:max-w-[50dvw] max-h-[70dvh] md:max-h-[50dvh] h-full flex flex-col'
           onPointerDownOutside={(e) => e.preventDefault()}
         >
           <DialogHeader>
             <DialogTitle>{modalTitle}</DialogTitle>
           </DialogHeader>
-          <div className="flex-1 h-full shrink-0 overflow-hidden p-2 overflow-y-auto">
+          <div className='flex-1 h-full shrink-0 overflow-hidden p-2 overflow-y-auto'>
             {modalContent(() => setIsModalOpen(false))}
           </div>
         </DialogContent>
@@ -470,23 +470,25 @@ export function DatePickerTime<TFieldValues extends FieldValues = FieldValues>({
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
-                    variant="outline"
-                    className="w-48 justify-between font-normal"
+                    variant='outline'
+                    className='w-48 justify-between font-normal'
                   >
-                    {currentDate ? formatUTC(currentDate) : 'Selecione uma data'}
+                    {currentDate
+                      ? formatUTC(currentDate)
+                      : 'Selecione uma data'}
 
                     <ChevronDownIcon />
                   </Button>
                 </PopoverTrigger>
 
                 <PopoverContent
-                  className="w-auto overflow-hidden p-0"
-                  align="start"
+                  className='w-auto overflow-hidden p-0'
+                  align='start'
                 >
                   <Calendar
-                    mode="single"
+                    mode='single'
                     selected={currentDate}
-                    captionLayout="dropdown"
+                    captionLayout='dropdown'
                     defaultMonth={currentDate}
                     onSelect={handleDateChange}
                   />
@@ -496,16 +498,16 @@ export function DatePickerTime<TFieldValues extends FieldValues = FieldValues>({
 
             <Field
               data-invalid={ariaInvalid ?? fieldState.invalid}
-              className="w-36"
+              className='w-36'
             >
               <FieldLabel>Tempo</FieldLabel>
 
               <Input
-                type="time"
-                step="1"
+                type='time'
+                step='1'
                 value={currentDate ? getUTCTime(currentDate) : ''}
                 onChange={handleTimeChange}
-                className="appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                className='appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none'
               />
 
               <FieldError>{fieldState.error?.message}</FieldError>

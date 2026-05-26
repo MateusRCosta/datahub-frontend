@@ -21,14 +21,14 @@ const retornaClientes = async ({
   return apiRequest<PaginationApiResponse<ClientesResponse[]>>({
     path: `${baseUrl}?baseDeDadosId=${baseDadosId}`,
     method: 'GET',
-    query: { page, limit, orderBy, order,  },
+    query: { page, limit, orderBy, order },
   });
 };
 
 export default function useRetornaClientes({
   enabled,
   pagination,
-  baseDadosId
+  baseDadosId,
 }: {
   enabled: boolean;
   pagination: PaginationApiRequest<string>;

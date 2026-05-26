@@ -78,7 +78,7 @@ export function BaseDadosCria({ pagination, filtros }: BaseDadosCreateProps) {
   };
 
   if (isLoading) {
-    return <Skeleton className="h-9 w-32" />;
+    return <Skeleton className='h-9 w-32' />;
   }
 
   function retornaColunasDoCsv(event: React.ChangeEvent<HTMLInputElement>) {
@@ -122,13 +122,13 @@ export function BaseDadosCria({ pagination, filtros }: BaseDadosCreateProps) {
   return (
     <DialogCustom
       titulo={`Nova Base de dados`}
-      idForm="form-cria-base-dados"
+      idForm='form-cria-base-dados'
       descricao={<p>Crie uma nova base de dados.</p>}
       open={open}
       setOpen={setOpen}
       trigger={
         <Button
-          type="button"
+          type='button'
           onClick={() => {
             form.reset();
             setOpen(true);
@@ -139,60 +139,60 @@ export function BaseDadosCria({ pagination, filtros }: BaseDadosCreateProps) {
       }
       isPending={isPending}
     >
-      <div className="flex flex-col h-full">
+      <div className='flex flex-col h-full'>
         <FormProvider {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            id="form-cria-base-dados"
-            className="flex flex-col gap-2 h-full"
+            id='form-cria-base-dados'
+            className='flex flex-col gap-2 h-full'
           >
-            <FieldGroup className="flex flex-col min-h-0 flex-1 gap-6">
-              <div className="space-y-4">
-                <h3 className="text-sm font-semibold">Informações básicas</h3>
+            <FieldGroup className='flex flex-col min-h-0 flex-1 gap-6'>
+              <div className='space-y-4'>
+                <h3 className='text-sm font-semibold'>Informações básicas</h3>
                 <Input
-                  name="nome"
-                  label="Nome"
-                  placeholder="Digite o nome da base de dados"
+                  name='nome'
+                  label='Nome'
+                  placeholder='Digite o nome da base de dados'
                 />
                 <Input
-                  name="arquivo"
-                  label="Arquivo"
-                  accept=".csv"
-                  type="file"
+                  name='arquivo'
+                  label='Arquivo'
+                  accept='.csv'
+                  type='file'
                   onChange={(e) => retornaColunasDoCsv(e)}
-                  placeholder="Escolha o arquivo csv"
+                  placeholder='Escolha o arquivo csv'
                 />
-                <FieldGroup className="flex flex-col min-h-0 flex-1 gap-6">
-                  <div className="space-y-4">
-                    <h3 className="text-sm font-semibold">
+                <FieldGroup className='flex flex-col min-h-0 flex-1 gap-6'>
+                  <div className='space-y-4'>
+                    <h3 className='text-sm font-semibold'>
                       Estrutura dos dados
                     </h3>
-                    <div className="grid gap-2">
+                    <div className='grid gap-2'>
                       {colunas.length === 0 &&
                         'Insira um arquivo csv para visualizar as suas colunas'}
                       {estruturaFields.map((field, index) => (
                         <div
                           key={field.id}
-                          className="flex flex-col bg-foreground/1 p-2 gap-2 border rounded-md"
+                          className='flex flex-col bg-foreground/1 p-2 gap-2 border rounded-md'
                         >
                           <Input
                             name={`estrutura.${index}.cabecalho`}
-                            label="Cabeçalho"
+                            label='Cabeçalho'
                             disabled
                           />
                           <Input
                             name={`estrutura.${index}.rotulo`}
-                            label="Rótulo"
+                            label='Rótulo'
                           />
-                          <div className="flex gap-2 w-full items-center">
+                          <div className='flex gap-2 w-full items-center'>
                             <Switch
                               name={`estrutura.${index}.obrigatorio` as const}
-                              label="Obrigatório"
-                              className="justify-end"
+                              label='Obrigatório'
+                              className='justify-end'
                             />
                             <Select
                               name={`estrutura.${index}.tipo`}
-                              label="Tipo"
+                              label='Tipo'
                               options={tipoColunaOptions}
                             />
                           </div>

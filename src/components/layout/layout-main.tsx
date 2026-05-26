@@ -19,8 +19,8 @@ function LayoutMainContent({ children }: { children: React.ReactNode }) {
 
   if (isLoading || !usuario) {
     return (
-      <main className="flex min-h-dvh w-full flex-col gap-4 p-6">
-        <Skeleton className="min-h-0 flex-1 w-full" />
+      <main className='flex min-h-dvh w-full flex-col gap-4 p-6'>
+        <Skeleton className='min-h-0 flex-1 w-full' />
       </main>
     );
   }
@@ -29,7 +29,7 @@ function LayoutMainContent({ children }: { children: React.ReactNode }) {
     <SidebarProvider>
       <AppSidebar />
       <Main>
-        <div className="sticky top-0 z-10 pt-2 pl-2 lg:hidden">
+        <div className='sticky top-0 z-10 pt-2 pl-2 lg:hidden'>
           <SidebarTrigger />
         </div>
         {children}

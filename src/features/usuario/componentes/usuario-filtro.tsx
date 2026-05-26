@@ -46,26 +46,26 @@ export function UsuarioFiltro({ filtros, setFiltros }: UsuarioFiltroProps) {
     <FormWrapper
       form={form}
       onSubmit={handleSubmit}
-      id="usuario-filtro-complexo"
+      id='usuario-filtro-complexo'
     >
-      <div className="grid grid-cols-1 gap-4">
-        <InputGenerico name="nome" label="Nome" />
-        <InputGenerico name="email" label="E-mail" />
-        <div className="grid grid-cols-2 gap-2">
+      <div className='grid grid-cols-1 gap-4'>
+        <InputGenerico name='nome' label='Nome' />
+        <InputGenerico name='email' label='E-mail' />
+        <div className='grid grid-cols-2 gap-2'>
           <SelectGenerico
-            name="ativo"
-            label="Ativo"
+            name='ativo'
+            label='Ativo'
             options={selectOptionsAtivo}
           />
         </div>
-        <div className="grid grid-cols-2 gap-2">
+        <div className='grid grid-cols-2 gap-2'>
           <SelectGenerico
-            name="admin"
-            label="Tipo de usuário"
+            name='admin'
+            label='Tipo de usuário'
             options={selectOptionsAdmin}
           />
         </div>
-        <Button form="usuario-filtro-complexo" type="submit" className="w-full">
+        <Button form='usuario-filtro-complexo' type='submit' className='w-full'>
           Filtrar
         </Button>
       </div>

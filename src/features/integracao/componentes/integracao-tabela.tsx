@@ -39,9 +39,9 @@ export function IntegracaoTabela() {
   const colunas = getColunas();
 
   return (
-    <div className="flex flex-col w-full flex-1 min-h-0 mx-auto gap-2">
+    <div className='flex flex-col w-full flex-1 min-h-0 mx-auto gap-2'>
       <div
-        className="flex flex-col md:flex-row gap-2 shrink-0 self-end"
+        className='flex flex-col md:flex-row gap-2 shrink-0 self-end'
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -61,7 +61,7 @@ export function IntegracaoTabela() {
           }
         />
       </div>
-      <div className="flex-1 min-h-0 w-full">
+      <div className='flex-1 min-h-0 w-full'>
         <DataTable
           columns={colunas}
           data={registros || []}

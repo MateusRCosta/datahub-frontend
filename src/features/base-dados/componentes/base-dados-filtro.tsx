@@ -35,12 +35,12 @@ export function BaseDadosFiltro({ filtros, setFiltros }: BaseDadosFiltroProps) {
     <FormWrapper
       form={form}
       onSubmit={handleSubmit}
-      id="usuario-filtro-complexo"
+      id='usuario-filtro-complexo'
     >
-      <div className="grid grid-cols-1 gap-4">
-        <InputGenerico name="nome" label="Nome" />
-        <InputGenerico name="id" label="Id" />
-        <Button form="usuario-filtro-complexo" type="submit" className="w-full">
+      <div className='grid grid-cols-1 gap-4'>
+        <InputGenerico name='nome' label='Nome' />
+        <InputGenerico name='id' label='Id' />
+        <Button form='usuario-filtro-complexo' type='submit' className='w-full'>
           Filtrar
         </Button>
       </div>

@@ -102,17 +102,17 @@ export function AppSidebar() {
   const menuAdmin = menuItems.filter((item) => item.visible && item.adminOnly);
 
   return (
-    <Sidebar collapsible="icon" className="border-0">
-      <SidebarContent className="bg-primary">
+    <Sidebar collapsible='icon' className='border-0'>
+      <SidebarContent className='bg-primary'>
         {/* Header */}
-        <SidebarGroup className="border-b border-white rounded-b-none">
+        <SidebarGroup className='border-b border-white rounded-b-none'>
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton
                 onClick={() => toggleSidebar()}
-                className="flex items-center gap-2 text-white font-medium"
+                className='flex items-center gap-2 text-white font-medium'
               >
-                <Menu className="h-4 w-4" />
+                <Menu className='h-4 w-4' />
                 <span>Hotdata</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -132,9 +132,9 @@ export function AppSidebar() {
                       <SidebarMenuButton
                         isActive={currentPage === item.id}
                         onClick={() => handleNavigate(item.path)}
-                        className="text-white font-medium"
+                        className='text-white font-medium'
                       >
-                        <Icon className="h-4 w-4" />
+                        <Icon className='h-4 w-4' />
                         <span>{item.label}</span>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -146,7 +146,7 @@ export function AppSidebar() {
             .length > 0 && (
             <SidebarGroupContent>
               {open && (
-                <SidebarGroupLabel className="text-white font-medium">
+                <SidebarGroupLabel className='text-white font-medium'>
                   Integrações
                 </SidebarGroupLabel>
               )}
@@ -160,9 +160,9 @@ export function AppSidebar() {
                         <SidebarMenuButton
                           isActive={currentPage === item.id}
                           onClick={() => handleNavigate(item.path)}
-                          className="text-white font-medium"
+                          className='text-white font-medium'
                         >
-                          <Icon className="h-4 w-4" />
+                          <Icon className='h-4 w-4' />
                           <span>{item.label}</span>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
@@ -174,7 +174,7 @@ export function AppSidebar() {
           {menuAdmin.length > 0 && (
             <SidebarGroupContent>
               {open && (
-                <SidebarGroupLabel className="text-white font-medium">
+                <SidebarGroupLabel className='text-white font-medium'>
                   Administração
                 </SidebarGroupLabel>
               )}
@@ -186,9 +186,9 @@ export function AppSidebar() {
                       <SidebarMenuButton
                         isActive={currentPage === item.id}
                         onClick={() => handleNavigate(item.path)}
-                        className="text-white font-medium"
+                        className='text-white font-medium'
                       >
-                        <Icon className="h-4 w-4" />
+                        <Icon className='h-4 w-4' />
                         <span>{item.label}</span>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -200,24 +200,24 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="bg-primary border-t rounded-b-none border-white">
+      <SidebarFooter className='bg-primary border-t rounded-b-none border-white'>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
               onClick={handleAlteraTema}
-              className="text-white"
+              className='text-white'
             >
-              <Sun className="h-4 w-4 dark:hidden" />
-              <Moon className="h-4 w-4 hidden dark:block" />
+              <Sun className='h-4 w-4 dark:hidden' />
+              <Moon className='h-4 w-4 hidden dark:block' />
               <span>Alterar Tema</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton
               onClick={() => setOpenMe(!openMe)}
-              className="text-white"
+              className='text-white'
             >
-              <Settings className="h-4 w-4" />
+              <Settings className='h-4 w-4' />
               <span>Configurações</span>
             </SidebarMenuButton>
             <Me open={openMe} onOpenChange={() => setOpenMe(false)} />
@@ -225,11 +225,11 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton
               onClick={handleLogout}
-              className="text-vermelho"
+              className='text-vermelho'
               disabled={isPending}
             >
-              {isPending && <Loader className="mr-2 h-4 w-4 animate-spin" />}
-              <LogOut className="h-4 w-4" />
+              {isPending && <Loader className='mr-2 h-4 w-4 animate-spin' />}
+              <LogOut className='h-4 w-4' />
               <span>Sair</span>
             </SidebarMenuButton>
           </SidebarMenuItem>

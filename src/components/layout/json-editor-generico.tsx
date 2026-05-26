@@ -45,7 +45,7 @@ export function JsonEditorGenerico<
       render={({ field: { onChange, value }, fieldState }) => (
         <Field data-invalid={fieldState.invalid} className={className}>
           {label && (
-            <FieldLabel htmlFor={String(name)} className="font-normal text-xs">
+            <FieldLabel htmlFor={String(name)} className='font-normal text-xs'>
               {label}
             </FieldLabel>
           )}
@@ -62,7 +62,7 @@ export function JsonEditorGenerico<
               extensions={[json()]}
               onChange={onChange}
               theme={isDark ? oneDark : 'light'}
-              className="text-sm"
+              className='text-sm'
             />
           </div>
           <FieldError>{fieldState.error?.message}</FieldError>

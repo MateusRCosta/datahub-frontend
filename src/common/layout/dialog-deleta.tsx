@@ -63,7 +63,7 @@ export function DialogDeleta({
     <>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Trash2 className="text-destructive mr-2 h-4" />
+          <Trash2 className='text-destructive mr-2 h-4' />
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
@@ -80,7 +80,7 @@ export function DialogDeleta({
             </p>
           )}
           <DialogFooter>
-            <div className="w-full h-full flex flex-row justify-between gap-2">
+            <div className='w-full h-full flex flex-row justify-between gap-2'>
               <Button
                 variant={'destructive'}
                 onClick={() => handleDeleta()}
@@ -89,7 +89,7 @@ export function DialogDeleta({
                 Excluir
               </Button>
               <DialogClose asChild>
-                <Button variant="outline">Sair</Button>
+                <Button variant='outline'>Sair</Button>
               </DialogClose>
             </div>
           </DialogFooter>

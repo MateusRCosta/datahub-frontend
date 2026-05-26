@@ -7,10 +7,10 @@ export default function UsuariosPage() {
   return (
     <ProtectedPage roles={getRolesParaRecurso('basesDados')}>
       <Cabecalho
-        titulo="Bases de dados"
-        descricao="Gerencie as bases de dados do sistema"
+        titulo='Bases de dados'
+        descricao='Gerencie as bases de dados do sistema'
       />
-      <div className="flex flex-col w-full flex-1 min-h-0 gap-2 p-6">
+      <div className='flex flex-col w-full flex-1 min-h-0 gap-2 p-6'>
         <BaseDadosTabela />
       </div>
     </ProtectedPage>

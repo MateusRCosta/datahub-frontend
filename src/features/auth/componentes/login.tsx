@@ -76,8 +76,8 @@ export default function Login() {
   };
 
   return (
-    <div className="mx-auto flex min-h-dvh min-w-dvw items-center justify-center">
-      <Card className="w-[90%] rounded-lg px-4 py-6 shadow-xl transition-shadow duration-200 hover:shadow-sm sm:w-[80%] md:w-[60%] lg:w-[40%]">
+    <div className='mx-auto flex min-h-dvh min-w-dvw items-center justify-center'>
+      <Card className='w-[90%] rounded-lg px-4 py-6 shadow-xl transition-shadow duration-200 hover:shadow-sm sm:w-[80%] md:w-[60%] lg:w-[40%]'>
         <CardHeader>
           <CardTitle>Acesso ao DataHub</CardTitle>
           <CardDescription>
@@ -88,22 +88,22 @@ export default function Login() {
           <FormWrapper
             form={form}
             onSubmit={(data) => onSubmit(data)}
-            id="login-form"
+            id='login-form'
           >
             <FieldGroup>
-              <InputGenerico name="email" label="E-mail" type="text" />
-              <InputGenerico name="senha" label="Senha" type="password" />
+              <InputGenerico name='email' label='E-mail' type='text' />
+              <InputGenerico name='senha' label='Senha' type='password' />
               <FieldError>{form.formState.errors.root?.message}</FieldError>
             </FieldGroup>
           </FormWrapper>
         </CardContent>
         <CardFooter>
-          <Field orientation="horizontal">
+          <Field orientation='horizontal'>
             <Button
-              type="submit"
-              form="login-form"
-              size="lg"
-              className="w-full"
+              type='submit'
+              form='login-form'
+              size='lg'
+              className='w-full'
               disabled={isPending}
             >
               {isPending ? 'Enviando...' : 'Enviar'}

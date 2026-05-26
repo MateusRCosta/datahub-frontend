@@ -71,18 +71,18 @@ export function FiltroSimplesGenerico<
 
   return (
     <FormWrapper form={form}>
-      <div className="flex w-full max-w-sm items-center gap-0 overflow-hidden rounded-lg border border-input bg-background p-0 focus-within:ring-2 focus-within:ring-ring">
+      <div className='flex w-full max-w-sm items-center gap-0 overflow-hidden rounded-lg border border-input bg-background p-0 focus-within:ring-2 focus-within:ring-ring'>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
-              variant="ghost"
-              className="rounded-none border-r bg-field-background px-3 text-xs font-medium tracking-wider hover:bg-muted dark:bg-input/30"
+              variant='ghost'
+              className='rounded-none border-r bg-field-background px-3 text-xs font-medium tracking-wider hover:bg-muted dark:bg-input/30'
             >
               {opcoesLabels[watchFiltrarPor]}
-              <ChevronDown className="ml-2 h-3 w-3 opacity-50" />
+              <ChevronDown className='ml-2 h-3 w-3 opacity-50' />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="start">
+          <DropdownMenuContent align='start'>
             {Object.entries(opcoesLabels).map(([key, value]) => (
               <DropdownMenuItem
                 key={key}
@@ -94,26 +94,26 @@ export function FiltroSimplesGenerico<
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <div className="flex flex-1 items-center">
+        <div className='flex flex-1 items-center'>
           <Controller
             control={form.control}
-            name="valor"
+            name='valor'
             render={({ field }) => (
               <Input
                 {...field}
-                placeholder="Buscar..."
-                className="rounded-none border-none bg-field-background focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-input/30"
+                placeholder='Buscar...'
+                className='rounded-none border-none bg-field-background focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-input/30'
               />
             )}
           />
           <Button
-            type="button"
+            type='button'
             onClick={form.handleSubmit(handleSubmit)}
-            size="icon"
-            variant="ghost"
-            className="rounded-bl-none rounded-tl-none border-l bg-field-background dark:bg-input/30"
+            size='icon'
+            variant='ghost'
+            className='rounded-bl-none rounded-tl-none border-l bg-field-background dark:bg-input/30'
           >
-            <Search className="h-4 w-4 opacity-50" />
+            <Search className='h-4 w-4 opacity-50' />
           </Button>
         </div>
       </div>

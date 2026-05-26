@@ -32,16 +32,16 @@ export function TemplateFiltro({ filtros, setFiltros }: TemplateFiltroProps) {
     <FormWrapper
       form={form}
       onSubmit={handleSubmit}
-      id="template-filtro-complexo"
+      id='template-filtro-complexo'
     >
-      <div className="grid grid-cols-1 gap-4">
-        <InputGenerico name="nome" label="Nome" />
-        <InputGenerico name="provedor" label="Provedor" />
-        <InputGenerico name="id" label="Id" />
+      <div className='grid grid-cols-1 gap-4'>
+        <InputGenerico name='nome' label='Nome' />
+        <InputGenerico name='provedor' label='Provedor' />
+        <InputGenerico name='id' label='Id' />
         <Button
-          form="template-filtro-complexo"
-          type="submit"
-          className="w-full"
+          form='template-filtro-complexo'
+          type='submit'
+          className='w-full'
         >
           Filtrar
         </Button>

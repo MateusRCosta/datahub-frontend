@@ -15,28 +15,28 @@ export function constroiClienteColunas({
   colunasVisiveis,
   estrutura,
 }: ConstroiColunasParams): ColumnDef<ClientesResponse>[] {
-  const visiveis = new Set(colunasVisiveis.map(c => c.toLowerCase().trim()));
+  const visiveis = new Set(colunasVisiveis.map((c) => c.toLowerCase().trim()));
 
   const colunaId: ColumnDef<ClientesResponse> = {
     accessorKey: 'id',
     header: () => {
-      return <div className="sr-only">Identificador</div>;
+      return <div className='sr-only'>Identificador</div>;
     },
     cell: ({ row }) => {
       return (
-        <div className="flex flex-col">
-          <span className="font-medium">{row.original.id}</span>
+        <div className='flex flex-col'>
+          <span className='font-medium'>{row.original.id}</span>
         </div>
       );
     },
-  }
+  };
 
   const colunasDinamicas: ColumnDef<ClientesResponse>[] = (estrutura ?? [])
     .filter((est) => visiveis.has(est.cabecalho.toLowerCase().trim()))
     .map((est) => ({
       accessorKey: `dados.${est.cabecalho}`,
       header: () => (
-        <span className="font-semibold">
+        <span className='font-semibold'>
           {est.rotulo ?? est.cabecalho.replaceAll('_', ' ')}
         </span>
       ),
@@ -44,7 +44,11 @@ export function constroiClienteColunas({
         const valor = getValue();
 
         if (valor == null) {
-          return <span className="text-muted-foreground truncate w-1/3">(sem valor)</span>;
+          return (
+            <span className='text-muted-foreground truncate w-1/3'>
+              (sem valor)
+            </span>
+          );
         }
 
         return <span className='block max-w-32 truncate'>{String(valor)}</span>;
@@ -55,9 +59,9 @@ export function constroiClienteColunas({
     id: 'acoes',
     enableSorting: false,
     enableHiding: false,
-    header: () => <span className="sr-only">Ações</span>,
+    header: () => <span className='sr-only'>Ações</span>,
     cell: ({ row }) => (
-      <div className="flex items-center gap-1">
+      <div className='flex items-center gap-1'>
         <div className='relative inline-flex'>
           {row.original.validacao.length > 0 && (
             <div className='absolute -top-1 -right z-10'>
@@ -71,8 +75,8 @@ export function constroiClienteColunas({
         </div>
         <DialogDeleta
           id={row.original.id}
-          path="clientes"
-          objeto="Cliente"
+          path='clientes'
+          objeto='Cliente'
           mensagens={{
             naoEncontrado: `O cliente "${row.original.id}" não foi encontrado.`,
             sucesso: `O cliente "${row.original.id}" foi excluído com sucesso.`,

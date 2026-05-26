@@ -31,12 +31,12 @@ export const getColunas = ({
     {
       accessorKey: 'id',
       header: () => {
-        return <div className="sr-only">Identificador</div>;
+        return <div className='sr-only'>Identificador</div>;
       },
       cell: ({ row }) => {
         return (
-          <div className="flex flex-col">
-            <span className="font-medium">{row.original.id}</span>
+          <div className='flex flex-col'>
+            <span className='font-medium'>{row.original.id}</span>
           </div>
         );
       },
@@ -44,16 +44,16 @@ export const getColunas = ({
     {
       accessorKey: 'nome',
       header: () => {
-        return <div className="">Nome</div>;
+        return <div className=''>Nome</div>;
       },
       cell: ({ row }) => {
         return (
-          <div className="flex flex-col">
-            <span className="font-medium">{row.original.nome}</span>
-            <span className="text-xs text-muted-foreground">
+          <div className='flex flex-col'>
+            <span className='font-medium'>{row.original.nome}</span>
+            <span className='text-xs text-muted-foreground'>
               {row.original.email}
             </span>
-            <span className="text-xs text-muted-foreground">
+            <span className='text-xs text-muted-foreground'>
               {row.original.admin ? 'Administrador' : 'Usuário'}
             </span>
           </div>
@@ -63,7 +63,7 @@ export const getColunas = ({
     {
       accessorKey: 'permissoes',
       header: () => {
-        return <div className="">Permissões</div>;
+        return <div className=''>Permissões</div>;
       },
       cell: ({ row }) => {
         const permissoes = row.original.permissoes;
@@ -81,7 +81,7 @@ export const getColunas = ({
         });
 
         return (
-          <div className="flex gap-2">
+          <div className='flex gap-2'>
             {items.map((item) => {
               const Icon = item.icon;
               return (
@@ -89,10 +89,10 @@ export const getColunas = ({
                   <Tooltip>
                     <div>
                       <TooltipTrigger asChild>
-                        <Icon className="h-4 w-4 cursor-pointer" />
+                        <Icon className='h-4 w-4 cursor-pointer' />
                       </TooltipTrigger>
                       <TooltipContent>
-                        <div className="space-y-1">{item.label}</div>
+                        <div className='space-y-1'>{item.label}</div>
                       </TooltipContent>
                     </div>
                   </Tooltip>
@@ -110,15 +110,15 @@ export const getColunas = ({
       {
         accessorKey: 'ativo',
         header: () => {
-          return <div className="">Status</div>;
+          return <div className=''>Status</div>;
         },
         cell: ({ row }) => {
           return (
-            <div className="flex items-right">
+            <div className='flex items-right'>
               <SwitchStatus
                 status={row.getValue('ativo')}
                 id={row.original.id}
-                path="usuarios"
+                path='usuarios'
                 mensagens={{
                   naoEncontrado: `O usuário "${row.original.nome}" não foi encontrado.`,
                   sucesso: 'Status alterado com sucesso.',
@@ -131,15 +131,15 @@ export const getColunas = ({
       {
         id: 'acoes',
         header: () => {
-          return <span className="sr-only">Ações</span>;
+          return <span className='sr-only'>Ações</span>;
         },
         cell: ({ row }) => {
           return (
-            <div className="flex items-center gap-1">
+            <div className='flex items-center gap-1'>
               <UsuarioEdita id={row.original.id} />
               <DialogDeleta
                 id={row.original.id}
-                path="usuarios"
+                path='usuarios'
                 nome={row.original.nome}
                 objeto={'Usuário'}
                 mensagens={{

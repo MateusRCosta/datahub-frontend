@@ -16,12 +16,12 @@ export const getColunas = ({
     {
       accessorKey: 'id',
       header: () => {
-        return <div className="sr-only">Identificador</div>;
+        return <div className='sr-only'>Identificador</div>;
       },
       cell: ({ row }) => {
         return (
-          <div className="flex flex-col">
-            <span className="font-medium">{row.original.id}</span>
+          <div className='flex flex-col'>
+            <span className='font-medium'>{row.original.id}</span>
           </div>
         );
       },
@@ -29,13 +29,13 @@ export const getColunas = ({
     {
       accessorKey: 'nome',
       header: () => {
-        return <div className="">Nome</div>;
+        return <div className=''>Nome</div>;
       },
       cell: ({ row }) => {
         return (
-          <div className="flex flex-col">
-            <span className="font-medium">{row.original.nome}</span>
-            <span className="text-xs text-muted-foreground">
+          <div className='flex flex-col'>
+            <span className='font-medium'>{row.original.nome}</span>
+            <span className='text-xs text-muted-foreground'>
               {row.original.usuario
                 ? `Criado pelo usuário: ${row.original.usuario.nome}`
                 : ''}
@@ -50,11 +50,11 @@ export const getColunas = ({
     {
       accessorKey: '_count',
       header: () => {
-        return <div className="">Clientes</div>;
+        return <div className=''>Clientes</div>;
       },
       cell: ({ row }) => {
         return (
-          <span className="font-medium">{row.original._count.clientes}</span>
+          <span className='font-medium'>{row.original._count.clientes}</span>
         );
       },
     },
@@ -64,16 +64,19 @@ export const getColunas = ({
     baseCols.push({
       id: 'acoes',
       header: () => {
-        return <span className="sr-only">Ações</span>;
+        return <span className='sr-only'>Ações</span>;
       },
       cell: ({ row }) => {
         return (
-          <div className="flex items-center gap-1">
-            <ClienteTabela baseDadosId={row.original.id} estrutura={row.original.estrutura}/>
+          <div className='flex items-center gap-1'>
+            <ClienteTabela
+              baseDadosId={row.original.id}
+              estrutura={row.original.estrutura}
+            />
             <BaseDadosAtualiza id={row.original.id} />
             <DialogDeleta
               id={row.original.id}
-              path="basesDados"
+              path='basesDados'
               nome={row.original.nome}
               objeto={'Base de dados'}
               mensagens={{

@@ -87,10 +87,10 @@ export function DataTable<TData, TValue>({
   const currentPage = totalItens > 0 ? Math.min(page, totalPages) : 0;
 
   return (
-    <div className="flex flex-col overflow-hidden rounded-md border w-full h-full min-h-0">
-      <div className="flex-1 min-h-0 overflow-auto">
+    <div className='flex flex-col overflow-hidden rounded-md border w-full h-full min-h-0'>
+      <div className='flex-1 min-h-0 overflow-auto'>
         <Table>
-          <TableHeader className="header">
+          <TableHeader className='header'>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -131,7 +131,7 @@ export function DataTable<TData, TValue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className='h-24 text-center'
                 >
                   Sem resultados.
                 </TableCell>
@@ -140,64 +140,64 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex flex-col md:flex-row items-center justify-between px-4 py-3 border-t bg-muted/30 gap-3 md:gap-0">
-        <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-start">
+      <div className='flex flex-col md:flex-row items-center justify-between px-4 py-3 border-t bg-muted/30 gap-3 md:gap-0'>
+        <div className='flex items-center gap-3 w-full md:w-auto justify-between md:justify-start'>
           {typeof totalItens === 'number' && (
-            <span className="text-xs text-muted-foreground">
-              <span className="font-semibold text-foreground">
+            <span className='text-xs text-muted-foreground'>
+              <span className='font-semibold text-foreground'>
                 {totalItens}
               </span>{' '}
               {totalItens === 1 ? 'item' : 'itens'}
             </span>
           )}
 
-          <div className="hidden md:block w-px h-4 bg-border" />
+          <div className='hidden md:block w-px h-4 bg-border' />
 
-          <div className="flex items-center gap-1">
+          <div className='flex items-center gap-1'>
             <Button
-              variant="ghost"
-              size="icon"
-              className="h-7 w-7"
+              variant='ghost'
+              size='icon'
+              className='h-7 w-7'
               onClick={handlePrev}
               disabled={page <= 1}
             >
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className='h-4 w-4' />
             </Button>
 
-            <span className="text-xs text-muted-foreground px-1">
-              <span className="font-semibold text-foreground">
+            <span className='text-xs text-muted-foreground px-1'>
+              <span className='font-semibold text-foreground'>
                 {currentPage}
               </span>
               /
-              <span className="font-semibold text-foreground">
+              <span className='font-semibold text-foreground'>
                 {totalPages}
               </span>
             </span>
 
             <Button
-              variant="ghost"
-              size="icon"
-              className="h-7 w-7"
+              variant='ghost'
+              size='icon'
+              className='h-7 w-7'
               onClick={handleNext}
               disabled={page >= totalPages}
             >
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className='h-4 w-4' />
             </Button>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 w-full md:w-auto justify-between md:justify-end">
-          <span className="text-xs text-muted-foreground">Por página</span>
+        <div className='flex items-center gap-2 w-full md:w-auto justify-between md:justify-end'>
+          <span className='text-xs text-muted-foreground'>Por página</span>
           <Select
             value={limit.toString()}
             onValueChange={(value) => handlePageSizeChange(Number(value))}
           >
-            <SelectTrigger className="h-7 w-16 text-xs">
+            <SelectTrigger className='h-7 w-16 text-xs'>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
               {[5, 10, 20, 50].map((n) => (
-                <SelectItem key={n} value={n.toString()} className="text-xs">
+                <SelectItem key={n} value={n.toString()} className='text-xs'>
                   {n}
                 </SelectItem>
               ))}

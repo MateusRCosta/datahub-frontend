@@ -61,14 +61,14 @@ export function IntegracaoCria({ pagination, filtros }: IntegracaoCriaProps) {
 
   return (
     <DialogCustom
-      titulo="Nova integração"
-      idForm="form-cria-integracao"
+      titulo='Nova integração'
+      idForm='form-cria-integracao'
       descricao={<p>Crie uma nova integração de coleta.</p>}
       open={open}
       setOpen={setOpen}
       trigger={
         <Button
-          type="button"
+          type='button'
           onClick={() => {
             form.reset(integracaoDefaultValues);
             setOpen(true);
@@ -79,14 +79,14 @@ export function IntegracaoCria({ pagination, filtros }: IntegracaoCriaProps) {
       }
       isPending={isPending}
     >
-      <div className="flex flex-col h-full">
+      <div className='flex flex-col h-full'>
         <FormProvider {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            id="form-cria-integracao"
-            className="flex flex-col gap-2 h-full"
+            id='form-cria-integracao'
+            className='flex flex-col gap-2 h-full'
           >
-            <FieldGroup className="flex flex-col min-h-0 flex-1 gap-3">
+            <FieldGroup className='flex flex-col min-h-0 flex-1 gap-3'>
               <IntegracaoBasicoForm />
               <IntegracaoConfigForm />
             </FieldGroup>

@@ -57,9 +57,9 @@ export function Me({ open = false, onOpenChange }: MeProps) {
           {Array.from({ length: 3 }).map((_, i) => (
             <div
               key={i}
-              className="flex items-center justify-between px-4 py-3"
+              className='flex items-center justify-between px-4 py-3'
             >
-              <Skeleton className="h-4 w-full" />
+              <Skeleton className='h-4 w-full' />
             </div>
           ))}
         </>
@@ -86,22 +86,22 @@ export function Me({ open = false, onOpenChange }: MeProps) {
 
       const renderizaPermissoes = () => {
         if (!permissoes.length) {
-          return <span className="text-sm font-medium">Nenhuma</span>;
+          return <span className='text-sm font-medium'>Nenhuma</span>;
         }
 
         return (
           <TooltipProvider>
-            <div className="flex items-center gap-2">
+            <div className='flex items-center gap-2'>
               {permissoes.map((item) => {
                 const Icon = item.icon;
 
                 return (
                   <Tooltip key={item.label}>
                     <TooltipTrigger asChild>
-                      <Icon className="h-4 w-4 cursor-pointer" />
+                      <Icon className='h-4 w-4 cursor-pointer' />
                     </TooltipTrigger>
                     <TooltipContent>
-                      <div className="space-y-1">{item.label}</div>
+                      <div className='space-y-1'>{item.label}</div>
                     </TooltipContent>
                   </Tooltip>
                 );
@@ -126,10 +126,10 @@ export function Me({ open = false, onOpenChange }: MeProps) {
           {campos.map(({ label, value }) => (
             <div
               key={label}
-              className="flex items-center justify-between px-4 py-3"
+              className='flex items-center justify-between px-4 py-3'
             >
-              <span className="text-sm text-muted-foreground">{label}</span>
-              <div className="text-sm font-medium">{value}</div>
+              <span className='text-sm text-muted-foreground'>{label}</span>
+              <div className='text-sm font-medium'>{value}</div>
             </div>
           ))}
         </>
@@ -150,19 +150,19 @@ export function Me({ open = false, onOpenChange }: MeProps) {
                 Informações básicas do seu usuário
               </DialogDescription>
             </DialogHeader>
-            <div className="divide-y divide-border rounded-lg border">
+            <div className='divide-y divide-border rounded-lg border'>
               {renderizaConteudo()}
             </div>
             <DialogFooter>
-              <div className="flex h-full w-full flex-row justify-between gap-2">
+              <div className='flex h-full w-full flex-row justify-between gap-2'>
                 <Button
-                  variant="default"
+                  variant='default'
                   onClick={() => setOpenAlteraSenha(!openAlteraSenha)}
                 >
                   Alterar senha
                 </Button>
                 <DialogClose asChild>
-                  <Button variant="outline">Sair</Button>
+                  <Button variant='outline'>Sair</Button>
                 </DialogClose>
               </div>
             </DialogFooter>
@@ -180,25 +180,25 @@ export function Me({ open = false, onOpenChange }: MeProps) {
     <>
       <Drawer open={open} onOpenChange={onOpenChange}>
         <DrawerContent>
-          <div className="mx-auto w-full max-w-sm">
+          <div className='mx-auto w-full max-w-sm'>
             <DrawerHeader>
               <DrawerTitle>Usuário</DrawerTitle>
               <DrawerDescription>
                 Informações básicas do seu usuário
               </DrawerDescription>
             </DrawerHeader>
-            <div className="divide-y divide-border rounded-lg border">
+            <div className='divide-y divide-border rounded-lg border'>
               {renderizaConteudo()}
             </div>
             <DrawerFooter>
               <Button
-                variant="default"
+                variant='default'
                 onClick={() => setOpenAlteraSenha(!openAlteraSenha)}
               >
                 Alterar senha
               </Button>
               <DrawerClose asChild>
-                <Button variant="outline">Sair</Button>
+                <Button variant='outline'>Sair</Button>
               </DrawerClose>
             </DrawerFooter>
           </div>

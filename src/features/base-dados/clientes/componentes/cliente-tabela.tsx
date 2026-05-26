@@ -42,46 +42,51 @@ export function ClienteTabela({ baseDadosId, estrutura }: ClienteTabelaProps) {
 
   const colunas = constroiClienteColunas({
     colunasVisiveis,
-    estrutura
+    estrutura,
   });
 
   const chavesColunasDisponiveis = useMemo(
-    () => (camposMetadados ?? []).map((coluna) => coluna.key.toLowerCase().trim()),
-    [camposMetadados]
+    () =>
+      (camposMetadados ?? []).map((coluna) => coluna.key.toLowerCase().trim()),
+    [camposMetadados],
   );
 
   useEffect(() => {
     const chavesValidas = new Set(chavesColunasDisponiveis);
 
     setColunasVisiveis((atual) => {
-      const atualValido = atual.filter((coluna) => chavesValidas.has(coluna.toLowerCase().trim()));
-      return atualValido.length > 0 ? atualValido : chavesColunasDisponiveis.slice(0, 3);
+      const atualValido = atual.filter((coluna) =>
+        chavesValidas.has(coluna.toLowerCase().trim()),
+      );
+      return atualValido.length > 0
+        ? atualValido
+        : chavesColunasDisponiveis.slice(0, 3);
     });
   }, [chavesColunasDisponiveis]);
 
   return (
     <DialogCustom
       titulo={`Editar clientes`}
-      descricao={<p className="w-full">Tabela de clientes</p>}
+      descricao={<p className='w-full'>Tabela de clientes</p>}
       open={open}
       setOpen={setOpen}
       trigger={
         <DialogTrigger asChild>
-          <Users2 className="mr-2 h-4 cursor-pointer hover:text-primary transition-colors" />
+          <Users2 className='mr-2 h-4 cursor-pointer hover:text-primary transition-colors' />
         </DialogTrigger>
       }
       isPending={isPending}
       temFooter={false}
     >
-      <div className="flex flex-col h-full w-full flex-1 min-h-0 mx-auto gap-2">
-        <div className="shrink-0 self-end">
+      <div className='flex flex-col h-full w-full flex-1 min-h-0 mx-auto gap-2'>
+        <div className='shrink-0 self-end'>
           <SeletorColunas
             colunas={camposMetadados ?? []}
             colunasSelecionadas={colunasVisiveis}
             onChange={setColunasVisiveis}
           />
         </div>
-        <div className="flex-1 min-h-0 w-full">
+        <div className='flex-1 min-h-0 w-full'>
           <DataTable
             columns={colunas}
             data={data?.data?.data || []}

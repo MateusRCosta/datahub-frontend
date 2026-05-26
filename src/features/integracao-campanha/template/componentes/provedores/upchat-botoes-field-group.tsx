@@ -18,7 +18,6 @@ import {
 import { TipoBotoesEnum } from '../../schema/upchat.schema';
 
 const tipoBotaoOptions: { label: string; value: TipoBotoesEnum }[] = [
-  
   { label: 'Resposta rápida', value: 'quickReply' },
   { label: 'Telefone', value: 'phoneNumber' },
   { label: 'URL', value: 'url' },
@@ -56,11 +55,11 @@ const criaBotao = (tipo: TipoBotoesEnum): BotaoFormValue => {
     return { ...base, flowId: '' };
   }
 
-  if (!tipo){
-    return{
+  if (!tipo) {
+    return {
       ...base,
-      tipo: 'quickReply'
-    }
+      tipo: 'quickReply',
+    };
   }
   return base;
 };
@@ -81,26 +80,26 @@ export function UpchatBotoesFieldGroup() {
 
   return (
     <FieldSet>
-      <div className="flex items-center justify-between gap-3">
+      <div className='flex items-center justify-between gap-3'>
         <div>
           <FieldLegend>Botoes</FieldLegend>
-          <FieldLabel className="text-xs text-muted-foreground font-normal">
+          <FieldLabel className='text-xs text-muted-foreground font-normal'>
             Até 3 botões por template.
           </FieldLabel>
         </div>
         <Button
-          type="button"
-          variant="outline"
-          size="sm"
+          type='button'
+          variant='outline'
+          size='sm'
           onClick={() => append(criaBotao('quickReply'))}
           disabled={fields.length >= 3}
         >
-          <Plus className="h-4 w-4" />
+          <Plus className='h-4 w-4' />
           Adicionar
         </Button>
       </div>
 
-      <FieldGroup className="gap-4">
+      <FieldGroup className='gap-4'>
         {fields.map((field, index) => {
           const tipo = getTipoBotao(botoesValues[index]);
           const prefixo = `config.botoes.${index}`;
@@ -108,11 +107,11 @@ export function UpchatBotoesFieldGroup() {
           return (
             <div
               key={field.id}
-              className="grid gap-3 rounded-md border p-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]"
+              className='grid gap-3 rounded-md border p-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]'
             >
               <SelectGenerico
                 name={`${prefixo}.tipo`}
-                label="Tipo"
+                label='Tipo'
                 options={tipoBotaoOptions}
                 onValueChange={(value) =>
                   update(index, criaBotao(value as TipoBotoesEnum))
@@ -120,49 +119,49 @@ export function UpchatBotoesFieldGroup() {
               />
               <InputGenerico
                 name={`${prefixo}.textoBotao`}
-                label="Texto do botao"
+                label='Texto do botao'
                 maxLength={25}
-                placeholder="Digite o texto"
+                placeholder='Digite o texto'
               />
 
               <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="self-end"
+                type='button'
+                variant='ghost'
+                size='icon'
+                className='self-end'
                 onClick={() => remove(index)}
-                aria-label="Remover botao"
+                aria-label='Remover botao'
               >
-                <Trash2 className="h-4 w-4" />
+                <Trash2 className='h-4 w-4' />
               </Button>
 
               {tipo === 'phoneNumber' && (
                 <InputGenerico
                   name={`${prefixo}.numeroTelefone`}
-                  label="Telefone"
+                  label='Telefone'
                   maxLength={20}
-                  placeholder="Digite o telefone"
-                  className="md:col-span-2"
+                  placeholder='Digite o telefone'
+                  className='md:col-span-2'
                 />
               )}
 
               {tipo === 'url' && (
                 <InputGenerico
                   name={`${prefixo}.url`}
-                  label="URL"
+                  label='URL'
                   maxLength={2000}
-                  placeholder="https://exemplo.com"
-                  className="md:col-span-2"
+                  placeholder='https://exemplo.com'
+                  className='md:col-span-2'
                 />
               )}
 
               {tipo === 'flow' && (
                 <InputGenerico
                   name={`${prefixo}.flowId`}
-                  label="Flow ID"
+                  label='Flow ID'
                   maxLength={36}
-                  placeholder="Digite o flow ID"
-                  className="md:col-span-2"
+                  placeholder='Digite o flow ID'
+                  className='md:col-span-2'
                 />
               )}
             </div>

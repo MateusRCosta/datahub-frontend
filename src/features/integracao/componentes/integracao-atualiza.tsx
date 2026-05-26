@@ -73,12 +73,12 @@ export function IntegracaoAtualiza({ id }: IntegracaoAtualizaProps) {
 
   return (
     <DialogCustom
-      titulo="Editar integração"
-      idForm="form-atualiza-integracao"
+      titulo='Editar integração'
+      idForm='form-atualiza-integracao'
       descricao={
-        <div className="flex flex-row w-full justify-between">
-          <p className="w-full">Edite a integração existente.</p>
-          <div className="flex flex-1 w-full">
+        <div className='flex flex-row w-full justify-between'>
+          <p className='w-full'>Edite a integração existente.</p>
+          <div className='flex flex-1 w-full'>
             <RegistroInfoCard
               dados={{
                 ID: data?.data?.id,
@@ -94,21 +94,21 @@ export function IntegracaoAtualiza({ id }: IntegracaoAtualizaProps) {
       setOpen={setOpen}
       trigger={
         <DialogTrigger asChild>
-          <PenBox className="mr-2 h-4 cursor-pointer hover:text-primary transition-colors" />
+          <PenBox className='mr-2 h-4 cursor-pointer hover:text-primary transition-colors' />
         </DialogTrigger>
       }
       isPending={isPending}
     >
-      <div className="flex flex-col h-full">
+      <div className='flex flex-col h-full'>
         <FormProvider {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            id="form-atualiza-integracao"
-            className="flex flex-col gap-2 h-full"
+            id='form-atualiza-integracao'
+            className='flex flex-col gap-2 h-full'
           >
-            <FieldGroup className="flex flex-col min-h-0 flex-1 gap-3">
+            <FieldGroup className='flex flex-col min-h-0 flex-1 gap-3'>
               {isError && (
-                <div className="text-red-500">
+                <div className='text-red-500'>
                   Erro ao carregar integração: {error?.message}
                 </div>
               )}

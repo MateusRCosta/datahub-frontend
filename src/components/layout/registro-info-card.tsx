@@ -27,7 +27,7 @@ export function RegistroInfoCard({
     <HoverCard open={open} onOpenChange={setOpen}>
       <HoverCardTrigger asChild>
         <button
-          type="button"
+          type='button'
           aria-label={titulo}
           onClick={() => setOpen((current) => !current)}
           className={cn(
@@ -35,19 +35,19 @@ export function RegistroInfoCard({
             className,
           )}
         >
-          <Info className="h-4 w-4" />
+          <Info className='h-4 w-4' />
         </button>
       </HoverCardTrigger>
-      <HoverCardContent className="flex flex-1 flex-col w-fit gap-2">
-        <div className="font-semibold text-md">{titulo}</div>
-        <div className="flex-1 divide-y divide-border rounded-lg border">
+      <HoverCardContent className='flex flex-1 flex-col w-fit gap-2'>
+        <div className='font-semibold text-md'>{titulo}</div>
+        <div className='flex-1 divide-y divide-border rounded-lg border'>
           {Object.entries(dados).map(([nome, valor]) => (
             <div
               key={nome}
-              className="flex items-center justify-between gap-4 px-2 py-1"
+              className='flex items-center justify-between gap-4 px-2 py-1'
             >
-              <span className="text-xs text-muted-foreground">{nome}:</span>
-              <span className="text-xs font-medium">{valor ?? '--'}</span>
+              <span className='text-xs text-muted-foreground'>{nome}:</span>
+              <span className='text-xs font-medium'>{valor ?? '--'}</span>
             </div>
           ))}
         </div>

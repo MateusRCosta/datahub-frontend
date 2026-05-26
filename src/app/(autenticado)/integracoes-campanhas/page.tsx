@@ -7,10 +7,10 @@ export default function IntegracoesCampanhasPage() {
   return (
     <ProtectedPage roles={getRolesParaRecurso('integracoesCampanha')}>
       <Cabecalho
-        titulo="Integrações de campanhas"
-        descricao="Gerencie as integrações que enviará as mensagens eventuais das campanhas"
+        titulo='Integrações de campanhas'
+        descricao='Gerencie as integrações que enviará as mensagens eventuais das campanhas'
       />
-      <div className="flex flex-col w-full flex-1 min-h-0 gap-2 p-6">
+      <div className='flex flex-col w-full flex-1 min-h-0 gap-2 p-6'>
         <IntegracaoCampanhaTabela />
       </div>
     </ProtectedPage>

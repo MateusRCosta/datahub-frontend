@@ -85,14 +85,14 @@ export function TemplateCria({ pagination, filtros }: TemplateCriaProps) {
 
   return (
     <DialogCustom
-      titulo="Novo template"
-      idForm="form-cria-template"
+      titulo='Novo template'
+      idForm='form-cria-template'
       descricao={<p>Crie um novo template de campanha.</p>}
       open={open}
       setOpen={setOpen}
       trigger={
         <Button
-          type="button"
+          type='button'
           onClick={() => {
             form.reset();
             setIntegracaoCampanhaNome('');
@@ -104,37 +104,37 @@ export function TemplateCria({ pagination, filtros }: TemplateCriaProps) {
       }
       isPending={isPending}
     >
-      <div className="flex flex-col h-full">
+      <div className='flex flex-col h-full'>
         <FormProvider {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            id="form-cria-template"
-            className="flex flex-col gap-2 h-full"
+            id='form-cria-template'
+            className='flex flex-col gap-2 h-full'
           >
-            <FieldGroup className="flex flex-col min-h-0 flex-1 gap-6">
-              <div className="space-y-4">
-                <h3 className="text-sm font-semibold">Informações básicas</h3>
+            <FieldGroup className='flex flex-col min-h-0 flex-1 gap-6'>
+              <div className='space-y-4'>
+                <h3 className='text-sm font-semibold'>Informações básicas</h3>
                 <Input
-                  name="nome"
-                  label="Nome"
-                  placeholder="Digite o nome do template"
+                  name='nome'
+                  label='Nome'
+                  placeholder='Digite o nome do template'
                 />
                 <Input
-                  name="quantidadeVars"
-                  label="Quantidade de variáveis"
-                  type="number"
+                  name='quantidadeVars'
+                  label='Quantidade de variáveis'
+                  type='number'
                   min={1}
                   max={1024}
-                  placeholder="Digite a quantidade de variáveis"
+                  placeholder='Digite a quantidade de variáveis'
                 />
                 <InputSelecaoModal
-                  name="integracaoCampanhaId"
-                  label="Integração de campanha"
+                  name='integracaoCampanhaId'
+                  label='Integração de campanha'
                   nomeDisplay={integracaoCampanhaNome}
-                  modalTitle="Selecionar integração de campanha"
+                  modalTitle='Selecionar integração de campanha'
                   modalContent={(fecharModal) => (
                     <IntegracaoCampanhaTabela
-                      contexto="templates"
+                      contexto='templates'
                       modoSelecao
                       onSelecionar={(integracaoCampanha) => {
                         selecionarIntegracaoCampanha(integracaoCampanha);
@@ -144,8 +144,8 @@ export function TemplateCria({ pagination, filtros }: TemplateCriaProps) {
                   )}
                 />
               </div>
-              <div className="space-y-4">
-                <h3 className="text-sm font-semibold">Configuração</h3>
+              <div className='space-y-4'>
+                <h3 className='text-sm font-semibold'>Configuração</h3>
                 <TemplateConfigForm />
               </div>
             </FieldGroup>

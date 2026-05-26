@@ -7,10 +7,10 @@ export default function UsuariosPage() {
   return (
     <ProtectedPage roles={getRolesParaRecurso('usuarios')}>
       <Cabecalho
-        titulo="Usuários"
-        descricao="Gerencie os usuários e suas permissões de acesso ao sistema."
+        titulo='Usuários'
+        descricao='Gerencie os usuários e suas permissões de acesso ao sistema.'
       />
-      <div className="flex flex-col w-full flex-1 min-h-0 gap-2 p-6">
+      <div className='flex flex-col w-full flex-1 min-h-0 gap-2 p-6'>
         <UsuariosTable />
       </div>
     </ProtectedPage>

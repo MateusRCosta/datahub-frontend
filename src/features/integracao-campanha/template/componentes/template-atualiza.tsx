@@ -98,12 +98,12 @@ export function TemplateAtualiza({ id }: TemplateAtualizaProps) {
 
   return (
     <DialogCustom
-      titulo="Editar template"
-      idForm="form-atualiza-template"
+      titulo='Editar template'
+      idForm='form-atualiza-template'
       descricao={
-        <div className="flex flex-row w-full justify-between">
-          <p className="w-full">Edite o template existente.</p>
-          <div className="flex flex-1 w-full">
+        <div className='flex flex-row w-full justify-between'>
+          <p className='w-full'>Edite o template existente.</p>
+          <div className='flex flex-1 w-full'>
             <RegistroInfoCard
               dados={{
                 ID: data?.data?.id,
@@ -120,57 +120,57 @@ export function TemplateAtualiza({ id }: TemplateAtualizaProps) {
       setOpen={setOpen}
       trigger={
         <DialogTrigger asChild>
-          <PenBox className="mr-2 h-4 cursor-pointer hover:text-primary transition-colors" />
+          <PenBox className='mr-2 h-4 cursor-pointer hover:text-primary transition-colors' />
         </DialogTrigger>
       }
       isPending={isPending}
     >
-      <div className="flex flex-col h-full">
+      <div className='flex flex-col h-full'>
         <FormProvider {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            id="form-atualiza-template"
-            className="flex flex-col gap-2 h-full"
+            id='form-atualiza-template'
+            className='flex flex-col gap-2 h-full'
           >
-            <FieldGroup className="flex flex-col min-h-0 flex-1 gap-6">
+            <FieldGroup className='flex flex-col min-h-0 flex-1 gap-6'>
               {isError && (
-                <div className="text-red-500">
+                <div className='text-red-500'>
                   Erro ao carregar template: {error?.message}
                 </div>
               )}
               {data && !isError && (
                 <>
-                  <div className="space-y-4">
-                    <h3 className="text-sm font-semibold">
+                  <div className='space-y-4'>
+                    <h3 className='text-sm font-semibold'>
                       Informações básicas
                     </h3>
                     <Input
-                      name="nome"
-                      label="Nome"
-                      placeholder="Digite o nome do template"
+                      name='nome'
+                      label='Nome'
+                      placeholder='Digite o nome do template'
                     />
                     <Input
-                      name="quantidadeVars"
-                      label="Quantidade de variáveis"
-                      type="number"
+                      name='quantidadeVars'
+                      label='Quantidade de variáveis'
+                      type='number'
                       min={1}
                       max={1024}
-                      placeholder="Digite a quantidade de variáveis"
+                      placeholder='Digite a quantidade de variáveis'
                     />
                     <Field>
-                      <FieldLabel className="font-normal text-xs">
+                      <FieldLabel className='font-normal text-xs'>
                         Integração de campanha
                       </FieldLabel>
                       <InputUi
                         value={integracaoCampanhaNome}
                         readOnly
                         disabled
-                        className="bg-field-background text-sm"
+                        className='bg-field-background text-sm'
                       />
                     </Field>
                   </div>
-                  <div className="space-y-4">
-                    <h3 className="text-sm font-semibold">Configuração</h3>
+                  <div className='space-y-4'>
+                    <h3 className='text-sm font-semibold'>Configuração</h3>
                     <TemplateConfigForm />
                   </div>
                 </>

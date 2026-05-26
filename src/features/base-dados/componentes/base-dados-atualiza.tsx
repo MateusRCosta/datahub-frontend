@@ -101,11 +101,11 @@ export function BaseDadosAtualiza({ id }: BaseDadosAtualizaProps) {
   return (
     <DialogCustom
       titulo={`Editar base de dados`}
-      idForm="form-cria-base-dados"
+      idForm='form-cria-base-dados'
       descricao={
-        <div className="flex flex-row w-full justify-between">
-          <p className="w-full">Edite a base de dados existente.</p>
-          <div className="flex flex-1 w-full">
+        <div className='flex flex-row w-full justify-between'>
+          <p className='w-full'>Edite a base de dados existente.</p>
+          <div className='flex flex-1 w-full'>
             <RegistroInfoCard
               dados={{
                 ID: data?.data?.id,
@@ -124,61 +124,61 @@ export function BaseDadosAtualiza({ id }: BaseDadosAtualizaProps) {
       setOpen={setOpen}
       trigger={
         <DialogTrigger asChild>
-          <PenBox className="mr-2 h-4 cursor-pointer hover:text-primary transition-colors" />
+          <PenBox className='mr-2 h-4 cursor-pointer hover:text-primary transition-colors' />
         </DialogTrigger>
       }
       isPending={isPending}
     >
-      <div className="flex flex-col h-full">
+      <div className='flex flex-col h-full'>
         <FormProvider {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            id="form-cria-base-dados"
-            className="flex flex-col gap-2 h-full"
+            id='form-cria-base-dados'
+            className='flex flex-col gap-2 h-full'
           >
-            <FieldGroup className="flex flex-col min-h-0 flex-1 gap-6">
-              <div className="space-y-4">
-                <h3 className="text-sm font-semibold">Informações básicas</h3>
+            <FieldGroup className='flex flex-col min-h-0 flex-1 gap-6'>
+              <div className='space-y-4'>
+                <h3 className='text-sm font-semibold'>Informações básicas</h3>
                 <Input
-                  name="nome"
-                  label="Nome"
-                  placeholder="Digite o nome da base de dados"
+                  name='nome'
+                  label='Nome'
+                  placeholder='Digite o nome da base de dados'
                 />
-                <FieldGroup className="flex flex-col min-h-0 flex-1 gap-6">
+                <FieldGroup className='flex flex-col min-h-0 flex-1 gap-6'>
                   {isError && (
-                    <div className="text-red-500">
+                    <div className='text-red-500'>
                       Erro ao carregar base de dados: {error?.message}
                     </div>
                   )}
                   {data && !isError && (
-                    <div className="space-y-4">
-                      <h3 className="text-sm font-semibold">
+                    <div className='space-y-4'>
+                      <h3 className='text-sm font-semibold'>
                         Estrutura dos dados
                       </h3>
-                      <div className="grid gap-2">
+                      <div className='grid gap-2'>
                         {estruturaFields.map((field, index) => (
                           <div
                             key={field.id}
-                            className="flex flex-col bg-foreground/1 p-2 gap-2 border rounded-md"
+                            className='flex flex-col bg-foreground/1 p-2 gap-2 border rounded-md'
                           >
                             <Input
                               name={`estrutura.${index}.cabecalho`}
-                              label="Cabeçalho"
+                              label='Cabeçalho'
                               disabled
                             />
                             <Input
                               name={`estrutura.${index}.rotulo`}
-                              label="Rótulo"
+                              label='Rótulo'
                             />
-                            <div className="flex gap-2 w-full items-center">
+                            <div className='flex gap-2 w-full items-center'>
                               <Switch
                                 name={`estrutura.${index}.obrigatorio` as const}
-                                label="Obrigatório"
-                                className="justify-end"
+                                label='Obrigatório'
+                                className='justify-end'
                               />
                               <Select
                                 name={`estrutura.${index}.tipo`}
-                                label="Tipo"
+                                label='Tipo'
                                 options={tipoColunaOptions}
                               />
                             </div>

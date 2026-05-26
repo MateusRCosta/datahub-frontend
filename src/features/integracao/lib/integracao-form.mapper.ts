@@ -91,7 +91,8 @@ function normalizaIncremento(value: unknown): IntegracaoVariavelIncremento {
     incrementa: Boolean(item.incrementa),
     limiteIncrementa:
       limite === null || limite === undefined ? undefined : Number(limite),
-    limiteDataAtual: item.limiteDataAtual === null ? false : Boolean(item.limiteDataAtual),
+    limiteDataAtual:
+      item.limiteDataAtual === null ? false : Boolean(item.limiteDataAtual),
     delimitador: normalizaBooleano(item.delimitador),
   };
 }

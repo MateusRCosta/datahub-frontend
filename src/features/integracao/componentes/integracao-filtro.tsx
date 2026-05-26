@@ -35,15 +35,15 @@ export function IntegracaoFiltro({
     <FormWrapper
       form={form}
       onSubmit={handleSubmit}
-      id="integracao-filtro-complexo"
+      id='integracao-filtro-complexo'
     >
-      <div className="grid grid-cols-1 gap-4">
-        <InputGenerico name="nome" label="Nome" />
-        <InputGenerico name="id" label="Id" />
+      <div className='grid grid-cols-1 gap-4'>
+        <InputGenerico name='nome' label='Nome' />
+        <InputGenerico name='id' label='Id' />
         <Button
-          form="integracao-filtro-complexo"
-          type="submit"
-          className="w-full"
+          form='integracao-filtro-complexo'
+          type='submit'
+          className='w-full'
         >
           Filtrar
         </Button>

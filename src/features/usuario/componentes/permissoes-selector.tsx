@@ -21,7 +21,8 @@ const ROLES_COMUM = [
   {
     id: ROLES.GERENCIAR_CAMPANHAS,
     label: 'Gerenciar campanhas e templates',
-    description: 'Gerenciar campanhas e templates: listar, criar, editar e excluir',
+    description:
+      'Gerenciar campanhas e templates: listar, criar, editar e excluir',
   },
   {
     id: ROLES.GERENCIAR_INTEGRACOES,
@@ -51,9 +52,9 @@ export function PermissoesSelector({ name }: PermissoesSelectorProps) {
   };
 
   return (
-    <div className="flex flex-col gap-4 flex-1 min-h-0 overflow-y-auto pr-2 custom-scrollbar">
-      <div className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+    <div className='flex flex-col gap-4 flex-1 min-h-0 overflow-y-auto pr-2 custom-scrollbar'>
+      <div className='space-y-4'>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
           {ROLES_COMUM.map((role) => (
             <div
               key={role.id}
@@ -68,16 +69,16 @@ export function PermissoesSelector({ name }: PermissoesSelectorProps) {
                 checked={permissoesAtuais.includes(role.id)}
                 onCheckedChange={() => togglePermissao(role.id)}
                 onClick={(e) => e.stopPropagation()}
-                className="cursor-pointer"
+                className='cursor-pointer'
               />
-              <div className="flex flex-col gap-0.5 leading-none">
+              <div className='flex flex-col gap-0.5 leading-none'>
                 <Label
                   htmlFor={`role-${role.id}`}
-                  className="text-sm font-medium cursor-pointer"
+                  className='text-sm font-medium cursor-pointer'
                 >
                   {role.label}
                 </Label>
-                <p className="text-xs text-muted-foreground leading-tight">
+                <p className='text-xs text-muted-foreground leading-tight'>
                   {role.description}
                 </p>
               </div>
