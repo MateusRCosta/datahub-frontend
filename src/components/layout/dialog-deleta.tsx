@@ -63,7 +63,7 @@ export function DialogDeleta({
     <>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Trash2 className='text-destructive mr-2 h-4' />
+          <Trash2 className='cursor-pointer text-destructive mr-2 h-4 hover:text-destructive/40 duration-200' />
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>

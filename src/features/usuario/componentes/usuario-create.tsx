@@ -53,6 +53,7 @@ export function UsuarioCreate({ pagination, filtros }: UsuarioCreateProps) {
       toast.success('Usuário criado com sucesso.');
       form.reset();
       setOpen(false);
+      return;
     }
 
     if (response.status === 409) {

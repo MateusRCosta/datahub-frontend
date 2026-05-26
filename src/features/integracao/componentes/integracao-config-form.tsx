@@ -32,7 +32,7 @@ type SecaoIntegracao = 'Scrap' | 'Auth' | 'Refresh';
 
 const secaoLabel: Record<SecaoIntegracao, string> = {
   Scrap: 'Coleta',
-  Auth: 'Autenticacao',
+  Auth: 'Autenticação',
   Refresh: 'Refresh',
 };
 
@@ -195,8 +195,7 @@ function VariavelItem({
         />
         <CheckboxGenerico
           name={`${name}.${index}.incremento.incrementa`}
-          label='Incremento automatico'
-          className='w-4 self-center'
+          label='Incremento automático'
         />
       </div>
 
@@ -206,20 +205,18 @@ function VariavelItem({
             <div className='min-w-0 flex-1'>
               <InputGenerico
                 name={`${name}.${index}.incremento.limiteIncrementa`}
-                label='Limite maximo'
+                label='Limite máximo'
                 type='number'
               />
             </div>
-            <div className='flex flex-wrap items-center gap-4 w-full px-4 '>
+            <div className='flex flex-col gap-4 px-4 '>
               <CheckboxGenerico
                 name={`${name}.${index}.incremento.delimitador`}
                 label='Delimitador'
-                className='w-4'
               />
               <CheckboxGenerico
                 name={`${name}.${index}.incremento.limiteDataAtual`}
                 label='Limitar pela data atual'
-                className='w-4'
               />
             </div>
           </div>

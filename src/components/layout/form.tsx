@@ -148,6 +148,11 @@ export function SelectGenerico({
       render={({ field: { onChange, value }, fieldState }) => {
         const stringValue =
           value === null || value === undefined ? '' : String(value);
+        const hasMatchingOption = options.some(
+          (option) => String(option.value) === stringValue,
+        );
+        const selectValue =
+          stringValue && hasMatchingOption ? stringValue : undefined;
 
         return (
           <Field data-invalid={fieldState.invalid}>
@@ -157,6 +162,7 @@ export function SelectGenerico({
               </FieldLabel>
             )}
             <Select
+              key={`${name}-${selectValue ?? 'empty'}`}
               onValueChange={(val) => {
                 let finalValue: unknown;
                 if (val === 'true') {
@@ -171,10 +177,10 @@ export function SelectGenerico({
                 onChange(finalValue);
                 onValueChange?.(val);
               }}
-              value={stringValue}
+              value={selectValue}
               disabled={disabled}
             >
-              <SelectTrigger className='bg-field-background dark:bg-input/30 text-sm'>
+              <SelectTrigger className='w-full bg-field-background dark:bg-input/30 text-sm'>
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
               <SelectContent>
@@ -279,20 +285,22 @@ export function CheckboxGenerico({
         return (
           <Field
             data-invalid={fieldState.invalid}
-            className={cn('flex flex-row items-center gap-2', className)}
+            className={cn('shring-0 gap-2', className)}
           >
-            <Checkbox
-              id={`${name}-${itemValue || ''}`}
-              checked={isChecked}
-              onCheckedChange={handleChange}
-              disabled={disabled}
-            />
-            <FieldLabel
+            <div className='flex flex-row shrink-0 pt-0.5 gap-2'>
+              <Checkbox
+                id={`${name}-${itemValue || ''}`}
+                checked={isChecked}
+                onCheckedChange={handleChange}
+                disabled={disabled}
+              />
+              <FieldLabel
               htmlFor={`${name}-${itemValue || ''}`}
-              className='cursor-pointer text-xs text-foreground font-normal'
+              className='text-xs text-foreground font-normal leading-4'
             >
               {label}
             </FieldLabel>
+            </div>
           </Field>
         );
       }}

@@ -1,9 +1,11 @@
 import { enumSchema } from '@/features/base-dados/schema/base-dados.schema';
 import {
   IntegracaoCriacao,
+  IntegracaoMetodo,
   IntegracaoResponse,
   IntegracaoVariavel,
   IntegracaoVariavelIncremento,
+  integracaoMetodoSchema,
 } from '../schema/integracao.schema';
 
 export const integracaoDefaultValues: IntegracaoCriacao = {
@@ -59,6 +61,17 @@ const nullableArray = <T>(value: unknown): T[] =>
 const nullableUrl = (value: unknown): string | undefined => {
   if (value === null || value === undefined || value === '') return undefined;
   return typeof value === 'string' ? value : undefined;
+};
+
+const normalizaMetodo = (
+  value: unknown,
+  fallback: IntegracaoMetodo,
+): IntegracaoMetodo => {
+  const metodo =
+    typeof value === 'string' ? value.toUpperCase() : String(value ?? '');
+  return (integracaoMetodoSchema.options as readonly string[]).includes(metodo)
+    ? (metodo as IntegracaoMetodo)
+    : fallback;
 };
 
 function normalizaResponse(value: unknown): IntegracaoResponse {
@@ -137,17 +150,19 @@ export function normalizaIntegracaoFormValues(
       source.horaExecucao ?? integracaoDefaultValues.horaExecucao,
     ),
     urlAuth: nullableUrl(source.urlAuth),
-    metodoAuth:
-      (source.metodoAuth as IntegracaoCriacao['metodoAuth']) ??
+    metodoAuth: normalizaMetodo(
+      source.metodoAuth,
       integracaoDefaultValues.metodoAuth,
+    ),
     headersAuth: nullableArray(source.headersAuth),
     bodyAuth: nullableString(source.bodyAuth ?? source.bodyRequestAuth),
     responseAuth: normalizaResponses(source.responseAuth),
     variaveisAuth: nullableArray(source.variaveisAuth).map(normalizaVariavel),
     urlRefresh: nullableUrl(source.urlRefresh),
-    metodoRefresh:
-      (source.metodoRefresh as IntegracaoCriacao['metodoRefresh']) ??
+    metodoRefresh: normalizaMetodo(
+      source.metodoRefresh,
       integracaoDefaultValues.metodoRefresh,
+    ),
     headersRefresh: nullableArray(source.headersRefresh),
     bodyRefresh: nullableString(
       source.bodyRefresh ?? source.bodyRequestRefresh,
@@ -157,9 +172,10 @@ export function normalizaIntegracaoFormValues(
       normalizaVariavel,
     ),
     urlScrap: nullableString(source.urlScrap, integracaoDefaultValues.urlScrap),
-    metodoScrap:
-      (source.metodoScrap as IntegracaoCriacao['metodoScrap']) ??
+    metodoScrap: normalizaMetodo(
+      source.metodoScrap,
       integracaoDefaultValues.metodoScrap,
+    ),
     headersScrap: nullableArray(source.headersScrap),
     bodyScrap: nullableString(source.bodyScrap ?? source.bodyRequestScrap),
     responseScrap: normalizaResponses(source.responseScrap),

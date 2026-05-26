@@ -30,18 +30,25 @@ type IntegracaoAtualizaProps = {
 export function IntegracaoAtualiza({ id }: IntegracaoAtualizaProps) {
   const [open, setOpen] = useState(false);
   const { isError, error, data } = useRetornaIntegracao({ enabled: open, id });
+
+  // next otimiza para useMemo
+  const formValues =
+    data?.data ? normalizaIntegracaoFormValues(data.data) : undefined
+
   const form = useForm<IntegracaoEdicao>({
     mode: 'onSubmit',
     resolver: zodResolver(integracaoEdicaoSchema),
     defaultValues: integracaoDefaultValues,
+    values: formValues,
   });
 
   const { reset } = form;
 
   useEffect(() => {
-    if (!data?.data) return;
-    reset(normalizaIntegracaoFormValues(data.data));
-  }, [data, reset]);
+    if (!open) {
+      reset(integracaoDefaultValues);
+    }
+  }, [open, reset]);
 
   const { mutateAsync, isPending } = useEditaIntegracao(id);
 

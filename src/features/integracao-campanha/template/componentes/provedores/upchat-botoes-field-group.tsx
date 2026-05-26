@@ -16,6 +16,7 @@ import {
   useWatch,
 } from 'react-hook-form';
 import { TipoBotoesEnum } from '../../schema/upchat.schema';
+import { tamanhoBotaoUpchat } from '../../constante';
 
 const tipoBotaoOptions: { label: string; value: TipoBotoesEnum }[] = [
   { label: 'Resposta rápida', value: 'quickReply' },
@@ -82,7 +83,7 @@ export function UpchatBotoesFieldGroup() {
     <FieldSet>
       <div className='flex items-center justify-between gap-3'>
         <div>
-          <FieldLegend>Botoes</FieldLegend>
+          <FieldLegend>Botões</FieldLegend>
           <FieldLabel className='text-xs text-muted-foreground font-normal'>
             Até 3 botões por template.
           </FieldLabel>
@@ -107,33 +108,35 @@ export function UpchatBotoesFieldGroup() {
           return (
             <div
               key={field.id}
-              className='grid gap-3 rounded-md border p-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]'
+              className='flex flex-col gap-3 rounded-md border p-3'
             >
-              <SelectGenerico
-                name={`${prefixo}.tipo`}
-                label='Tipo'
-                options={tipoBotaoOptions}
-                onValueChange={(value) =>
-                  update(index, criaBotao(value as TipoBotoesEnum))
-                }
-              />
-              <InputGenerico
-                name={`${prefixo}.textoBotao`}
-                label='Texto do botao'
-                maxLength={25}
-                placeholder='Digite o texto'
-              />
+              <div className='flex flex-col md:flex-row gap-3'>
+                <SelectGenerico
+                  name={`${prefixo}.tipo`}
+                  label='Tipo'
+                  options={tipoBotaoOptions}
+                  onValueChange={(value) =>
+                    update(index, criaBotao(value as TipoBotoesEnum))
+                  }
+                />
+                <InputGenerico
+                  name={`${prefixo}.textoBotao`}
+                  label='Texto do botão'
+                  maxLength={tamanhoBotaoUpchat}
+                  placeholder='Digite o texto'
+                />
 
-              <Button
-                type='button'
-                variant='ghost'
-                size='icon'
-                className='self-end'
-                onClick={() => remove(index)}
-                aria-label='Remover botao'
-              >
-                <Trash2 className='h-4 w-4' />
-              </Button>
+                <Button
+                  type='button'
+                  variant='ghost'
+                  size='icon'
+                  className='self-start md:self-end'
+                  onClick={() => remove(index)}
+                  aria-label='Remover botão'
+                >
+                  <Trash2 className='h-4 w-4' />
+                </Button>
+              </div>
 
               {tipo === 'phoneNumber' && (
                 <InputGenerico

@@ -11,7 +11,6 @@ import { RegistroInfoCard } from '@/components/layout/registro-info-card';
 
 import {
   ClienteEdicao,
-  Validacao,
   criaClienteEdicaoSchema,
 } from '../schema/cliente.schema';
 import z from 'zod';
