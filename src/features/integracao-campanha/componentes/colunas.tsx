@@ -72,7 +72,7 @@ export const getColunas = ({
               <SwitchStatus
                 status={row.original.status}
                 id={row.original.id}
-                path='integracoesCampanha'
+                path='integracoesCampanhas'
                 mensagens={{
                   naoEncontrado: `A integração de campanha "${row.original.nome}" não foi encontrada.`,
                   sucesso: 'Status alterado com sucesso.',
@@ -93,7 +93,7 @@ export const getColunas = ({
               <IntegracaoCampanhaAtualiza id={row.original.id} />
               <DialogDeleta
                 id={row.original.id}
-                path='integracoesCampanha'
+                path='integracoesCampanhas'
                 nome={row.original.nome}
                 objeto={'Integração de campanha'}
                 mensagens={{

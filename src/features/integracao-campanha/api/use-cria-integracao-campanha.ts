@@ -33,7 +33,7 @@ export default function useIntegracaoCampanha({
 
   const queryClient = getQueryClient();
   const { resolvePathApi } = useAuth();
-  const baseUrl = resolvePathApi('integracoesCampanha');
+  const baseUrl = resolvePathApi('integracoesCampanhas');
 
   return useMutation<ApiResponse<string>, Error, IntegracaoCampanhaCriacao>({
     mutationKey: [`integracao-campanha-criacao`],

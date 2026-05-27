@@ -5,7 +5,7 @@ import { IntegracaoCampanhaTabela } from '@/features/integracao-campanha/compone
 
 export default function IntegracoesCampanhasPage() {
   return (
-    <ProtectedPage roles={getRolesParaRecurso('integracoesCampanha')}>
+    <ProtectedPage roles={getRolesParaRecurso('integracoesCampanhas')}>
       <Cabecalho
         titulo='Integrações de campanhas'
         descricao='Gerencie as integrações que enviará as mensagens eventuais das campanhas'

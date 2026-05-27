@@ -1,5 +1,6 @@
 import {
   Database,
+  DatabaseSearch,
   File,
   FileCog2,
   Mail,
@@ -69,6 +70,14 @@ export const RESOURCE_CONFIG = {
     icon: File,
     adminOnly: false,
   },
+  views: {
+    pathApi: 'views',
+    pathFront: 'visualizacoes',
+    userRole: ROLES.GERENCIAR_VISUALIZACOES,
+    label: 'Visualizações',
+    icon: DatabaseSearch,
+    adminOnly: false
+  },
   basesDados: {
     pathApi: 'bases-dados',
     pathFront: 'bases-dados',
@@ -94,14 +103,14 @@ export const RESOURCE_CONFIG = {
     icon: ServerCog,
     adminOnly: false,
   },
-  integracoesCampanha: {
+  integracoesCampanhas: {
     pathApi: 'integracoes-campanhas',
     pathFront: 'integracoes-campanhas',
     userRole: ROLES.GERENCIAR_INTEGRACOES,
     label: 'Integrações de campanhas',
     icon: FileCog2,
     adminOnly: false,
-  },
+  }
 } as const satisfies Record<string, ResourceEntry>;
 
 /**
