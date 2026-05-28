@@ -5,10 +5,7 @@ import {
   PaginationApiResponse,
 } from '@/types/api.schema';
 import { useAuth } from '@/features/auth/provider/auth-provider';
-import {
-  ViewCampanhaFiltros,
-  ViewsApiResponse,
-} from '../schema/view.schema';
+import { ViewFiltros, ViewsApiResponse } from '../schema/view.schema';
 
 const retornaViews = async ({
   page,
@@ -18,7 +15,7 @@ const retornaViews = async ({
   filtro,
   baseUrl,
 }: PaginationApiRequest<string> & {
-  filtro?: ViewCampanhaFiltros;
+  filtro?: ViewFiltros;
   baseUrl: string;
 }) => {
   return apiRequest<PaginationApiResponse<ViewsApiResponse[]>>({
@@ -35,7 +32,7 @@ export default function useRetornaViews({
 }: {
   enabled: boolean;
   pagination: PaginationApiRequest<string>;
-  filtro?: ViewCampanhaFiltros;
+  filtro?: ViewFiltros;
 }) {
   const { resolvePathApi, isLoading: authLoading } = useAuth();
   const baseUrl = resolvePathApi('views');

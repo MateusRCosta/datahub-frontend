@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/dialog';
 import { toast } from 'sonner';
 import useIntegracaoAtivar from '../api/use-integracao-ativar';
-import { ArrowBigUp, Settings, Trash2 } from 'lucide-react';
+import { ArrowBigUp } from 'lucide-react';
 
 type IntegracaoDialogAtivarProps = {
   id: number;

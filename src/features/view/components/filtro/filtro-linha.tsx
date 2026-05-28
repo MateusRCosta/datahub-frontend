@@ -1,11 +1,11 @@
 'use client';
 
-import { useFormContext } from 'react-hook-form';
+import { type FieldPath, useFormContext } from 'react-hook-form';
 import { Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { BasesDadosApiResponse } from '@/features/base-dados/schema/base-dados.schema';
-import { ViewCampanhaCriacao } from '../schema/view.schema';
-import { OPERADOR_ENUM } from '../types/enums';
+import { ViewCampanhaCriacao } from '../../schema/view.schema';
+import { OPERADOR_ENUM } from '../../types/enums';
 
 type FiltroLinhaProps = {
   path: string;
@@ -17,9 +17,12 @@ const operadorOptions = Object.values(OPERADOR_ENUM);
 
 export function FiltroLinha({ path, basesDados, onRemove }: FiltroLinhaProps) {
   const { register, watch } = useFormContext<ViewCampanhaCriacao>();
-  const baseDadosId = watch(`${path}.baseDadosId` as 'query.groupFilter.filter.baseDadosId');
+  const baseDadosIdPath =
+    `${path}.baseDadosId` as FieldPath<ViewCampanhaCriacao>;
+  const baseDadosId = watch(baseDadosIdPath);
   const estrutura =
-    basesDados.find((baseDados) => baseDados.id === Number(baseDadosId))?.estrutura ?? [];
+    basesDados.find((baseDados) => baseDados.id === Number(baseDadosId))
+      ?.estrutura ?? [];
 
   return (
     <div className='flex flex-wrap items-center gap-2 p-2 border rounded bg-muted/20'>

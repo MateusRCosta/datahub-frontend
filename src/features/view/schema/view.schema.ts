@@ -3,7 +3,12 @@ import {
   usuarioBasicApiResponse,
 } from '@/lib/schema/usuario.schema';
 import z from 'zod';
-import { OPERADOR_ENUM, OPERADOR_WHERE_ENUM, TIPO_FILTRO_ENUM, TIPO_JOIN_ENUM } from '../types/enums';
+import {
+  OPERADOR_ENUM,
+  OPERADOR_WHERE_ENUM,
+  TIPO_FILTRO_ENUM,
+  TIPO_JOIN_ENUM,
+} from '../types/enums';
 
 export const tipoJoinEnumSchema = z.enum(TIPO_JOIN_ENUM);
 export const operadorEnumSchema = z.enum(OPERADOR_ENUM);
@@ -25,7 +30,7 @@ export type Join = z.infer<typeof joinsSchema>;
 
 export const selectCampoSchema = z.object({
   campo: z.string(),
-  rotulo: z.string()
+  rotulo: z.string(),
 });
 export type SelectCampo = z.infer<typeof selectCampoSchema>;
 
@@ -37,7 +42,7 @@ export type SelectCamposForm = z.infer<typeof selectCamposFormSchema>;
 export const selectSchema = z.object({
   baseDadosId: z.number().int().positive(),
   joinIndex: z.number().int().positive(),
-  campos: z.array(selectCampoSchema)
+  campos: z.array(selectCampoSchema),
 });
 export type Select = z.infer<typeof selectSchema>;
 
@@ -46,7 +51,7 @@ export const filterSchema = z.object({
   joinIndex: z.number().int().positive(),
   campo: z.string(),
   operador: operadorEnumSchema,
-  valor: z.union([z.string(), z.number(), z.boolean()])
+  valor: z.union([z.string(), z.number(), z.boolean()]),
 });
 
 export type GroupFilter = {
@@ -56,20 +61,21 @@ export type GroupFilter = {
   filter: z.infer<typeof filterSchema>;
 };
 
-export const groupFilterSchema: z.ZodType<GroupFilter> = z.lazy(() =>
-  z.object({
-    type: tipoFiltroEnumSchema,
-    operadorWhere: operadorWhereEnumSchema,
-    groupFilter: z.array(groupFilterSchema),
-    filter: filterSchema,
-  })
+export const groupFilterSchema: z.ZodType<GroupFilter, GroupFilter> = z.lazy(
+  () =>
+    z.object({
+      type: tipoFiltroEnumSchema,
+      operadorWhere: operadorWhereEnumSchema,
+      groupFilter: z.array(groupFilterSchema),
+      filter: filterSchema,
+    }),
 );
 
-export const querySchema = z.object({
+export const configSchema = z.object({
   from: fromSchema,
   joins: z.array(joinsSchema),
   select: z.array(selectSchema),
-  groupFilter: z.array(groupFilterSchema)
+  groupFilter: z.array(groupFilterSchema),
 });
 
 export const viewSchema = z.object({
@@ -82,7 +88,7 @@ export const viewSchema = z.object({
     .string()
     .min(1, 'A descrição deve ter no mínimo 3 caracteres')
     .max(100, 'A descrição deve ter no máximo 100 caracteres'),
-  query: querySchema,
+  config: configSchema,
   createdAt: z.date(),
   updatedAt: z.date().optional().nullable(),
   deletedAt: z.date().optional().nullable(),
@@ -95,9 +101,7 @@ export const viewCriacaoSchema = viewSchema.omit({
   updatedAt: true,
   deletedAt: true,
 });
-export type ViewCampanhaCriacao = z.infer<
-  typeof viewCriacaoSchema
->;
+export type ViewCampanhaCriacao = z.infer<typeof viewCriacaoSchema>;
 
 export const viewDadosSchema = viewSchema.pick({
   nome: true,
@@ -115,14 +119,13 @@ export const viewEdicaoSchema = viewSchema
   .partial({
     nome: true,
     descricao: true,
-    query: true
+    config: true,
   });
-export type ViewCampanhaEdicao = z.input<
-  typeof viewEdicaoSchema
->;
+export type ViewCampanhaEdicao = z.input<typeof viewEdicaoSchema>;
 
 export const viewsApiResponseSchema = viewSchema
   .omit({
+    config: true,
     createdAt: true,
     updatedAt: true,
     deletedAt: true,
@@ -130,9 +133,7 @@ export const viewsApiResponseSchema = viewSchema
   .extend({
     usuario: usuarioBasicApiResponse.optional(),
   });
-export type ViewsApiResponse = z.infer<
-  typeof viewsApiResponseSchema
->;
+export type ViewsApiResponse = z.infer<typeof viewsApiResponseSchema>;
 
 export const viewApiResponseSchema = viewSchema
   .omit({
@@ -141,9 +142,7 @@ export const viewApiResponseSchema = viewSchema
   .extend({
     usuario: usuarioApiResponse,
   });
-export type ViewCampanhaApiResponse = z.infer<
-  typeof viewApiResponseSchema
->;
+export type ViewApiResponse = z.infer<typeof viewApiResponseSchema>;
 
 export const viewFiltrosSchema = z.object({
   nome: z.string().optional(),
@@ -151,9 +150,7 @@ export const viewFiltrosSchema = z.object({
   id: z.string().optional(),
 });
 
-export type ViewCampanhaFiltros = z.infer<
-  typeof viewFiltrosSchema
->;
+export type ViewFiltros = z.infer<typeof viewFiltrosSchema>;
 
 const viewFiltroSimplesChaves = viewSchema
   .pick({ nome: true, descricao: true })
@@ -163,8 +160,7 @@ export const viewFiltroSimplesChavesObjeto = {
   [viewFiltroSimplesChaves.enum.descricao]: 'Descrição',
 };
 
-export const viewFiltroSimplesChavesOptions =
-  viewFiltroSimplesChaves.options;
+export const viewFiltroSimplesChavesOptions = viewFiltroSimplesChaves.options;
 export const viewFiltrosSimplesSchema = z.object({
   filtrarPor: viewFiltroSimplesChaves.optional(),
   valor: z.string().optional(),

@@ -3,16 +3,17 @@
 import { useState } from 'react';
 import { Database, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import {
+  type BasesDadosApiResponse,
+  type Metadado,
+} from '@/features/base-dados/schema/base-dados.schema';
 import { SelectModal } from './select-modal';
-import { BasesDadosApiResponse, Metadado } from '@/features/base-dados/schema/base-dados.schema';
-import { SelectCampo } from '../schema/view.schema';
-import { SelectComNome } from '../types';
+import { type SelectCampo } from '../../schema/view.schema';
+import { type SelectComNome } from '../../types';
 
 type SelectColunaProps = {
   selects: SelectComNome[];
   basesDados: BasesDadosApiResponse[];
-  basesDadosPermitidas: number[];
-  onDrop: (baseDadosId: number, nome: string) => void;
   onUpdate: (index: number, campos: SelectCampo[]) => void;
   onRemove: (index: number) => void;
 };
@@ -20,32 +21,10 @@ type SelectColunaProps = {
 export function SelectColuna({
   selects,
   basesDados,
-  basesDadosPermitidas,
-  onDrop,
   onUpdate,
   onRemove,
 }: SelectColunaProps) {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const basesDadosPermitidasSet = new Set(basesDadosPermitidas);
-
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'copy';
-  };
-
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    try {
-      const payload = JSON.parse(e.dataTransfer.getData('application/json')) as {
-        baseDadosId: number;
-        nome: string;
-      };
-      if (!basesDadosPermitidasSet.has(payload.baseDadosId)) return;
-      onDrop(payload.baseDadosId, payload.nome);
-    } catch {
-      // ignore malformed drag data
-    }
-  };
 
   const getEstrutura = (baseDadosId: number): Metadado[] => {
     return basesDados.find((bd) => bd.id === baseDadosId)?.estrutura ?? [];
@@ -54,11 +33,7 @@ export function SelectColuna({
   const editingEntry = editingIndex !== null ? selects[editingIndex] : null;
 
   return (
-    <div
-      className='flex flex-col gap-2 min-h-24 border-2 border-dashed rounded-md p-3 transition-colors hover:bg-muted/30'
-      onDragOver={handleDragOver}
-      onDrop={handleDrop}
-    >
+    <div className='flex flex-col gap-2 min-h-24 border-2 border-dashed rounded-md p-3 transition-colors hover:bg-muted/30'>
       {selects.map((entry, index) => (
         <div
           key={index}
@@ -90,7 +65,7 @@ export function SelectColuna({
       ))}
 
       <p className='text-xs text-muted-foreground text-center py-2'>
-        Arraste bases do From ou dos Joins aqui
+        Use o botão + para adicionar bases do From ou dos Joins
       </p>
 
       {editingIndex !== null && editingEntry !== null && (

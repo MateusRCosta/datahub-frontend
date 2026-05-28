@@ -5,9 +5,9 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { DialogCustom } from '@/components/layout/dialog-custom';
 import { FieldError, FieldGroup } from '@/components/ui/field';
 import { useFormComponents } from '@/hooks/use-form-components';
-import { Join, joinsSchema, tipoJoinEnumSchema } from '../schema/view.schema';
-import { JoinComNome } from '../types';
-import { TIPO_JOIN_ENUM } from '../types/enums';
+import { Join, joinsSchema, tipoJoinEnumSchema } from '../../schema/view.schema';
+import { JoinComNome } from '../../types';
+import { TIPO_JOIN_ENUM } from '../../types/enums';
 
 
 type JoinModalProps = {

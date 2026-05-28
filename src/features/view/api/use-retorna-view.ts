@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/api-request';
 import { useAuth } from '@/features/auth/provider/auth-provider';
-import { ViewCampanhaApiResponse } from '../schema/view.schema';
+import { ViewApiResponse } from '../schema/view.schema';
 
 const retornaView = async ({
   id,
@@ -10,7 +10,7 @@ const retornaView = async ({
   id: number;
   baseUrl: string;
 }) => {
-  return apiRequest<ViewCampanhaApiResponse>({
+  return apiRequest<ViewApiResponse>({
     path: `${baseUrl}/${id}`,
     method: 'GET',
   });

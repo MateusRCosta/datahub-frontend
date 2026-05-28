@@ -1,15 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { toast } from 'sonner';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { QueryTabela } from './query-tabela';
-import { GroupFilterConstrutor } from './group-filter-construtor';
-import { BaseDadosSidebar } from './base-dados-sidebar';
+import { QueryTabela } from './query/query-tabela';
 import { ViewDadosModal } from './view-dados-modal';
+import { ViewFiltrosModal } from './filtro/view-filtros-modal';
+import { ViewBar } from './view-bar';
 import { useViewCriacaoForm } from '../hooks/use-view-form';
+import useRetornaView from '../api/use-retorna-view';
 import useRetornaViews from '../api/use-retorna-views';
 import useCriaView from '../api/use-cria-view';
 import useEditaView from '../api/use-edita-view';
@@ -19,6 +18,7 @@ import {
   SelectCampo,
   ViewDados,
   ViewCampanhaCriacao,
+  ViewApiResponse,
   ViewsApiResponse,
 } from '../schema/view.schema';
 import { FromComNome, JoinComNome, SelectComNome } from '../types';
@@ -32,11 +32,15 @@ const defaultPagination = {
 } as const;
 
 export function ViewPagina() {
-  const [selectedView, setSelectedView] = useState<ViewsApiResponse | null>(null);
+  const [selectedView, setSelectedView] = useState<ViewsApiResponse | null>(
+    null,
+  );
   const [from, setFrom] = useState<FromComNome | null>(null);
   const [joins, setJoins] = useState<JoinComNome[]>([]);
   const [selects, setSelects] = useState<SelectComNome[]>([]);
   const [dadosModalOpen, setDadosModalOpen] = useState(false);
+  const [filtrosModalOpen, setFiltrosModalOpen] = useState(false);
+  const [selectedViewId, setSelectedViewId] = useState<number | null>(null);
 
   const { data: viewsData } = useRetornaViews({
     enabled: true,
@@ -48,8 +52,20 @@ export function ViewPagina() {
     pagination: defaultPagination,
   });
 
-  const views = viewsData?.data?.data ?? [];
-  const basesDados = basesDadosData?.data?.data ?? [];
+  const {
+    data: retornaViewResponse,
+    isPending: retornaViewPending,
+    error: retornaViewError,
+  } = useRetornaView({
+    id: selectedViewId ?? 0,
+    enabled: selectedViewId !== null,
+  });
+
+  const views = useMemo(() => viewsData?.data?.data ?? [], [viewsData]);
+  const basesDados = useMemo(
+    () => basesDadosData?.data?.data ?? [],
+    [basesDadosData],
+  );
 
   const criacaoForm = useViewCriacaoForm();
   const { mutateAsync: criaView, isPending: criaPending } = useCriaView();
@@ -57,38 +73,45 @@ export function ViewPagina() {
     selectedView?.id ?? 0,
   );
 
-  const isPending = criaPending || editaPending;
+  const isPending = retornaViewPending || criaPending || editaPending;
 
-  const getNomeBaseDados = (baseDadosId: number) =>
-    basesDados.find((baseDados) => baseDados.id === baseDadosId)?.nome ??
-    `ID ${baseDadosId}`;
+  const getNomeBaseDados = useCallback(
+    (baseDadosId: number) =>
+      basesDados.find((baseDados) => baseDados.id === baseDadosId)?.nome ??
+      `ID ${baseDadosId}`,
+    [basesDados],
+  );
 
-  const loadView = (view: ViewsApiResponse) => {
-    setSelectedView(view);
-    setFrom({
-      ...view.query.from,
-      nome: getNomeBaseDados(view.query.from.baseDadosId),
-    });
-    setJoins(
-      view.query.joins.map((join) => ({
-        ...join,
-        nome: getNomeBaseDados(join.baseDadosIdJoin),
-      })),
-    );
-    setSelects(
-      view.query.select.map((select) => ({
-        ...select,
-        nome: getNomeBaseDados(select.baseDadosId),
-      })),
-    );
-    criacaoForm.reset({
-      nome: view.nome,
-      descricao: view.descricao,
-      query: view.query,
-    });
-  };
+  const loadView = useCallback(
+    (view: ViewApiResponse) => {
+      setSelectedView(view);
+      setFrom({
+        ...view.config.from,
+        nome: getNomeBaseDados(view.config.from.baseDadosId),
+      });
+      setJoins(
+        view.config.joins.map((join) => ({
+          ...join,
+          nome: getNomeBaseDados(join.baseDadosIdJoin),
+        })),
+      );
+      setSelects(
+        view.config.select.map((select) => ({
+          ...select,
+          nome: getNomeBaseDados(select.baseDadosId),
+        })),
+      );
+      criacaoForm.reset({
+        nome: view.nome,
+        descricao: view.descricao,
+        config: view.config,
+      });
+    },
+    [criacaoForm, getNomeBaseDados],
+  );
 
   const resetView = () => {
+    setSelectedViewId(null);
     setSelectedView(null);
     setFrom(null);
     setJoins([]);
@@ -96,9 +119,47 @@ export function ViewPagina() {
     criacaoForm.reset();
   };
 
+  useEffect(() => {
+    if (selectedViewId === null || !retornaViewResponse) return;
+    if (basesDados.length === 0) return;
+    if (retornaViewResponse.status === 200) {
+      if (retornaViewResponse.data) {
+        const view = retornaViewResponse.data;
+        console.log('view carregada:', JSON.stringify(view, null, 2)); 
+        queueMicrotask(() => {
+          loadView(view);
+        });
+      }
+      return;
+    }
+
+    if (retornaViewResponse.status === 404) {
+      toast.warning('Erro ao selecionar registro: visualização não encontrada');
+      return;
+    }
+
+    toast.error('Erro ao carregar visualização.');
+  }, [loadView, retornaViewResponse, selectedViewId, basesDados]);
+
+  useEffect(() => {
+    if (!retornaViewError) return;
+
+    toast.error('Erro ao carregar visualização.');
+  }, [retornaViewError]);
+
+  const handleSelecionaView = (view: ViewsApiResponse | null) => {
+    if (!view) {
+      resetView();
+      return;
+    }
+
+    setSelectedViewId(view.id);
+    setSelectedView(view);
+  };
+
   const buildQuery = (
-    groupFilter: ViewCampanhaCriacao['query']['groupFilter'],
-  ): ViewCampanhaCriacao['query'] => ({
+    groupFilter: ViewCampanhaCriacao['config']['groupFilter'],
+  ): ViewCampanhaCriacao['config'] => ({
     from: { baseDadosId: from?.baseDadosId ?? 0 },
     joins: joins.map((join) => ({
       baseDadosIdJoin: join.baseDadosIdJoin,
@@ -114,53 +175,75 @@ export function ViewPagina() {
     groupFilter,
   });
 
-  const getGroupFilter = (): ViewCampanhaCriacao['query']['groupFilter'] =>
-    criacaoForm.getValues('query.groupFilter') as ViewCampanhaCriacao['query']['groupFilter'];
+  const getGroupFilter = (): ViewCampanhaCriacao['config']['groupFilter'] =>
+    criacaoForm.getValues('config.groupFilter');
 
   const handleCriaView = async (data: ViewDados) => {
-    const query = buildQuery(getGroupFilter());
-    const response = await criaView({ ...data, query });
+    const config = buildQuery(getGroupFilter());
+    const response = await criaView({ ...data, config });
     if (response.status === 201) {
-      toast.success('View criada com sucesso.');
+      toast.success('Visualização criada com sucesso.');
       setDadosModalOpen(false);
       resetView();
       return;
     }
-    toast.error('Erro ao criar view.');
+    toast.error('Erro ao criar visualização.');
   };
 
   const handleEditaDados = async (data: ViewDados) => {
     if (!selectedView) return;
-    const query = buildQuery(getGroupFilter());
-    const response = await editaView({ ...data, id: selectedView.id, query });
+    const config = buildQuery(getGroupFilter());
+    const response = await editaView({ ...data, id: selectedView.id, config });
     if (response.status === 204) {
-      toast.success('Dados da view atualizados com sucesso.');
+      toast.success('Dados da visualização atualizados com sucesso.');
       setSelectedView((viewAtual) =>
-        viewAtual ? { ...viewAtual, ...data, query } : viewAtual,
+        viewAtual ? { ...viewAtual, ...data, config } : viewAtual,
       );
       setDadosModalOpen(false);
       return;
     }
-    toast.error('Erro ao atualizar view.');
+    if (response.status === 400) {
+      toast.warning(
+        'Erro ao salvar registro: verifique se os dados estão salvos corretamente',
+      );
+      return;
+    }
+    if (response.status > 500) {
+      toast.error(
+        'Erro ao salvar registro: erro interno de servidor, por favor tente novamente mais tarde',
+      );
+      return;
+    }
   };
 
   const handleSalvaView = async () => {
     if (!selectedView) return;
-    const query = buildQuery(getGroupFilter());
+    const config = buildQuery(getGroupFilter());
     const response = await editaView({
       id: selectedView.id,
       nome: selectedView.nome,
       descricao: selectedView.descricao,
-      query,
+      config,
     });
     if (response.status === 204) {
-      toast.success('View salva com sucesso.');
+      toast.success('Visualização salva com sucesso.');
       setSelectedView((viewAtual) =>
-        viewAtual ? { ...viewAtual, query } : viewAtual,
+        viewAtual ? { ...viewAtual, config } : viewAtual,
       );
       return;
     }
-    toast.error('Erro ao salvar view.');
+    if (response.status === 400) {
+      toast.warning(
+        'Erro ao salvar registro: verifique se os dados estão salvos corretamente',
+      );
+      return;
+    }
+    if (response.status > 500) {
+      toast.error(
+        'Erro ao salvar registro: erro interno de servidor, por favor tente novamente mais tarde',
+      );
+      return;
+    }
   };
 
   const removeSelectsForaDasBasesPermitidas = (
@@ -179,58 +262,25 @@ export function ViewPagina() {
   };
 
   return (
-    <div className='flex flex-row h-full min-h-0 w-full overflow-hidden'>
-      <div className='flex flex-col flex-1 min-w-0 overflow-y-auto p-6 gap-6'>
-        <div className='flex items-end gap-4 flex-wrap border rounded-md p-4 bg-card'>
-          <div className='flex flex-col gap-1'>
-            <Label htmlFor='view-selector' className='text-sm'>
-              Visualização existente
-            </Label>
-            <select
-              id='view-selector'
-              className='border rounded px-3 py-2 text-sm bg-background min-w-52'
-              value={selectedView?.id ?? ''}
-              onChange={(event) => {
-                const id = Number(event.target.value);
-                const found = views.find((view) => view.id === id);
-                if (found) loadView(found);
-                else resetView();
-              }}
-            >
-              <option value=''>Nova visualização</option>
-              {views.map((view) => (
-                <option key={view.id} value={view.id}>
-                  {view.nome}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className='flex items-center gap-2'>
-            <Button
-              type='button'
-              variant={selectedView ? 'outline' : 'default'}
-              onClick={() => setDadosModalOpen(true)}
-              disabled={isPending}
-            >
-              {selectedView ? 'Editar dados' : 'Criar view'}
-            </Button>
-            {selectedView && (
-              <Button
-                type='button'
-                onClick={handleSalvaView}
-                disabled={isPending}
-              >
-                Salvar alterações
-              </Button>
-            )}
-          </div>
-        </div>
+    <div className='h-full min-h-0 w-full overflow-hidden'>
+      <div className='flex flex-col h-full min-w-0 overflow-y-auto p-6 gap-6'>
+        <ViewBar
+          views={views}
+          selectedView={selectedView}
+          isPending={isPending}
+          onViewSelect={(view) => {
+            void handleSelecionaView(view);
+          }}
+          onCreateView={() => setDadosModalOpen(true)}
+          onSaveView={handleSalvaView}
+        />
 
         <ViewDadosModal
           open={dadosModalOpen}
           onClose={() => setDadosModalOpen(false)}
-          titulo={selectedView ? 'Editar dados da view' : 'Criar view'}
+          titulo={
+            selectedView ? 'Editar dados da visualização' : 'Criar visualização'
+          }
           descricao={
             selectedView
               ? 'Atualize o nome e a descrição da visualização.'
@@ -244,84 +294,100 @@ export function ViewPagina() {
           onSubmit={selectedView ? handleEditaDados : handleCriaView}
         />
 
-        <QueryTabela
-          from={from}
-          joins={joins}
-          selects={selects}
-          basesDados={basesDados}
-          onFromDrop={(baseDadosId, nome) => {
-            const proximoFrom = { baseDadosId, nome };
-            setFrom(proximoFrom);
-            setSelects((selectsAtuais) =>
-              removeSelectsForaDasBasesPermitidas(selectsAtuais, proximoFrom, joins),
-            );
-          }}
-          onFromRemove={() => {
-            setFrom(null);
-            setSelects((selectsAtuais) =>
-              removeSelectsForaDasBasesPermitidas(selectsAtuais, null, joins),
-            );
-          }}
-          onJoinDrop={(baseDadosIdJoin, nome) =>
-            setJoins((joinsAtuais) => [
-              ...joinsAtuais,
-              {
-                baseDadosIdJoin,
-                nome,
-                campoFrom: '',
-                campoJoin: '',
-                tipo: TIPO_JOIN_ENUM.INNER,
-              },
-            ])
-          }
-          onJoinUpdate={(index, data: Join) =>
-            setJoins((joinsAtuais) =>
-              joinsAtuais.map((join, joinIndex) =>
-                joinIndex === index ? { ...join, ...data } : join,
-              ),
-            )
-          }
-          onJoinRemove={(index) => {
-            const proximosJoins = joins.filter((_, joinIndex) => joinIndex !== index);
-            setJoins(proximosJoins);
-            setSelects((selectsAtuais) =>
-              removeSelectsForaDasBasesPermitidas(selectsAtuais, from, proximosJoins),
-            );
-          }}
-          onSelectDrop={(baseDadosId, nome) =>
-            setSelects((selectsAtuais) => [
-              ...selectsAtuais,
-              { baseDadosId, nome, joinIndex: selectsAtuais.length, campos: [] },
-            ])
-          }
-          onSelectUpdate={(index, campos: SelectCampo[]) =>
-            setSelects((selectsAtuais) =>
-              selectsAtuais.map((select, selectIndex) =>
-                selectIndex === index ? { ...select, campos } : select,
-              ),
-            )
-          }
-          onSelectRemove={(index) =>
-            setSelects((selectsAtuais) =>
-              selectsAtuais
-                .filter((_, selectIndex) => selectIndex !== index)
-                .map((select, selectIndex) => ({ ...select, joinIndex: selectIndex })),
-            )
-          }
-        />
-
         <FormProvider {...criacaoForm}>
-          <div className='flex flex-col gap-2'>
-            <h3 className='text-sm font-semibold'>Filtros</h3>
-            <GroupFilterConstrutor
-              path='query.groupFilter'
+          <div className='flex justify-end'>
+            <ViewFiltrosModal
+              open={filtrosModalOpen}
+              onOpenChange={setFiltrosModalOpen}
               basesDados={basesDados}
             />
           </div>
+
+          <QueryTabela
+            from={from}
+            joins={joins}
+            selects={selects}
+            basesDados={basesDados}
+            onFromSelect={(baseDadosId, nome) => {
+              const proximoFrom = { baseDadosId, nome };
+              setFrom(proximoFrom);
+              setSelects((selectsAtuais) =>
+                removeSelectsForaDasBasesPermitidas(
+                  selectsAtuais,
+                  proximoFrom,
+                  joins,
+                ),
+              );
+            }}
+            onFromRemove={() => {
+              setFrom(null);
+              setSelects((selectsAtuais) =>
+                removeSelectsForaDasBasesPermitidas(selectsAtuais, null, joins),
+              );
+            }}
+            onJoinSelect={(baseDadosIdJoin, nome) =>
+              setJoins((joinsAtuais) => [
+                ...joinsAtuais,
+                {
+                  baseDadosIdJoin,
+                  nome,
+                  campoFrom: '',
+                  campoJoin: '',
+                  tipo: TIPO_JOIN_ENUM.INNER,
+                },
+              ])
+            }
+            onJoinUpdate={(index, data: Join) =>
+              setJoins((joinsAtuais) =>
+                joinsAtuais.map((join, joinIndex) =>
+                  joinIndex === index ? { ...join, ...data } : join,
+                ),
+              )
+            }
+            onJoinRemove={(index) => {
+              const proximosJoins = joins.filter(
+                (_, joinIndex) => joinIndex !== index,
+              );
+              setJoins(proximosJoins);
+              setSelects((selectsAtuais) =>
+                removeSelectsForaDasBasesPermitidas(
+                  selectsAtuais,
+                  from,
+                  proximosJoins,
+                ),
+              );
+            }}
+            onSelectSelect={(baseDadosId, nome) =>
+              setSelects((selectsAtuais) => [
+                ...selectsAtuais,
+                {
+                  baseDadosId,
+                  nome,
+                  joinIndex: selectsAtuais.length,
+                  campos: [],
+                },
+              ])
+            }
+            onSelectUpdate={(index, campos: SelectCampo[]) =>
+              setSelects((selectsAtuais) =>
+                selectsAtuais.map((select, selectIndex) =>
+                  selectIndex === index ? { ...select, campos } : select,
+                ),
+              )
+            }
+            onSelectRemove={(index) =>
+              setSelects((selectsAtuais) =>
+                selectsAtuais
+                  .filter((_, selectIndex) => selectIndex !== index)
+                  .map((select, selectIndex) => ({
+                    ...select,
+                    joinIndex: selectIndex,
+                  })),
+              )
+            }
+          />
         </FormProvider>
       </div>
-
-      <BaseDadosSidebar basesDados={basesDados} />
     </div>
   );
 }

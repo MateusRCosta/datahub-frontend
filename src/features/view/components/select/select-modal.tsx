@@ -11,7 +11,7 @@ import {
   SelectCampo,
   SelectCamposForm,
   selectCamposFormSchema,
-} from '../schema/view.schema';
+} from '../../schema/view.schema';
 
 type SelectModalProps = {
   open: boolean;

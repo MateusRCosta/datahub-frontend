@@ -5,7 +5,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import {
   FormWrapper,
   InputGenerico,
-  SelectGenerico,
 } from '@/components/layout/form';
 import { Button } from '@/components/ui/button';
 import {

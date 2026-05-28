@@ -3,47 +3,22 @@
 import { useState } from 'react';
 import { Database, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { MAX_JOINS } from '../constants';
+import { MAX_JOINS } from '../../constants';
 import { JoinModal } from './join-modal';
-import { Join } from '../schema/view.schema';
-import { JoinComNome } from '../types';
+import { type Join } from '../../schema/view.schema';
+import { type JoinComNome } from '../../types';
 
 type JoinsColunaProps = {
   joins: JoinComNome[];
-  onDrop: (baseDadosId: number, nome: string) => void;
   onUpdate: (index: number, data: Join) => void;
   onRemove: (index: number) => void;
 };
 
-export function JoinsColuna({ joins, onDrop, onUpdate, onRemove }: JoinsColunaProps) {
+export function JoinsColuna({ joins, onUpdate, onRemove }: JoinsColunaProps) {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    if (joins.length >= MAX_JOINS) return;
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'copy';
-  };
-
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    if (joins.length >= MAX_JOINS) return;
-    e.preventDefault();
-    try {
-      const payload = JSON.parse(e.dataTransfer.getData('application/json')) as {
-        baseDadosId: number;
-        nome: string;
-      };
-      onDrop(payload.baseDadosId, payload.nome);
-    } catch {
-      // ignore malformed drag data
-    }
-  };
-
   return (
-    <div
-      className='flex flex-col gap-2 min-h-24 border-2 border-dashed rounded-md p-3 transition-colors hover:bg-muted/30'
-      onDragOver={handleDragOver}
-      onDrop={handleDrop}
-    >
+    <div className='flex flex-col gap-2 min-h-24 border-2 border-dashed rounded-md p-3 transition-colors hover:bg-muted/30'>
       {joins.map((join, index) => (
         <div
           key={index}
@@ -55,7 +30,7 @@ export function JoinsColuna({ joins, onDrop, onUpdate, onRemove }: JoinsColunaPr
             <span className='font-medium truncate'>{join.nome}</span>
             {join.campoFrom && (
               <span className='text-xs text-muted-foreground'>
-                {join.campoFrom} → {join.campoJoin} ({join.tipo})
+                {join.campoFrom} - {join.campoJoin} ({join.tipo})
               </span>
             )}
           </div>
@@ -76,7 +51,7 @@ export function JoinsColuna({ joins, onDrop, onUpdate, onRemove }: JoinsColunaPr
 
       {joins.length < MAX_JOINS ? (
         <p className='text-xs text-muted-foreground text-center py-2'>
-          Arraste bases aqui (máx. {MAX_JOINS})
+          Use o botão + para adicionar bases (máx. {MAX_JOINS})
         </p>
       ) : (
         <p className='text-xs text-muted-foreground text-center py-2'>

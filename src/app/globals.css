@@ -86,6 +86,7 @@
 
 .dark {
   --background: #1a1d2e;
+  --field-background: #ffffff00;
   --foreground: #e5e7eb;
   --card: #252940;
   --card-foreground: #e5e7eb;

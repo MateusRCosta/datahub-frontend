@@ -24,5 +24,5 @@ export enum OPERADOR_WHERE_ENUM {
 }
 
 export enum TIPO_JOIN_ENUM {
-  INNER = 'inner',
+  INNER = 'INNER',
 }
