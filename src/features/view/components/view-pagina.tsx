@@ -264,8 +264,7 @@ export function ViewPagina() {
   };
 
   return (
-    <div className='h-full min-h-0 w-full overflow-hidden'>
-      <div className='flex flex-col h-full min-w-0 overflow-y-auto p-6 gap-6'>
+      <div className='flex flex-col h-full min-w-0 overflow-y-auto px-6 pb-6 pt-2 gap-6'>
         <FormProvider {...form}>
           <ViewBar
             views={views}
@@ -388,6 +387,5 @@ export function ViewPagina() {
           />
         </FormProvider>
       </div>
-    </div>
   );
 }

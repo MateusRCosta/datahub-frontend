@@ -1,9 +1,11 @@
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
 import { Save } from 'lucide-react';
+import { useEffect, useMemo } from 'react';
+import { useFormContext } from 'react-hook-form';
+import { useFormComponents } from '@/hooks/use-form-components';
 import { type ViewsApiResponse } from '../schema/view.schema';
-import { ViewFiltrosModal } from './filtro/view-filtros-modal';
 import { BasesDadosApiResponse } from '../types';
+import { ViewFiltrosModal } from './filtro/view-filtros-modal';
 import { ViewExecutaModal } from './view-executa/view-executa-modal';
 
 type ViewBarProps = {
@@ -33,36 +35,41 @@ export function ViewBar({
 }: ViewBarProps) {
   const hasSelectedView = Boolean(selectedView);
   const selectedViewId = selectedView ? String(selectedView.id) : '';
+  const { Select } = useFormComponents();
+  const { setValue } = useFormContext();
+  const viewOptions = useMemo(
+    () => [
+      { label: 'Nova visualização', value: 'nova' },
+      ...views.map((view) => ({
+        label: view.nome,
+        value: String(view.id),
+      })),
+    ],
+    [views],
+  );
+
+  useEffect(() => {
+    setValue('view-selector', selectedViewId || 'nova');
+  }, [selectedViewId, setValue]);
 
   return (
-    <div className='flex flex-col w-full gap-1'>
-      <Label htmlFor='view-selector' className='text-sm'>
-        Visualização existente
-      </Label>
+    <div className='flex flex-col md:flex-row w-full gap-2 items-end'>
+      <Select
+        name='view-selector'
+        label='Visualização existente'
+        options={viewOptions}
+        placeholder='Selecione uma visualização'
+        onValueChange={(id) => {
+          if (id === 'nova') {
+            onViewSelect(null);
+            return;
+          }
+
+          const found = views.find((view) => String(view.id) === id);
+          onViewSelect(found ?? null);
+        }}
+      />
       <div className='flex flex-col md:flex-row gap-2 md:items-center w-full'>
-        <select
-          id='view-selector'
-          className='border rounded-md p-2 text-sm bg-field-background min-w-52'
-          value={selectedViewId}
-          onChange={(event) => {
-            const id = event.target.value;
-            const found = views.find((view) => String(view.id) === id);
-            onViewSelect(found ?? null);
-          }}
-        >
-          <option value='' className='bg-background/90'>
-            Nova visualização
-          </option>
-          {views.map((view) => (
-            <option
-              key={view.id}
-              value={String(view.id)}
-              className='bg-background/90'
-            >
-              {view.nome}
-            </option>
-          ))}
-        </select>
         <div className='flex flex-col md:flex-row w-full items-center gap-2'>
           <Button
             type='button'
@@ -70,7 +77,7 @@ export function ViewBar({
             disabled={isPending}
             className='w-full md:w-fit'
           >
-            {hasSelectedView ? 'Editar visualização' : 'Criar visualização'}
+            {hasSelectedView ? 'Editar visualizacao' : 'Criar visualizacao'}
           </Button>
           <div className='flex flex-row w-full gap-2'>
             <ViewFiltrosModal
@@ -84,8 +91,8 @@ export function ViewBar({
               size='icon'
               onClick={onSaveView}
               disabled={isPending || !hasSelectedView}
-              aria-label='Salvar visualização'
-              title='Salvar visualização'
+              aria-label='Salvar visualizacao'
+              title='Salvar visualizacao'
             >
               <Save aria-hidden='true' />
             </Button>

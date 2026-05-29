@@ -124,7 +124,7 @@ interface Option {
 
 interface SelectGenericoProps {
   name: string;
-  label: string;
+  label?: string;
   options: Option[];
   onValueChange?: (value: string) => void;
   placeholder?: string;
