@@ -295,11 +295,11 @@ export function CheckboxGenerico({
                 disabled={disabled}
               />
               <FieldLabel
-              htmlFor={`${name}-${itemValue || ''}`}
-              className='text-xs text-foreground font-normal leading-4'
-            >
-              {label}
-            </FieldLabel>
+                htmlFor={`${name}-${itemValue || ''}`}
+                className='text-xs text-foreground font-normal leading-4'
+              >
+                {label}
+              </FieldLabel>
             </div>
           </Field>
         );

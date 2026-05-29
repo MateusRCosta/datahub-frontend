@@ -1,6 +1,4 @@
 export enum OPERADOR_ENUM {
-  AND = 'and',
-  OR = 'or',
   EQUAL = 'eq',
   DIFFERENT = 'df',
   GREATER = 'gt',

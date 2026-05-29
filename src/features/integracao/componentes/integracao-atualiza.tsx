@@ -32,8 +32,9 @@ export function IntegracaoAtualiza({ id }: IntegracaoAtualizaProps) {
   const { isError, error, data } = useRetornaIntegracao({ enabled: open, id });
 
   // next otimiza para useMemo
-  const formValues =
-    data?.data ? normalizaIntegracaoFormValues(data.data) : undefined
+  const formValues = data?.data
+    ? normalizaIntegracaoFormValues(data.data)
+    : undefined;
 
   const form = useForm<IntegracaoEdicao>({
     mode: 'onSubmit',

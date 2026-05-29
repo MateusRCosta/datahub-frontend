@@ -24,7 +24,11 @@ export default function useEditaView(id: number) {
   const { resolvePathApi } = useAuth();
   const baseUrl = resolvePathApi('views');
 
-  return useMutation<ApiResponse<string>, Error, ViewCampanhaEdicao & { id: number }>({
+  return useMutation<
+    ApiResponse<string>,
+    Error,
+    ViewCampanhaEdicao & { id: number }
+  >({
     mutationKey: ['view-edita', id],
     mutationFn: (variables) => editaView({ ...variables, baseUrl }),
     onSuccess: (response) => {

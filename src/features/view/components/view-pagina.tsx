@@ -1,12 +1,12 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { FormProvider } from 'react-hook-form';
+import { FormProvider, useWatch } from 'react-hook-form';
 import { toast } from 'sonner';
 import { QueryTabela } from './query/query-tabela';
 import { ViewDadosModal } from './view-dados-modal';
 import { ViewBar } from './view-bar';
-import { useViewCriacaoForm } from '../hooks/use-view-form';
+import { useViewForm } from '../hooks/use-view-form';
 import useRetornaView from '../api/use-retorna-view';
 import useRetornaViews from '../api/use-retorna-views';
 import useCriaView from '../api/use-cria-view';
@@ -60,24 +60,19 @@ export function ViewPagina() {
     enabled: selectedViewId !== null,
   });
   const retornaViewPending = retornaViewQueryPending && selectedViewId !== null;
-  
+
   const views = useMemo(() => viewsData?.data?.data ?? [], [viewsData]);
   const basesDados = useMemo(
     () => basesDadosData?.data?.data ?? [],
     [basesDadosData],
   );
 
-  const criacaoForm = useViewCriacaoForm();
+  const form = useViewForm();
   const { mutateAsync: criaView, isPending: criaPending } = useCriaView();
   const { mutateAsync: editaView, isPending: editaPending } = useEditaView(
     selectedView?.id ?? 0,
   );
 
-  console.log(
-    'retorna'+retornaViewPending,
-    'cria'+criaPending,
-    'edita'+editaPending
-  )
   const isPending = retornaViewPending || criaPending || editaPending;
 
   const getNomeBaseDados = useCallback(
@@ -106,13 +101,13 @@ export function ViewPagina() {
           nome: getNomeBaseDados(select.baseDadosId),
         })),
       );
-      criacaoForm.reset({
+      form.reset({
         nome: view.nome,
         descricao: view.descricao,
         config: view.config,
       });
     },
-    [criacaoForm, getNomeBaseDados],
+    [form, getNomeBaseDados],
   );
 
   const resetView = () => {
@@ -121,7 +116,7 @@ export function ViewPagina() {
     setFrom(null);
     setJoins([]);
     setSelects([]);
-    criacaoForm.reset();
+    form.reset();
   };
 
   useEffect(() => {
@@ -180,11 +175,8 @@ export function ViewPagina() {
     groupFilter,
   });
 
-  const getGroupFilter = (): ViewCampanhaCriacao['config']['groupFilter'] =>
-    criacaoForm.getValues('config.groupFilter');
-
   const handleCriaView = async (data: ViewDados) => {
-    const config = buildQuery(getGroupFilter());
+    const config = buildQuery(groupFilterWatched);
     const response = await criaView({ ...data, config });
     if (response.status === 201) {
       toast.success('Visualização criada com sucesso.');
@@ -197,7 +189,7 @@ export function ViewPagina() {
 
   const handleEditaDados = async (data: ViewDados) => {
     if (!selectedView) return;
-    const config = buildQuery(getGroupFilter());
+    const config = buildQuery(groupFilterWatched);
     const response = await editaView({ ...data, id: selectedView.id, config });
     if (response.status === 204) {
       toast.success('Dados da visualização atualizados com sucesso.');
@@ -221,9 +213,14 @@ export function ViewPagina() {
     }
   };
 
+  const groupFilterWatched = useWatch({
+    control: form.control,
+    name: 'config.groupFilter',
+  });
+  
   const handleSalvaView = async () => {
     if (!selectedView) return;
-    const config = buildQuery(getGroupFilter());
+    const config = buildQuery(groupFilterWatched);
     const response = await editaView({
       id: selectedView.id,
       nome: selectedView.nome,
@@ -269,7 +266,7 @@ export function ViewPagina() {
   return (
     <div className='h-full min-h-0 w-full overflow-hidden'>
       <div className='flex flex-col h-full min-w-0 overflow-y-auto p-6 gap-6'>
-        <FormProvider {...criacaoForm}>
+        <FormProvider {...form}>
           <ViewBar
             views={views}
             selectedView={selectedView}
@@ -289,7 +286,9 @@ export function ViewPagina() {
             open={dadosModalOpen}
             onClose={() => setDadosModalOpen(false)}
             titulo={
-              selectedView ? 'Editar dados da visualização' : 'Criar visualização'
+              selectedView
+                ? 'Editar dados da visualização'
+                : 'Criar visualização'
             }
             descricao={
               selectedView

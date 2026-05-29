@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/api-request';
 import { useAuth } from '@/features/auth/provider/auth-provider';
 import { ViewApiResponse } from '../schema/view.schema';
+import { ApiResponse, ApiResponseError } from '@/types/api.schema';
 
 const retornaView = async ({
   id,
@@ -26,7 +27,7 @@ export default function useRetornaView({
   const { resolvePathApi, isLoading: authLoading } = useAuth();
   const baseUrl = resolvePathApi('views');
 
-  return useQuery({
+  return useQuery<ApiResponse<ViewApiResponse>, ApiResponseError>({
     queryKey: [baseUrl, id],
     queryFn: () => retornaView({ id, baseUrl }),
     enabled: enabled && !authLoading,

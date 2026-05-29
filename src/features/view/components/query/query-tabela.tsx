@@ -85,8 +85,8 @@ export function QueryTabela({
   };
 
   return (
-    <div className='w-full h-full overflow-x-auto'>
-      <table className='w-full h-full border-collapse'>
+    <div className='w-full h-full overflow-x-auto rounded-md border'>
+      <table className='w-full h-full rounded-md border-none'>
         <thead className='h-[5%]'>
           <tr>
             <QueryHeader title='From' onAdd={() => setSelectorTarget('from')} />
@@ -102,19 +102,19 @@ export function QueryTabela({
             />
           </tr>
         </thead>
-        <tbody >
+        <tbody>
           <tr>
-            <td className='border p-2 align-top'>
+            <td className='p-2 align-top'>
               <FromColuna from={from} onRemove={onFromRemove} />
             </td>
-            <td className='border p-2 align-top'>
+            <td className='border-l p-2 align-top'>
               <JoinsColuna
                 joins={joins}
                 onUpdate={onJoinUpdate}
                 onRemove={onJoinRemove}
               />
             </td>
-            <td className='border p-2 align-top'>
+            <td className='border-l p-2 align-top'>
               <SelectColuna
                 selects={selects}
                 basesDados={basesDados}
@@ -152,7 +152,7 @@ type QueryHeaderProps = {
 
 function QueryHeader({ title, onAdd, disabled = false }: QueryHeaderProps) {
   return (
-    <th className='border bg-muted px-4 py-2 text-left text-sm font-semibold w-1/3'>
+    <th className='border-l bg-muted px-4 py-2 text-left text-sm font-semibold w-1/3'>
       <div className='flex items-center justify-between gap-2'>
         <span>{title}</span>
         <Button

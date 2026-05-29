@@ -14,7 +14,7 @@ const ativarIntegracao = async ({
   return apiRequest<string>({
     path: `${baseUrl}/${id}/ativar`,
     method: 'PATCH',
-    headers: 'none'
+    headers: 'none',
   });
 };
 
@@ -32,4 +32,3 @@ export default function useIntegracaoAtivar(id: number) {
     },
   });
 }
-

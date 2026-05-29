@@ -86,7 +86,10 @@ export function SelectModal({
             const selecionado = selecionadoIndex >= 0;
 
             return (
-              <div key={metadado.cabecalho} className='flex items-center gap-2 w-full'>
+              <div
+                key={metadado.cabecalho}
+                className='flex items-center gap-2 w-full'
+              >
                 <Checkbox
                   id={`campo-${metadado.cabecalho}`}
                   checked={selecionado}

@@ -1,6 +1,6 @@
 'use client';
 
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 import { ChevronDown, Search } from 'lucide-react';
 
@@ -67,7 +67,12 @@ export function FiltroSimplesGenerico<
     } as Partial<z.output<TSchema>>);
   };
 
-  const watchFiltrarPor = form.watch('filtrarPor');
+  const filtrarPor = useWatch({
+    control: form.control,
+    name: 'filtrarPor',
+  });
+
+  const labelFiltrarPor = filtrarPor ? opcoesLabels[filtrarPor] : '';
 
   return (
     <FormWrapper form={form}>
@@ -78,7 +83,7 @@ export function FiltroSimplesGenerico<
               variant='ghost'
               className='rounded-none border-r bg-field-background px-3 text-xs font-medium tracking-wider hover:bg-muted dark:bg-input/30'
             >
-              {opcoesLabels[watchFiltrarPor]}
+              {labelFiltrarPor}
               <ChevronDown className='ml-2 h-3 w-3 opacity-50' />
             </Button>
           </DropdownMenuTrigger>

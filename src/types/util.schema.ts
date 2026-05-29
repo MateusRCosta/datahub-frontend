@@ -55,18 +55,3 @@ export type TableModal<T> = {
   modoSelecao?: boolean;
   onSelecionar?: (objeto: T) => void;
 };
-
-export const viaCepSchema = z.object({
-  cep: z.string(),
-  logradouro: z.string(),
-  complemento: z.string(),
-  bairro: z.string(),
-  localidade: z.string(),
-  uf: z.string(),
-  ibge: z.string(),
-  gia: z.string(),
-  ddd: z.string(),
-  siafi: z.string(),
-});
-
-export type ViaCep = z.infer<typeof viaCepSchema>;

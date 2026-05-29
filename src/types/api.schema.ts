@@ -1,22 +1,14 @@
 import z from 'zod';
-
-export type ApiStatus = 'SUCCESS' | 'ERROR';
-
-export const createApiResponseSchema = <T extends z.ZodTypeAny>(
-  dataSchema: T,
-) =>
-  z.object({
-    status: z.enum(['SUCCESS', 'ERROR']),
-    statusCode: z.number(),
-    message: z.string(),
-    data: dataSchema.nullable(),
-  });
-
 export interface ApiResponse<T> {
   status: number;
   data: T | null;
 }
 
+export interface ApiResponseError {
+  message: string;
+  error: 'Bad Request' | 'Internal Server Error' | 'Not Found';
+  statusCode: number;
+}
 export const paginationApiRequest = <T extends z.ZodTypeAny>(orderBy: T) =>
   z.object({
     page: z.number().default(1),

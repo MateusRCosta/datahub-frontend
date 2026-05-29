@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { DialogCustom } from '@/components/layout/dialog-custom';
 import { Button } from '@/components/ui/button';
 import { Table2 } from 'lucide-react';
-import { type ViewsApiResponse } from '../schema/view.schema';
-import { ViewExecutaTabela } from './cliente/cliente-tabela';
+import { type ViewsApiResponse } from '../../schema/view.schema';
+import { ViewExecutaTabela } from './view-executa-tabela';
 
 type ViewExecutaModalProps = {
   selectedView: ViewsApiResponse | null;
@@ -24,7 +24,9 @@ export function ViewExecutaModal({
       setOpen={setOpen}
       isPending={false}
       descricao={<p>Dados retornados pela visualização selecionada.</p>}
-      titulo={selectedView ? `Visualização: ${selectedView.nome}` : 'Visualização'}
+      titulo={
+        selectedView ? `Visualização: ${selectedView.nome}` : 'Visualização'
+      }
       temFooter={false}
       trigger={
         <Button

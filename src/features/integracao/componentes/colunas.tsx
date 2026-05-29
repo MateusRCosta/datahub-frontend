@@ -51,10 +51,10 @@ export const getColunas = (): ColumnDef<IntegracoesApiResponse>[] => {
       cell: ({ row }) => (
         <div className='flex items-center gap-1'>
           <IntegracaoAtualiza id={row.original.id} />
-            <IntegracaoDialogAtivar
-              id={row.original.id}
-              nome={row.original.nome}
-            />
+          <IntegracaoDialogAtivar
+            id={row.original.id}
+            nome={row.original.nome}
+          />
           <DialogDeleta
             id={row.original.id}
             path='integracoes'
@@ -76,4 +76,3 @@ export const getColunas = (): ColumnDef<IntegracoesApiResponse>[] => {
     },
   ];
 };
-

@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/api-request';
 import {
+  ApiResponse,
+  ApiResponseError,
   PaginationApiRequest,
   PaginationApiResponse,
 } from '@/types/api.schema';
@@ -35,7 +37,10 @@ export default function useExecutaView({
   const { resolvePathApi, isLoading: authLoading } = useAuth();
   const baseUrl = resolvePathApi('views');
 
-  return useQuery({
+  return useQuery<
+    ApiResponse<PaginationApiResponse<ViewExecutaLinha[]>>,
+    ApiResponseError
+  >({
     queryKey: [baseUrl, id, 'executa', pagination],
     queryFn: () => executaView({ ...pagination, id, baseUrl }),
     enabled: enabled && id > 0 && !authLoading,

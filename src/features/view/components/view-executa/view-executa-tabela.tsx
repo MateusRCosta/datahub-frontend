@@ -6,6 +6,8 @@ import { PaginationApiRequest } from '@/types/api.schema';
 import SeletorColunas from '@/components/layout/seletor-colunas';
 import useExecutaView from '../../api/use-executa-view';
 import { constroiViewColunas } from './colunas';
+import { SkeletonTabela } from '@/components/layout/skeleton-tabela';
+import { mapViewError } from './view-executa-errors.constant';
 
 type ViewExecutaTabelaProps = {
   viewId: number;
@@ -20,7 +22,7 @@ export function ViewExecutaTabela({ viewId }: ViewExecutaTabelaProps) {
     limit: 10,
   });
 
-  const { data, isPending } = useExecutaView({
+  const { data, isPending, isError, error } = useExecutaView({
     enabled: true,
     id: viewId,
     pagination,
@@ -76,27 +78,30 @@ export function ViewExecutaTabela({ viewId }: ViewExecutaTabelaProps) {
     <div className='flex flex-col h-full w-full gap-2'>
       <div className='flex shrink-0 items-center justify-between gap-2'>
         <h2 className='text-sm font-semibold'>Resultado da visualização</h2>
-        <SeletorColunas
-          colunas={camposMetadados}
-          colunasSelecionadas={colunasSelecionadas}
-          onChange={setColunasVisiveis}
-        />
+        {!isError && (
+          <SeletorColunas
+            colunas={camposMetadados}
+            colunasSelecionadas={colunasSelecionadas}
+            onChange={setColunasVisiveis}
+          />
+        )}
       </div>
       <div className='flex-1 min-h-0 w-full'>
-        <DataTable
-          columns={colunas}
-          data={linhas}
-          limit={pagination.limit}
-          page={pagination.page}
-          pageCount={data?.data?.meta.totalPages || 0}
-          onPageChange={(page) => setPagination({ ...pagination, page })}
-          onPageLimitChange={(limit) => setPagination({ page: 1, limit })}
-          totalItens={data?.data?.meta.total || 0}
-        />
+        {isError && <p>Erro ao carregar visualização: {mapViewError(error)}</p>}
+        {isPending && <SkeletonTabela />}
+        {!isError && !isPending && data?.data?.data && (
+          <DataTable
+            columns={colunas}
+            data={linhas}
+            limit={pagination.limit}
+            page={pagination.page}
+            pageCount={data.data.meta.totalPages || 0}
+            onPageChange={(page) => setPagination({ ...pagination, page })}
+            onPageLimitChange={(limit) => setPagination({ page: 1, limit })}
+            totalItens={data.data.meta.total || 0}
+          />
+        )}
       </div>
-      {isPending ? (
-        <span className='text-xs text-muted-foreground'>Carregando dados...</span>
-      ) : null}
     </div>
   );
 }

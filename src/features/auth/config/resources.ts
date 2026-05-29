@@ -5,7 +5,6 @@ import {
   FileCog2,
   Mail,
   ServerCog,
-  Settings2,
   User,
   Users2,
 } from 'lucide-react';
@@ -76,7 +75,7 @@ export const RESOURCE_CONFIG = {
     userRole: ROLES.GERENCIAR_VISUALIZACOES,
     label: 'Visualizações',
     icon: DatabaseSearch,
-    adminOnly: false
+    adminOnly: false,
   },
   basesDados: {
     pathApi: 'bases-dados',
@@ -110,7 +109,7 @@ export const RESOURCE_CONFIG = {
     label: 'Integrações de campanhas',
     icon: FileCog2,
     adminOnly: false,
-  }
+  },
 } as const satisfies Record<string, ResourceEntry>;
 
 /**
@@ -128,7 +127,10 @@ export function getRolesParaRecurso(resource: ResourceName): Role[] {
  * Útil quando uma role dá acesso a múltiplos recursos (ex: GERENCIAR_CAMPANHAS → campanhas e templates).
  */
 export function getRecursosParaRole(role: Role): ResourceName[] {
-  return Object.entries(RESOURCE_CONFIG)
-    .filter(([_, config]) => config.userRole === role)
-    .map(([name]) => name as ResourceName);
+  return (
+    Object.entries(RESOURCE_CONFIG)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      .filter(([_, config]) => config.userRole === role)
+      .map(([name]) => name as ResourceName)
+  );
 }

@@ -2,10 +2,7 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  FormWrapper,
-  InputGenerico,
-} from '@/components/layout/form';
+import { FormWrapper, InputGenerico } from '@/components/layout/form';
 import { Button } from '@/components/ui/button';
 import {
   BaseDadosFiltros,
