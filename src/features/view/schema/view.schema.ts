@@ -152,6 +152,9 @@ export const viewFiltrosSchema = z.object({
 
 export type ViewFiltros = z.infer<typeof viewFiltrosSchema>;
 
+export type ViewExecutaValor = string | number | boolean | null;
+export type ViewExecutaLinha = Record<string, ViewExecutaValor>;
+
 const viewFiltroSimplesChaves = viewSchema
   .pick({ nome: true, descricao: true })
   .keyof();

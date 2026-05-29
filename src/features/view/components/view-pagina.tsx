@@ -5,7 +5,6 @@ import { FormProvider } from 'react-hook-form';
 import { toast } from 'sonner';
 import { QueryTabela } from './query/query-tabela';
 import { ViewDadosModal } from './view-dados-modal';
-import { ViewFiltrosModal } from './filtro/view-filtros-modal';
 import { ViewBar } from './view-bar';
 import { useViewCriacaoForm } from '../hooks/use-view-form';
 import useRetornaView from '../api/use-retorna-view';
@@ -54,13 +53,14 @@ export function ViewPagina() {
 
   const {
     data: retornaViewResponse,
-    isPending: retornaViewPending,
+    isPending: retornaViewQueryPending,
     error: retornaViewError,
   } = useRetornaView({
     id: selectedViewId ?? 0,
     enabled: selectedViewId !== null,
   });
-
+  const retornaViewPending = retornaViewQueryPending && selectedViewId !== null;
+  
   const views = useMemo(() => viewsData?.data?.data ?? [], [viewsData]);
   const basesDados = useMemo(
     () => basesDadosData?.data?.data ?? [],
@@ -73,6 +73,11 @@ export function ViewPagina() {
     selectedView?.id ?? 0,
   );
 
+  console.log(
+    'retorna'+retornaViewPending,
+    'cria'+criaPending,
+    'edita'+editaPending
+  )
   const isPending = retornaViewPending || criaPending || editaPending;
 
   const getNomeBaseDados = useCallback(
@@ -125,7 +130,7 @@ export function ViewPagina() {
     if (retornaViewResponse.status === 200) {
       if (retornaViewResponse.data) {
         const view = retornaViewResponse.data;
-        console.log('view carregada:', JSON.stringify(view, null, 2)); 
+        console.log('view carregada:', JSON.stringify(view, null, 2));
         queueMicrotask(() => {
           loadView(view);
         });
@@ -264,44 +269,40 @@ export function ViewPagina() {
   return (
     <div className='h-full min-h-0 w-full overflow-hidden'>
       <div className='flex flex-col h-full min-w-0 overflow-y-auto p-6 gap-6'>
-        <ViewBar
-          views={views}
-          selectedView={selectedView}
-          isPending={isPending}
-          onViewSelect={(view) => {
-            void handleSelecionaView(view);
-          }}
-          onCreateView={() => setDadosModalOpen(true)}
-          onSaveView={handleSalvaView}
-        />
-
-        <ViewDadosModal
-          open={dadosModalOpen}
-          onClose={() => setDadosModalOpen(false)}
-          titulo={
-            selectedView ? 'Editar dados da visualização' : 'Criar visualização'
-          }
-          descricao={
-            selectedView
-              ? 'Atualize o nome e a descrição da visualização.'
-              : 'Informe o nome e a descrição para salvar a visualização.'
-          }
-          isPending={isPending}
-          initialValues={{
-            nome: selectedView?.nome ?? '',
-            descricao: selectedView?.descricao ?? '',
-          }}
-          onSubmit={selectedView ? handleEditaDados : handleCriaView}
-        />
-
         <FormProvider {...criacaoForm}>
-          <div className='flex justify-end'>
-            <ViewFiltrosModal
-              open={filtrosModalOpen}
-              onOpenChange={setFiltrosModalOpen}
-              basesDados={basesDados}
-            />
-          </div>
+          <ViewBar
+            views={views}
+            selectedView={selectedView}
+            isPending={isPending}
+            dadosModalOpen={dadosModalOpen}
+            onViewSelect={(view) => {
+              void handleSelecionaView(view);
+            }}
+            onCreateView={() => setDadosModalOpen(true)}
+            onSaveView={handleSalvaView}
+            filtrosModalOpen={filtrosModalOpen}
+            setFiltrosModalOpen={setFiltrosModalOpen}
+            basesDados={basesDados}
+          />
+
+          <ViewDadosModal
+            open={dadosModalOpen}
+            onClose={() => setDadosModalOpen(false)}
+            titulo={
+              selectedView ? 'Editar dados da visualização' : 'Criar visualização'
+            }
+            descricao={
+              selectedView
+                ? 'Atualize o nome e a descrição da visualização.'
+                : 'Informe o nome e a descrição para salvar a visualização.'
+            }
+            isPending={isPending}
+            initialValues={{
+              nome: selectedView?.nome ?? '',
+              descricao: selectedView?.descricao ?? '',
+            }}
+            onSubmit={selectedView ? handleEditaDados : handleCriaView}
+          />
 
           <QueryTabela
             from={from}

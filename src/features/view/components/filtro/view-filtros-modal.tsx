@@ -30,9 +30,10 @@ export function ViewFiltrosModal({
           type='button'
           variant='outline'
           onClick={() => onOpenChange(true)}
+          aria-label='Aplicar filtros'
+          title='Aplicar filtros'
         >
           <Funnel aria-hidden='true' />
-          Filtros
         </Button>
       }
     >

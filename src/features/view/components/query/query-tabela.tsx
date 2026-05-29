@@ -85,9 +85,9 @@ export function QueryTabela({
   };
 
   return (
-    <div className='w-full overflow-x-auto'>
-      <table className='w-full border-collapse'>
-        <thead>
+    <div className='w-full h-full overflow-x-auto'>
+      <table className='w-full h-full border-collapse'>
+        <thead className='h-[5%]'>
           <tr>
             <QueryHeader title='From' onAdd={() => setSelectorTarget('from')} />
             <QueryHeader
@@ -102,7 +102,7 @@ export function QueryTabela({
             />
           </tr>
         </thead>
-        <tbody>
+        <tbody >
           <tr>
             <td className='border p-2 align-top'>
               <FromColuna from={from} onRemove={onFromRemove} />
