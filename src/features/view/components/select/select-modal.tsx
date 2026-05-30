@@ -17,8 +17,11 @@ type SelectModalProps = {
   open: boolean;
   onClose: () => void;
   onSave: (campos: SelectCampo[]) => void;
-  baseDadosId: number;
-  estrutura: Metadado[];
+  baseDados: {
+    id: number;
+    estrutura: Metadado[];
+    nome: string;
+  };
   selectedCampos: SelectCampo[];
 };
 
@@ -26,8 +29,7 @@ export function SelectModal({
   open,
   onClose,
   onSave,
-  baseDadosId,
-  estrutura,
+  baseDados,
   selectedCampos,
 }: SelectModalProps) {
   const { Input } = useFormComponents<SelectCamposForm>();
@@ -70,7 +72,7 @@ export function SelectModal({
       isPending={false}
       descricao={<p>Selecione os campos e ajuste os rótulos exibidos.</p>}
       trigger={null}
-      titulo={`Selecionar Campos da Base: ${baseDadosId}`}
+      titulo={`Selecionar Campos da Base: ${baseDados.nome}`}
       idForm='form-select-modal'
     >
       <FormProvider {...form}>
@@ -79,7 +81,7 @@ export function SelectModal({
           onSubmit={form.handleSubmit(handleSave)}
           className='flex flex-col gap-2 py-2'
         >
-          {estrutura.map((metadado) => {
+          {baseDados.estrutura.map((metadado) => {
             const selecionadoIndex = campos.findIndex(
               (campo) => campo.campo === metadado.cabecalho,
             );

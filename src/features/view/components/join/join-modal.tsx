@@ -17,7 +17,7 @@ type JoinModalProps = {
   open: boolean;
   onClose: () => void;
   onSave: (data: Join) => void;
-  initialData: Pick<JoinComNome, 'baseDadosIdJoin' | 'nome'>;
+  initialData: JoinComNome;
 };
 
 const tipoJoinOptions = Object.values(TIPO_JOIN_ENUM).map((v) => ({
@@ -38,9 +38,9 @@ export function JoinModal({
     resolver: zodResolver(joinsSchema),
     defaultValues: {
       baseDadosIdJoin: initialData.baseDadosIdJoin,
-      campoFrom: '',
-      campoJoin: '',
-      tipo: tipoJoinEnumSchema.options[0],
+      campoFrom: initialData.campoFrom || '',
+      campoJoin: initialData.campoJoin || '',
+      tipo: initialData.tipo || tipoJoinEnumSchema.options[0],
     },
   });
 
@@ -59,7 +59,7 @@ export function JoinModal({
       isPending={false}
       descricao={<p>Configure os campos e o tipo do Join.</p>}
       trigger={null}
-      titulo='Configurar Join'
+      titulo={`Configurar Junção: ${initialData.nome}`}
       idForm='form-join-modal'
     >
       <FormProvider {...form}>
@@ -70,10 +70,10 @@ export function JoinModal({
         >
           <FieldGroup className='flex flex-col gap-4'>
             <Input name='baseDadosIdJoin' label='Base de Dados ID' disabled />
-            <Input name='campoFrom' label='Campo From' placeholder='Ex: id' />
+            <Input name='campoFrom' label='Campo da base de dados de referência' placeholder='Ex: id' />
             <Input
               name='campoJoin'
-              label='Campo Join'
+              label='Campo da base de dados da junção'
               placeholder='Ex: base_dados_id'
             />
             <Select name='tipo' label='Tipo' options={tipoJoinOptions} />

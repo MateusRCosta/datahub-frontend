@@ -89,14 +89,14 @@ export function QueryTabela({
       <table className='w-full h-full rounded-md border-none'>
         <thead className='h-[5%]'>
           <tr>
-            <QueryHeader title='From' onAdd={() => setSelectorTarget('from')} />
+            <QueryHeader title='Referência' onAdd={() => setSelectorTarget('from')} />
             <QueryHeader
-              title='Joins'
+              title='Junções'
               onAdd={() => setSelectorTarget('join')}
               disabled={joins.length >= MAX_JOINS}
             />
             <QueryHeader
-              title='Select'
+              title='Seleção'
               onAdd={() => setSelectorTarget('select')}
               disabled={basesDadosPermitidasSelect.length === 0}
             />

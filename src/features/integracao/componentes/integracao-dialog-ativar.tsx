@@ -52,9 +52,9 @@ export function IntegracaoDialogAtivar({
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Ativar integração: {nome}</DialogTitle>
+          <DialogTitle>Executar integração: {nome}</DialogTitle>
           <DialogDescription>
-            Deseja ativar a integração? Múltiplas integrações ativadas ao mesmo
+            Deseja executar a integração? Múltiplas integrações executadas ao mesmo
             tempo pode ocasionar lentidão ao seu serviço
           </DialogDescription>
         </DialogHeader>

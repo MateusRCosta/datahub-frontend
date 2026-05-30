@@ -30,7 +30,11 @@ export function JoinsColuna({ joins, onUpdate, onRemove }: JoinsColunaProps) {
             <span className='font-medium truncate'>{join.nome}</span>
             {join.campoFrom && (
               <span className='text-xs text-muted-foreground'>
-                {join.campoFrom} - {join.campoJoin} ({join.tipo})
+                FROM: {join.campoFrom}
+                <br/>
+                JOIN: {join.campoJoin} 
+                <br/>
+                ({join.tipo})
               </span>
             )}
           </div>
@@ -64,10 +68,7 @@ export function JoinsColuna({ joins, onUpdate, onRemove }: JoinsColunaProps) {
           open={editingIndex !== null}
           onClose={() => setEditingIndex(null)}
           onSave={(data) => onUpdate(editingIndex, data)}
-          initialData={{
-            baseDadosIdJoin: joins[editingIndex].baseDadosIdJoin,
-            nome: joins[editingIndex].nome,
-          }}
+          initialData={joins[editingIndex]}
         />
       )}
     </div>

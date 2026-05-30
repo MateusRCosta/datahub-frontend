@@ -73,8 +73,11 @@ export function SelectColuna({
           open={editingIndex !== null}
           onClose={() => setEditingIndex(null)}
           onSave={(campos) => onUpdate(editingIndex, campos)}
-          baseDadosId={editingEntry.baseDadosId}
-          estrutura={getEstrutura(editingEntry.baseDadosId)}
+          baseDados={{
+            estrutura: getEstrutura(editingEntry.baseDadosId),
+            id: editingEntry.baseDadosId,
+            nome: editingEntry.nome
+         }}
           selectedCampos={editingEntry.campos}
         />
       )}
