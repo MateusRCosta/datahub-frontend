@@ -1,11 +1,5 @@
-import {
-  integracaoApiResponse,
-  integracaoBasicApiResponse,
-} from '@/lib/schema/integracao.schema';
-import {
-  usuarioApiResponse,
-  usuarioBasicApiResponse,
-} from '@/lib/schema/usuario.schema';
+
+import { integracaoApiResponse, integracaoBasicApiResponse, usuarioApiResponse, usuarioBasicApiResponse } from '@/common/schema/relacao.schema';
 import z from 'zod';
 
 const TIPOS_PERMITIDOS = [

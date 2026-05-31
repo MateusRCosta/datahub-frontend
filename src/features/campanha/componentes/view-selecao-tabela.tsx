@@ -1,40 +1,61 @@
 'use client';
 
 import { useState } from 'react';
+import { ColumnDef } from '@tanstack/react-table';
 import { DataTable } from '@/components/layout/tabela';
 import { Filtro } from '@/components/layout/filtro';
 import { FiltroSimplesGenerico } from '@/components/layout/filtro-simples-input';
 import { SkeletonTabela } from '@/components/layout/skeleton-tabela';
 import { useFiltros } from '@/hooks/use-filtros';
 import { PaginationApiRequest } from '@/types/api.schema';
-import { getColunas } from './colunas';
-import { TemplateCria } from './template-cria';
-import { TemplateFiltro } from './template-filtro';
-import useRetornaTemplates from '../api/use-retorna-templates';
+import useRetornaViews from '@/features/view/api/use-retorna-views';
 import {
-  templateFiltroSimplesChavesObjeto,
-  templateFiltroSimplesChavesOptions,
-  templateFiltrosSchema,
-  TemplatesApiResponse,
-} from '../schema/template.schema';
+  viewFiltroSimplesChavesObjeto,
+  viewFiltroSimplesChavesOptions,
+  viewFiltrosSchema,
+  ViewsApiResponse,
+} from '@/features/view/schema/view.schema';
 
-interface TemplateTabelaProps {
-  modoSelecao?: boolean;
-  onSelecionar?: (template: TemplatesApiResponse) => void;
+interface ViewSelecaoTabelaProps {
+  onSelecionar: (view: ViewsApiResponse) => void;
 }
 
-export function TemplateTabela({
-  modoSelecao = false,
-  onSelecionar,
-}: TemplateTabelaProps) {
+const colunas: ColumnDef<ViewsApiResponse>[] = [
+  {
+    accessorKey: 'id',
+    header: () => <div className='sr-only'>Identificador</div>,
+    cell: ({ row }) => <span className='font-medium'>{row.original.id}</span>,
+  },
+  {
+    accessorKey: 'nome',
+    header: () => <div>Nome</div>,
+    cell: ({ row }) => (
+      <div className='flex flex-col'>
+        <span className='font-medium'>{row.original.nome}</span>
+        <span className='text-xs text-muted-foreground'>
+          {row.original.descricao}
+        </span>
+      </div>
+    ),
+  },
+  {
+    accessorKey: 'usuario.nome',
+    header: () => <div>Usuário</div>,
+    cell: ({ row }) => (
+      <span className='font-medium'>{row.original.usuario?.nome ?? '-'}</span>
+    ),
+  },
+];
+
+export function ViewSelecaoTabela({ onSelecionar }: ViewSelecaoTabelaProps) {
   const [pagination, setPagination] = useState<PaginationApiRequest<string>>({
     page: 1,
     limit: 10,
     orderBy: 'createdAt',
     order: 'asc',
   });
-  const { filtros, setFiltros } = useFiltros(templateFiltrosSchema);
-  const { data, isLoading } = useRetornaTemplates({
+  const { filtros, setFiltros } = useFiltros(viewFiltrosSchema);
+  const { data, isLoading } = useRetornaViews({
     enabled: true,
     pagination,
     filtro: {
@@ -46,28 +67,20 @@ export function TemplateTabela({
     return <SkeletonTabela />;
   }
 
-  const registros = data?.data?.data;
-  const colunas = getColunas({ modoSelecao, onSelecionar });
-
   return (
-    <div className='flex flex-col w-full h-full flex-1 min-h-0 mx-auto gap-2'>
+    <div className='flex flex-col w-full flex-1 min-h-0 h-full mx-auto gap-2'>
       <div
         className='flex flex-col md:flex-row gap-2 shrink-0 self-end'
         onClick={(e) => {
           e.stopPropagation();
         }}
       >
-        {!modoSelecao && (
-          <TemplateCria pagination={pagination} filtros={filtros} />
-        )}
         <Filtro
-          childrenComplexo={
-            <TemplateFiltro filtros={filtros} setFiltros={setFiltros} />
-          }
+          childrenComplexo={null}
           childrenSimples={
             <FiltroSimplesGenerico
-              chavesOpcoes={templateFiltroSimplesChavesOptions}
-              opcoesLabels={templateFiltroSimplesChavesObjeto}
+              chavesOpcoes={viewFiltroSimplesChavesOptions}
+              opcoesLabels={viewFiltroSimplesChavesObjeto}
               filtros={filtros}
               setFiltros={setFiltros}
             />
@@ -77,7 +90,7 @@ export function TemplateTabela({
       <div className='flex-1 min-h-0 w-full'>
         <DataTable
           columns={colunas}
-          data={registros || []}
+          data={data?.data?.data || []}
           limit={pagination.limit}
           page={pagination.page}
           pageCount={data?.data?.meta?.totalPages || 0}

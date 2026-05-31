@@ -1,11 +1,7 @@
-import {
-  usuarioApiResponse,
-  usuarioBasicApiResponse,
-} from '@/lib/schema/usuario.schema';
-import z from 'zod';
 
-export const provedorEnumSchema = z.enum({ UPCHAT: 'upchat' });
-export type ProvedorEnum = z.infer<typeof provedorEnumSchema>;
+import { usuarioApiResponse, usuarioBasicApiResponse } from '@/common/schema/relacao.schema';
+import z from 'zod';
+import { provedorEnumSchema, type ProvedorEnum } from '@/common/schema/provedor.schema';
 export const upchatConfigSchema = z.object({
   url: z.httpUrl('Informe uma URL válida'),
   queueId: z.coerce

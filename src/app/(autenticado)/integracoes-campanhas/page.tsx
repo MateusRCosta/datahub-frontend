@@ -7,7 +7,7 @@ export default function IntegracoesCampanhasPage() {
   return (
     <ProtectedPage roles={getRolesParaRecurso('integracoesCampanhas')}>
       <Cabecalho
-        titulo='Integrações de campanhas'
+        titulo='Integrações de campanha'
         descricao='Gerencie as integrações que enviará as mensagens eventuais das campanhas'
       />
       <div className='flex flex-col w-full flex-1 min-h-0 gap-2 p-6'>

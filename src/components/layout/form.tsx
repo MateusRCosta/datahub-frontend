@@ -314,6 +314,7 @@ interface InputSelecaoModalProps extends React.InputHTMLAttributes<HTMLInputElem
   nomeDisplay: string; // O nome que vai aparecer para o usuário
   modalTitle: string;
   modalContent: (fecharModal: () => void) => React.ReactNode; // Função que retorna a tabela
+  disabled?: boolean;
 }
 
 export function InputSelecaoModal({
@@ -322,6 +323,7 @@ export function InputSelecaoModal({
   nomeDisplay,
   modalTitle,
   modalContent,
+  disabled,
   ...rest
 }: InputSelecaoModalProps) {
   const { control } = useFormContext();
@@ -341,6 +343,7 @@ export function InputSelecaoModal({
                 value={nomeDisplay || ''}
                 readOnly
                 onClick={() => setIsModalOpen(true)}
+                disabled={disabled}
                 placeholder='Clique para selecionar...'
                 className={cn(
                   'bg-field-background cursor-pointer flex-1',
@@ -351,6 +354,7 @@ export function InputSelecaoModal({
               <Button
                 type='button'
                 variant='outline'
+                disabled={disabled}
                 onClick={() => setIsModalOpen(true)}
               >
                 <Search className='w-4 h-4' />
@@ -420,6 +424,7 @@ interface DatePickerTimeProps<TFieldValues extends FieldValues = FieldValues> {
   label?: string;
   containerClassName?: string;
   ariaInvalid?: boolean;
+  disabled?: boolean;
 }
 
 export function DatePickerTime<TFieldValues extends FieldValues = FieldValues>({
@@ -427,6 +432,7 @@ export function DatePickerTime<TFieldValues extends FieldValues = FieldValues>({
   label = 'Date',
   containerClassName,
   ariaInvalid,
+  disabled,
 }: DatePickerTimeProps<TFieldValues>) {
   const { control } = useFormContext();
 
@@ -480,6 +486,7 @@ export function DatePickerTime<TFieldValues extends FieldValues = FieldValues>({
                   <Button
                     variant='outline'
                     className='w-48 justify-between font-normal'
+                    disabled={disabled}
                   >
                     {currentDate
                       ? formatUTC(currentDate)
@@ -499,6 +506,7 @@ export function DatePickerTime<TFieldValues extends FieldValues = FieldValues>({
                     captionLayout='dropdown'
                     defaultMonth={currentDate}
                     onSelect={handleDateChange}
+                    disabled={disabled}
                   />
                 </PopoverContent>
               </Popover>
@@ -515,6 +523,7 @@ export function DatePickerTime<TFieldValues extends FieldValues = FieldValues>({
                 step='1'
                 value={currentDate ? getUTCTime(currentDate) : ''}
                 onChange={handleTimeChange}
+                disabled={disabled}
                 className='appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none'
               />
 

@@ -1,8 +1,5 @@
+import { usuarioApiResponse, usuarioBasicApiResponse } from '@/common/schema/relacao.schema';
 import { enumSchema } from '@/features/base-dados/schema/base-dados.schema';
-import {
-  usuarioApiResponse,
-  usuarioBasicApiResponse,
-} from '@/lib/schema/usuario.schema';
 import z from 'zod';
 
 export const integracaoMetodoSchema = z.enum([

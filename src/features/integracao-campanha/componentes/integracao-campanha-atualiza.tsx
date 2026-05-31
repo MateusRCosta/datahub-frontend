@@ -15,11 +15,11 @@ import {
   IntegracaoCampanhaEdicao,
   integracaoCampanhaConfigDefaultValues,
   integracaoCampanhaEdicaoSchema,
-  provedorEnumSchema,
 } from '../schema/integracao-campanha.schema';
 import useEditaIntegracaoCampanha from '../api/use-edita-integracao-campanha';
 import useRetornaIntegracaoCampanha from '../api/use-retorna-integracao-campanha';
 import { IntegracaoCampanhaConfigForm } from './integracao-campanha-config-form';
+import { provedorEnumSchema } from '@/common/schema/provedor.schema';
 
 interface IntegracaoCampanhaAtualizaProps {
   id: number;

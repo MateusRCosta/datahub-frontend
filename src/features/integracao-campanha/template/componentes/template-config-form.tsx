@@ -1,9 +1,9 @@
 'use client';
 
 import { useFormContext } from 'react-hook-form';
-import { ProvedorEnum } from '../../schema/integracao-campanha.schema';
 import { TemplateCriacao } from '../schema/template.schema';
 import { UpchatForm } from './provedores/upchat-form';
+import { ProvedorEnum } from '@/common/schema/provedor.schema';
 
 export function TemplateConfigForm() {
   const { watch } = useFormContext<TemplateCriacao>();

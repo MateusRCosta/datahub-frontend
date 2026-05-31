@@ -40,6 +40,19 @@ export const getColunas = ({
       },
     },
     {
+      accessorKey: 'quantidadeVars',
+      header: () => {
+        return <div>Quantidade variáveis</div>;
+      },
+      cell: ({ row }) => {
+        return (
+          <div className='flex flex-col'>
+            <span className='font-medium'>{row.original.quantidadeVars}</span>
+          </div>
+        );
+      },
+    },
+    {
       accessorKey: 'integracaoCampanha.provedor',
       header: () => {
         return <div>Provedor</div>;

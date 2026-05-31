@@ -21,6 +21,7 @@ interface OrganizacaoDialogProps {
   titulo: string;
   idForm?: string;
   temFooter?: boolean;
+  disableSubmit?: boolean;
 }
 
 export function DialogCustom({
@@ -33,6 +34,7 @@ export function DialogCustom({
   titulo,
   idForm,
   temFooter = true,
+  disableSubmit = false,
 }: OrganizacaoDialogProps) {
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
@@ -53,7 +55,7 @@ export function DialogCustom({
               </Button>
             </DialogClose>
             {idForm && (
-              <Button disabled={isPending} type='submit' form={idForm}>
+              <Button disabled={isPending || disableSubmit} type='submit' form={idForm}>
                 {false && <Loader className='mr-2 h-4 w-4 animate-spin' />}
                 Salvar
               </Button>

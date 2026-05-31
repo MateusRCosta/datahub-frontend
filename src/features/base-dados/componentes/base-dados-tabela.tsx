@@ -16,8 +16,17 @@ import {
 import { BaseDadosCria } from './base-dados-cria';
 import { BaseDadosFiltro } from './base-dados-filtro';
 import { SkeletonTabela } from '@/components/layout/skeleton-tabela';
+import { BasesDadosApiResponse } from '../schema/base-dados.schema';
 
-export function BaseDadosTabela() {
+interface BaseDadosTabelaProps {
+  modoSelecao?: boolean;
+  onSelecionar?: (baseDados: BasesDadosApiResponse) => void;
+}
+
+export function BaseDadosTabela({
+  modoSelecao = false,
+  onSelecionar,
+}: BaseDadosTabelaProps) {
   const [pagination, setPagination] = useState<PaginationApiRequest<string>>({
     page: 1,
     limit: 10,
@@ -39,7 +48,7 @@ export function BaseDadosTabela() {
 
   const registros = data?.data?.data;
 
-  const colunas = getColunas({ modoSelecao: false });
+  const colunas = getColunas({ modoSelecao, onSelecionar });
 
   return (
     <div className='flex flex-col w-full flex-1 min-h-0 mx-auto gap-2'>
@@ -49,7 +58,9 @@ export function BaseDadosTabela() {
           e.stopPropagation();
         }}
       >
-        <BaseDadosCria pagination={pagination} filtros={filtros} />
+        {!modoSelecao && (
+          <BaseDadosCria pagination={pagination} filtros={filtros} />
+        )}
         {
           <Filtro
             childrenComplexo={
@@ -76,6 +87,7 @@ export function BaseDadosTabela() {
           onPageChange={(page) => setPagination({ ...pagination, page })}
           onPageLimitChange={(limit) => setPagination({ ...pagination, limit })}
           totalItens={data?.data?.meta.total || 0}
+          onSelecionar={onSelecionar}
         />
       </div>
     </div>

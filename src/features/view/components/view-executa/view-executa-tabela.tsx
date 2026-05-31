@@ -19,7 +19,7 @@ export function ViewExecutaTabela({ viewId }: ViewExecutaTabelaProps) {
     Pick<PaginationApiRequest<string>, 'page' | 'limit'>
   >({
     page: 1,
-    limit: 10,
+    limit: 20,
   });
 
   const { data, isPending, isError, error } = useExecutaView({

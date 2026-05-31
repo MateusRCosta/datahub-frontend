@@ -1,17 +1,17 @@
 import { Cabecalho } from '@/components/layout/cabecalho';
 import { ProtectedPage } from '@/components/layout/route-guard';
 import { getRolesParaRecurso } from '@/features/auth/config/resources';
-import { IntegracaoTabela } from '@/features/integracao/componentes/integracao-tabela';
+import { CampanhaTabela } from '@/features/campanha/componentes/campanha-tabela';
 
-export default function IntegracoesPage() {
+export default function CampanhasPage() {
   return (
-    <ProtectedPage roles={getRolesParaRecurso('integracoes')}>
+    <ProtectedPage roles={getRolesParaRecurso('campanhas')}>
       <Cabecalho
-        titulo='Integrações de coleta'
-        descricao='Gerencie as integrações usadas para coleta de dados'
+        titulo='Campanhas'
+        descricao='Gerencie campanhas agendadas e seus status'
       />
       <div className='flex flex-col w-full flex-1 min-h-0 gap-2 p-6'>
-        <IntegracaoTabela />
+        <CampanhaTabela />
       </div>
     </ProtectedPage>
   );
