@@ -3,8 +3,14 @@ import './globals.css';
 import AppProvider from '../components/providers/app-provider';
 
 export const metadata: Metadata = {
-  title: 'Hotdata',
-  description: 'Gerenciador de Hotspots da Londrinet',
+  title: 'DataHub',
+  description: 'Sistema londrinet',
+  icons:{
+    icon: '/images/icon.png',
+    shortcut: '/images/icon.png',
+    apple: '/images/icon.png',
+  },
+  manifest: '/manifest'
 };
 
 export default function RootLayout({

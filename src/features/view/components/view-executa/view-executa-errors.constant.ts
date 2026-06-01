@@ -1,10 +1,7 @@
 import { ApiResponseError } from '@/types/api.schema';
 import { MAX_JOINS, MAX_NESTED_GROUP_FILTER } from '../../constants';
+import { ErrorMapper } from '@/types/util.schema';
 
-type ErrorMapper = {
-  pattern: RegExp;
-  getMessage: (match: RegExpMatchArray) => string;
-};
 
 const VIEW_ERROR_MAPPERS: ErrorMapper[] = [
   {

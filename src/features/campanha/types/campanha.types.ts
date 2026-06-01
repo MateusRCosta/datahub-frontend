@@ -40,6 +40,11 @@ export const STATUS_CAMPANHA_TRANSICOES: Record<
 
 export const CAMPANHA_STATUS_ALTERAVEL = [STATUS_CAMPANHA.PENDENTE] as const;
 
+export type CamposSelecionaveis = {
+  campo: string;
+  rotulo?: string;
+}[];
+
 export function campanhaPodeEditar(status: STATUS_CAMPANHA) {
   return CAMPANHA_STATUS_ALTERAVEL.includes(
     status as (typeof CAMPANHA_STATUS_ALTERAVEL)[number],

@@ -55,3 +55,8 @@ export type TableModal<T> = {
   modoSelecao?: boolean;
   onSelecionar?: (objeto: T) => void;
 };
+
+export type ErrorMapper = {
+  pattern: RegExp;
+  getMessage: (match: RegExpMatchArray) => string;
+};

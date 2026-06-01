@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { FieldError, FieldGroup } from '@/components/ui/field';
 import { DialogCustom } from '@/components/layout/dialog-custom';
-import { PaginationApiRequest } from '@/types/api.schema';
+import { ApiResponseError, PaginationApiRequest } from '@/types/api.schema';
 import useCriaCampanha from '../api/use-cria-campanha';
 import { CampanhaFiltros } from '../schema/campanha.schema';
 import {
@@ -15,6 +15,8 @@ import {
   CampanhaFormularioInput,
   campanhaFormularioSchema,
 } from '../schema/campanha-form.schema';
+import { mapCampanhaError } from '../types/erros.constant';
+import { CamposSelecionaveis } from '../types/campanha.types';
 import { CampanhaForm } from './campanha-form';
 
 interface CampanhaCriaProps {
@@ -35,8 +37,11 @@ const defaultValues: CampanhaFormularioInput = {
 export function CampanhaCria({ pagination, filtros }: CampanhaCriaProps) {
   const [open, setOpen] = useState(false);
   const [templateNome, setTemplateNome] = useState('');
+  const [templateQtdVars, setTemplateQtdVars] = useState<number>(0);
   const [viewNome, setViewNome] = useState('');
   const [baseDadosNome, setBaseDadosNome] = useState('');
+  const [camposSelecionaveis, setCamposSelecionaveis] =
+    useState<CamposSelecionaveis>([]);
 
   const form = useForm<CampanhaFormularioInput, unknown, CampanhaFormulario>({
     mode: 'onSubmit',
@@ -51,21 +56,28 @@ export function CampanhaCria({ pagination, filtros }: CampanhaCriaProps) {
     setTemplateNome('');
     setViewNome('');
     setBaseDadosNome('');
+    setCamposSelecionaveis([]);
   };
 
   const onSubmit = async (data: CampanhaFormulario) => {
-    const response = await mutateAsync(data);
-    if (response.status === 201) {
-      toast.success('Campanha criada com sucesso.');
-      resetForm();
-      setOpen(false);
-      return;
-    }
+    try {
+      const response = await mutateAsync(data);
+      if (response.status === 201) {
+        toast.success('Campanha criada com sucesso.');
+        resetForm();
+        setOpen(false);
+        return;
+      }
 
-    toast.error('Erro ao criar campanha.');
-    form.setError('root', {
-      message: 'Verifique os dados e tente novamente.',
-    });
+      toast.error('Erro ao criar campanha.');
+      form.setError('root', {
+        message: 'Verifique os dados e tente novamente.',
+      });
+    } catch (error) {
+      const message = mapCampanhaError(error as ApiResponseError);
+      toast.error(message);
+      form.setError('root', { message });
+    }
   };
 
   return (
@@ -98,11 +110,15 @@ export function CampanhaCria({ pagination, filtros }: CampanhaCriaProps) {
             <FieldGroup className='flex flex-col min-h-0 flex-1 gap-6'>
               <CampanhaForm
                 templateNome={templateNome}
+                templateQtdVars={templateQtdVars}
+                setTemplateQtdVars={setTemplateQtdVars}
                 setTemplateNome={setTemplateNome}
                 viewNome={viewNome}
                 setViewNome={setViewNome}
                 baseDadosNome={baseDadosNome}
                 setBaseDadosNome={setBaseDadosNome}
+                camposSelecionaveis={camposSelecionaveis}
+                setCamposSelecionaveis={setCamposSelecionaveis}
               />
             </FieldGroup>
           </form>

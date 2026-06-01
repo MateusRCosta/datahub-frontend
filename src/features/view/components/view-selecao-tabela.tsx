@@ -18,6 +18,7 @@ import {
 
 interface ViewSelecaoTabelaProps {
   onSelecionar: (view: ViewsApiResponse) => void;
+  path: 'campanhas',
 }
 
 const colunas: ColumnDef<ViewsApiResponse>[] = [
@@ -37,17 +38,10 @@ const colunas: ColumnDef<ViewsApiResponse>[] = [
         </span>
       </div>
     ),
-  },
-  {
-    accessorKey: 'usuario.nome',
-    header: () => <div>Usuário</div>,
-    cell: ({ row }) => (
-      <span className='font-medium'>{row.original.usuario?.nome ?? '-'}</span>
-    ),
-  },
+  }
 ];
 
-export function ViewSelecaoTabela({ onSelecionar }: ViewSelecaoTabelaProps) {
+export function ViewSelecaoTabela({ onSelecionar, path }: ViewSelecaoTabelaProps) {
   const [pagination, setPagination] = useState<PaginationApiRequest<string>>({
     page: 1,
     limit: 10,
@@ -58,6 +52,7 @@ export function ViewSelecaoTabela({ onSelecionar }: ViewSelecaoTabelaProps) {
   const { data, isLoading } = useRetornaViews({
     enabled: true,
     pagination,
+    path,
     filtro: {
       ...filtros,
     },

@@ -15,7 +15,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { ApiResponseError } from '@/types/api.schema';
 import useAlteraStatusCampanha from '../api/use-altera-status-campanha';
+import { mapCampanhaError } from '../types/erros.constant';
 import {
   STATUS_CAMPANHA,
   STATUS_CAMPANHA_LABEL,
@@ -54,16 +56,20 @@ export function CampanhaStatusAcoes({
   }
 
   const alterarStatus = async (proximoStatus: STATUS_CAMPANHA) => {
-    const response = await mutateAsync({ id, status: proximoStatus });
+    try {
+      const response = await mutateAsync({ id, status: proximoStatus });
 
-    if (response.status === 204) {
-      toast.success(
-        `Campanha "${nome}" alterada para ${STATUS_CAMPANHA_LABEL[proximoStatus]}.`,
-      );
-      return;
+      if (response.status === 204) {
+        toast.success(
+          `Campanha "${nome}" alterada para ${STATUS_CAMPANHA_LABEL[proximoStatus]}.`,
+        );
+        return;
+      }
+
+      toast.error('Erro ao alterar status da campanha.');
+    } catch (error) {
+      toast.error(mapCampanhaError(error as ApiResponseError));
     }
-
-    toast.error('Erro ao alterar status da campanha.');
   };
 
   return (

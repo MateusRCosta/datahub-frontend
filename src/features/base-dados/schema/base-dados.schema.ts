@@ -1,5 +1,5 @@
 
-import { integracaoApiResponse, integracaoBasicApiResponse, usuarioApiResponse, usuarioBasicApiResponse } from '@/common/schema/relacao.schema';
+import { camposSchema, integracaoApiResponse, integracaoBasicApiResponse, usuarioApiResponse, usuarioBasicApiResponse } from '@/common/schema/relacao.schema';
 import z from 'zod';
 
 const TIPOS_PERMITIDOS = [
@@ -116,6 +116,9 @@ export const basesDadosApiResponseSchema = baseDadosSchema
     integracao: integracaoBasicApiResponse.optional(),
     usuario: usuarioBasicApiResponse.optional(),
     _count: _countSchema,
+    campos: z.array(camposSchema).optional()
+  }).partial({
+    estrutura: true,
   });
 export type BasesDadosApiResponse = z.infer<typeof basesDadosApiResponseSchema>;
 

@@ -31,19 +31,23 @@ const retornaBasesDados = async ({
 export default function useRetornaBasesDados({
   enabled,
   pagination,
+  path,
   filtro,
 }: {
   enabled: boolean;
   pagination: PaginationApiRequest<string>;
+  path?: 'campanhas';
   filtro?: BaseDadosFiltros;
 }) {
   const { resolvePathApi, isLoading: authLoading } = useAuth();
   const baseUrl = resolvePathApi('basesDados');
-  console.log('Base URL:', baseUrl);
-  console.log('Filtros:', filtro);
+  const baseUrlFinal =
+    path === 'campanhas'
+      ? `${baseUrl}/campanhas`
+      : baseUrl;
   return useQuery({
-    queryKey: [baseUrl, pagination, filtro],
-    queryFn: () => retornaBasesDados({ ...pagination, filtro, baseUrl }),
+    queryKey: [baseUrlFinal, pagination, filtro],
+    queryFn: () => retornaBasesDados({ ...pagination, filtro, baseUrl: baseUrlFinal }),
     enabled: enabled && !authLoading,
   });
 }

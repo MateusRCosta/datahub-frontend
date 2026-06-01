@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/api-request';
-import { ApiResponse } from '@/types/api.schema';
+import { ApiResponse, ApiResponseError } from '@/types/api.schema';
 import { getQueryClient } from '@/lib/query-client';
 import { useAuth } from '@/features/auth/provider/auth-provider';
 import { CampanhaFormulario } from '../schema/campanha-form.schema';
@@ -26,7 +26,7 @@ export default function useEditaCampanha(id: number) {
 
   return useMutation<
     ApiResponse<string>,
-    Error,
+    ApiResponseError,
     CampanhaFormulario & { id: number }
   >({
     mutationKey: ['campanha-edita', id],

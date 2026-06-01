@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/api-request';
-import { ApiResponse } from '@/types/api.schema';
+import { ApiResponse, ApiResponseError } from '@/types/api.schema';
 import { getQueryClient } from '@/lib/query-client';
 import { useAuth } from '@/features/auth/provider/auth-provider';
 import { STATUS_CAMPANHA } from '../types/campanha.types';
@@ -28,7 +28,7 @@ export default function useAlteraStatusCampanha(id: number) {
 
   return useMutation<
     ApiResponse<string>,
-    Error,
+    ApiResponseError,
     { id: number; status: STATUS_CAMPANHA }
   >({
     mutationKey: ['campanha-status', id],

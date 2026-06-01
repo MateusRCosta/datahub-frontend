@@ -9,6 +9,7 @@ import { DialogTrigger } from '@/components/ui/dialog';
 import { FieldError, FieldGroup } from '@/components/ui/field';
 import { DialogCustom } from '@/components/layout/dialog-custom';
 import { RegistroInfoCard } from '@/components/layout/registro-info-card';
+import { ApiResponseError } from '@/types/api.schema';
 import {
   Tooltip,
   TooltipContent,
@@ -23,9 +24,11 @@ import {
   CampanhaFormularioInput,
   campanhaFormularioSchema,
 } from '../schema/campanha-form.schema';
+import { mapCampanhaError } from '../types/erros.constant';
 import {
   STATUS_CAMPANHA,
   STATUS_CAMPANHA_LABEL,
+  CamposSelecionaveis,
   campanhaPodeAbrirEdicao,
   campanhaPodeEditar,
 } from '../types/campanha.types';
@@ -46,20 +49,14 @@ const defaultValues: CampanhaFormularioInput = {
   vars: [{ variavel: '', valor: '' }],
 };
 
-function getRelacaoId(relacao: unknown) {
-  if (!relacao || typeof relacao !== 'object' || !('id' in relacao)) {
-    return undefined;
-  }
-
-  const id = relacao.id;
-  return typeof id === 'number' ? id : undefined;
-}
-
 export function CampanhaAtualiza({ id, status }: CampanhaAtualizaProps) {
   const [open, setOpen] = useState(false);
   const [templateNome, setTemplateNome] = useState('');
+  const [templateQtdVars, setTemplateQtdVars] = useState<number>(0);
   const [viewNome, setViewNome] = useState('');
   const [baseDadosNome, setBaseDadosNome] = useState('');
+  const [camposSelecionaveis, setCamposSelecionaveis] =
+    useState<CamposSelecionaveis>([]);
   const podeEditar = campanhaPodeEditar(status);
   const podeAbrirEdicao = campanhaPodeAbrirEdicao();
 
@@ -92,8 +89,8 @@ export function CampanhaAtualiza({ id, status }: CampanhaAtualizaProps) {
         nome: campanha.nome,
         scheduledAt: campanha.scheduledAt,
         templateId: campanha.template.id,
-        baseDadosId: getRelacaoId(campanha.baseDeDados),
-        viewId: getRelacaoId(campanha.view),
+        baseDadosId: campanha.baseDeDados?.id,
+        viewId: campanha.view?.id,
         contatoCampo: campanha.contatoCampo,
         vars: vars.length > 0 ? vars : [{ variavel: '', valor: '' }],
       },
@@ -103,6 +100,9 @@ export function CampanhaAtualiza({ id, status }: CampanhaAtualizaProps) {
       setTemplateNome(campanha.template.nome);
       setViewNome(campanha.view?.nome ?? '');
       setBaseDadosNome(campanha.baseDeDados?.nome ?? '');
+      setCamposSelecionaveis(
+        campanha.view?.campos ?? campanha.baseDeDados?.campos ?? [],
+      );
     });
   }, [data, reset]);
 
@@ -111,29 +111,31 @@ export function CampanhaAtualiza({ id, status }: CampanhaAtualizaProps) {
   const onSubmit = async (formData: CampanhaFormulario) => {
     if (!podeEditar) return;
 
-    const response = await mutateAsync({ ...formData, id });
-    if (response.status === 404) {
-      toast.warning('Campanha não encontrada.');
-      form.reset(defaultValues);
-      setOpen(false);
-      return;
-    }
-    if (response.status === 400) {
-      toast.error('Erro ao editar: verifique os dados e tente novamente.');
-      form.setError('root', {
-        message: 'Verifique os dados e tente novamente.',
-      });
-      return;
-    }
-    if (response.status === 204) {
-      toast.success('Campanha editada com sucesso.');
-      form.reset(defaultValues);
-      setOpen(false);
-      return;
-    }
+    try {
+      const response = await mutateAsync({ ...formData, id });
+      if (response.status === 204) {
+        toast.success('Campanha editada com sucesso.');
+        form.reset(defaultValues);
+        setOpen(false);
+        return;
+      }
 
-    toast.error('Erro ao editar: tente novamente mais tarde.');
-    form.setError('root', { message: 'Tente novamente mais tarde.' });
+      toast.error('Erro ao editar: tente novamente mais tarde.');
+      form.setError('root', { message: 'Tente novamente mais tarde.' });
+    } catch (error) {
+      const apiError = error as ApiResponseError;
+
+      if (apiError.statusCode === 404) {
+        toast.warning('Campanha não encontrada.');
+        form.reset(defaultValues);
+        setOpen(false);
+        return;
+      }
+
+      const message = mapCampanhaError(apiError);
+      toast.error(message);
+      form.setError('root', { message });
+    }
   };
 
   if (!podeAbrirEdicao) {
@@ -175,7 +177,7 @@ export function CampanhaAtualiza({ id, status }: CampanhaAtualizaProps) {
                 'Criado em': formataDataUI(data?.data?.createdAt),
                 'Atualizado em': formataDataUI(data?.data?.updatedAt),
                 'Finalizada em': formataDataUI(data?.data?.finishedAt),
-                'Executada em': formataDataUI(data?.data?.executedAt)
+                'Executada em': formataDataUI(data?.data?.executedAt),
               }}
             />
           </div>
@@ -208,10 +210,14 @@ export function CampanhaAtualiza({ id, status }: CampanhaAtualizaProps) {
                 <CampanhaForm
                   templateNome={templateNome}
                   setTemplateNome={setTemplateNome}
+                  templateQtdVars={templateQtdVars}
+                  setTemplateQtdVars={setTemplateQtdVars}
                   viewNome={viewNome}
                   setViewNome={setViewNome}
                   baseDadosNome={baseDadosNome}
                   setBaseDadosNome={setBaseDadosNome}
+                  camposSelecionaveis={camposSelecionaveis}
+                  setCamposSelecionaveis={setCamposSelecionaveis}
                   readOnly={!podeEditar}
                 />
               )}

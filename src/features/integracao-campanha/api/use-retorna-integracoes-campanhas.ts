@@ -32,17 +32,17 @@ export default function useIntegracoesCampanhas({
   enabled,
   pagination,
   filtro,
-  contexto,
+  path,
 }: {
   enabled: boolean;
   pagination: PaginationApiRequest<string>;
   filtro?: IntegracaoCampanhaFiltros;
-  contexto?: 'templates';
+  path?: 'templates';
 }) {
   const { resolvePathApi, isLoading: authLoading } = useAuth();
   const integracoesCampanhaPath = resolvePathApi('integracoesCampanhas');
   const baseUrl =
-    contexto === 'templates'
+    path === 'templates'
       ? `${integracoesCampanhaPath}/templates`
       : integracoesCampanhaPath;
 

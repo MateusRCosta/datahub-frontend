@@ -1,6 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/api-request';
-import { ApiResponse, PaginationApiRequest } from '@/types/api.schema';
+import {
+  ApiResponse,
+  ApiResponseError,
+  PaginationApiRequest,
+} from '@/types/api.schema';
 import { getQueryClient } from '@/lib/query-client';
 import { useAuth } from '@/features/auth/provider/auth-provider';
 import { CampanhaFiltros } from '../schema/campanha.schema';
@@ -31,12 +35,14 @@ export default function useCriaCampanha({
   const { resolvePathApi } = useAuth();
   const baseUrl = resolvePathApi('campanhas');
 
-  return useMutation<ApiResponse<string>, Error, CampanhaFormulario>({
-    mutationKey: ['campanha-criacao'],
-    mutationFn: (variables) => criaCampanha({ ...variables, baseUrl }),
-    onSuccess: (response) => {
-      if (response.status !== 201) return;
-      queryClient.invalidateQueries({ queryKey: [baseUrl], exact: false });
+  return useMutation<ApiResponse<string>, ApiResponseError, CampanhaFormulario>(
+    {
+      mutationKey: ['campanha-criacao'],
+      mutationFn: (variables) => criaCampanha({ ...variables, baseUrl }),
+      onSuccess: (response) => {
+        if (response.status !== 201) return;
+        queryClient.invalidateQueries({ queryKey: [baseUrl], exact: false });
+      },
     },
-  });
+  );
 }

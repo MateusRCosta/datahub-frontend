@@ -19,13 +19,13 @@ import {
 import { IntegracaoCampanhaCria } from './integracao-campanha-cria';
 
 type IntegracaoCampanhaTabelaProps = {
-  contexto?: 'templates';
+  path?: 'templates';
   modoSelecao?: boolean;
   onSelecionar?: (integracaoCampanha: IntegracoesCampanhasApiResponse) => void;
 };
 
 export function IntegracaoCampanhaTabela({
-  contexto,
+  path,
   modoSelecao = false,
   onSelecionar,
 }: IntegracaoCampanhaTabelaProps) {
@@ -39,7 +39,7 @@ export function IntegracaoCampanhaTabela({
   const { data, isLoading } = useRetornaIntegracoesCampanhas({
     enabled: true,
     pagination,
-    contexto,
+    path,
     filtro: {
       ...filtros,
     },

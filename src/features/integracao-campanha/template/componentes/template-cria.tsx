@@ -134,7 +134,7 @@ export function TemplateCria({ pagination, filtros }: TemplateCriaProps) {
                   modalTitle='Selecionar integração de campanha'
                   modalContent={(fecharModal) => (
                     <IntegracaoCampanhaTabela
-                      contexto='templates'
+                      path='templates'
                       modoSelecao
                       onSelecionar={(integracaoCampanha) => {
                         selecionarIntegracaoCampanha(integracaoCampanha);
