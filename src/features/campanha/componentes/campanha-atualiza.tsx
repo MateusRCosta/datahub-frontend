@@ -33,6 +33,7 @@ import {
   campanhaPodeEditar,
 } from '../types/campanha.types';
 import { CampanhaForm } from './campanha-form';
+import { ProvedorEnum } from '@/common/schema/provedor.schema';
 
 interface CampanhaAtualizaProps {
   id: number;
@@ -53,6 +54,7 @@ export function CampanhaAtualiza({ id, status }: CampanhaAtualizaProps) {
   const [open, setOpen] = useState(false);
   const [templateNome, setTemplateNome] = useState('');
   const [templateQtdVars, setTemplateQtdVars] = useState<number>(0);
+  const [templateProvedor, setTemplateProvedor] = useState<ProvedorEnum>(ProvedorEnum.UPCHAT);
   const [viewNome, setViewNome] = useState('');
   const [baseDadosNome, setBaseDadosNome] = useState('');
   const [camposSelecionaveis, setCamposSelecionaveis] =
@@ -97,12 +99,12 @@ export function CampanhaAtualiza({ id, status }: CampanhaAtualizaProps) {
       { keepDefaultValues: false },
     );
     queueMicrotask(() => {
+      setTemplateProvedor(campanha.template.integracaoCampanha.provedor);
       setTemplateNome(campanha.template.nome);
       setViewNome(campanha.view?.nome ?? '');
       setBaseDadosNome(campanha.baseDeDados?.nome ?? '');
-      setCamposSelecionaveis(
-        campanha.view?.campos ?? campanha.baseDeDados?.campos ?? [],
-      );
+      setTemplateQtdVars(campanha.template.quantidadeVars);
+      setCamposSelecionaveis(campanha.campos ?? []);
     });
   }, [data, reset]);
 
@@ -208,6 +210,8 @@ export function CampanhaAtualiza({ id, status }: CampanhaAtualizaProps) {
               )}
               {data && !isError && (
                 <CampanhaForm
+                  templateProvedor={templateProvedor}
+                  setTemplateProvedor={setTemplateProvedor}
                   templateNome={templateNome}
                   setTemplateNome={setTemplateNome}
                   templateQtdVars={templateQtdVars}

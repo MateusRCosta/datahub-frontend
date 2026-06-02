@@ -29,7 +29,7 @@ export function TemplateTabela({
 }: TemplateTabelaProps) {
   const [pagination, setPagination] = useState<PaginationApiRequest<string>>({
     page: 1,
-    limit: 10,
+    limit: 25,
     orderBy: 'createdAt',
     order: 'asc',
   });

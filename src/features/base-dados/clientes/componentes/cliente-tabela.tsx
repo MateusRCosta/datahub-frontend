@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { DataTable } from '@/components/layout/tabela';
 import { PaginationApiRequest } from '@/types/api.schema';
 import useRetornaClientes from '../api/use-retorna-clientes';
@@ -18,11 +18,15 @@ interface ClienteTabelaProps {
 
 export function ClienteTabela({ baseDadosId, estrutura }: ClienteTabelaProps) {
   const [open, setOpen] = useState(false);
-  const [colunasVisiveis, setColunasVisiveis] = useState<string[]>([]);
+  const [colunasVisiveis, setColunasVisiveis] = useState<string[]>(
+    () =>
+      estrutura?.slice(0, 3).map((est) => est.cabecalho.toLowerCase().trim()) ??
+      [],
+  );
 
   const [pagination, setPagination] = useState<PaginationApiRequest<string>>({
     page: 1,
-    limit: 10,
+    limit: 25,
     orderBy: 'id',
     order: 'asc',
   });
@@ -40,29 +44,22 @@ export function ClienteTabela({ baseDadosId, estrutura }: ClienteTabelaProps) {
     }));
   }, [estrutura]);
 
-  const colunas = constroiClienteColunas({
-    colunasVisiveis,
-    estrutura,
-  });
-
   const chavesColunasDisponiveis = useMemo(
     () =>
       (camposMetadados ?? []).map((coluna) => coluna.key.toLowerCase().trim()),
     [camposMetadados],
   );
 
-  useEffect(() => {
+  const colunasVisivelsFiltradas = useMemo(() => {
     const chavesValidas = new Set(chavesColunasDisponiveis);
+    const validas = colunasVisiveis.filter((col) => chavesValidas.has(col));
+    return validas.length > 0 ? validas : chavesColunasDisponiveis.slice(0, 3);
+  }, [colunasVisiveis, chavesColunasDisponiveis]);
 
-    setColunasVisiveis((atual) => {
-      const atualValido = atual.filter((coluna) =>
-        chavesValidas.has(coluna.toLowerCase().trim()),
-      );
-      return atualValido.length > 0
-        ? atualValido
-        : chavesColunasDisponiveis.slice(0, 3);
-    });
-  }, [chavesColunasDisponiveis]);
+  const colunas = constroiClienteColunas({
+    colunasVisiveis: colunasVisivelsFiltradas,
+    estrutura,
+  });
 
   return (
     <DialogCustom
@@ -82,7 +79,7 @@ export function ClienteTabela({ baseDadosId, estrutura }: ClienteTabelaProps) {
         <div className='shrink-0 self-end'>
           <SeletorColunas
             colunas={camposMetadados ?? []}
-            colunasSelecionadas={colunasVisiveis}
+            colunasSelecionadas={colunasVisivelsFiltradas}
             onChange={setColunasVisiveis}
           />
         </div>

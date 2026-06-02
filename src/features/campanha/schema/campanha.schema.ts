@@ -1,5 +1,6 @@
 import {
   baseDadosBasicApiResponse,
+  camposSchema,
   templateIntegracaoCampanhaApiResponse,
   templateIntegracaoCampanhaBasicApiResponse,
   usuarioBasicApiResponse,
@@ -48,6 +49,7 @@ export const campanhaResponseSchema = campanhaSchema
     view: viewBasicApiResponse.optional(),
     template: templateIntegracaoCampanhaApiResponse,
     baseDeDados: baseDadosBasicApiResponse.optional(),
+    campos: camposSchema.optional(),
   });
 
 export type CampanhaResponse = z.infer<typeof campanhaResponseSchema>;

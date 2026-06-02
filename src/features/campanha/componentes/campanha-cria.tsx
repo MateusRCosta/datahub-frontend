@@ -18,6 +18,7 @@ import {
 import { mapCampanhaError } from '../types/erros.constant';
 import { CamposSelecionaveis } from '../types/campanha.types';
 import { CampanhaForm } from './campanha-form';
+import { ProvedorEnum } from '@/common/schema/provedor.schema';
 
 interface CampanhaCriaProps {
   pagination: PaginationApiRequest<string>;
@@ -31,13 +32,14 @@ const defaultValues: CampanhaFormularioInput = {
   baseDadosId: undefined,
   viewId: undefined,
   contatoCampo: '',
-  vars: [{ variavel: '', valor: '' }],
+  vars: [],
 };
 
 export function CampanhaCria({ pagination, filtros }: CampanhaCriaProps) {
   const [open, setOpen] = useState(false);
   const [templateNome, setTemplateNome] = useState('');
   const [templateQtdVars, setTemplateQtdVars] = useState<number>(0);
+  const [templateProvedor, setTemplateProvedor] = useState<ProvedorEnum>(ProvedorEnum.UPCHAT);
   const [viewNome, setViewNome] = useState('');
   const [baseDadosNome, setBaseDadosNome] = useState('');
   const [camposSelecionaveis, setCamposSelecionaveis] =
@@ -53,6 +55,7 @@ export function CampanhaCria({ pagination, filtros }: CampanhaCriaProps) {
 
   const resetForm = () => {
     form.reset(defaultValues);
+    setTemplateProvedor(ProvedorEnum.UPCHAT);
     setTemplateNome('');
     setViewNome('');
     setBaseDadosNome('');
@@ -109,6 +112,8 @@ export function CampanhaCria({ pagination, filtros }: CampanhaCriaProps) {
           >
             <FieldGroup className='flex flex-col min-h-0 flex-1 gap-6'>
               <CampanhaForm
+                templateProvedor={templateProvedor}
+                setTemplateProvedor={setTemplateProvedor}
                 templateNome={templateNome}
                 templateQtdVars={templateQtdVars}
                 setTemplateQtdVars={setTemplateQtdVars}

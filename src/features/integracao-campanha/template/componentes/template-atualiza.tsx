@@ -25,6 +25,7 @@ import {
   templateEdicaoSchema,
 } from '../schema/template.schema';
 import { TemplateConfigForm } from './template-config-form';
+import { ProvedorEnum } from '@/common/schema/provedor.schema';
 
 interface TemplateAtualizaProps {
   id: number;
@@ -42,7 +43,7 @@ export function TemplateAtualiza({ id }: TemplateAtualizaProps) {
     defaultValues: {
       nome: '',
       quantidadeVars: undefined,
-      provedor: 'upchat',
+      provedor: ProvedorEnum.UPCHAT,
       config: templateConfigDefaultValues.upchat,
     },
   });
@@ -153,7 +154,7 @@ export function TemplateAtualiza({ id }: TemplateAtualizaProps) {
                       name='quantidadeVars'
                       label='Quantidade de variáveis'
                       type='number'
-                      min={1}
+                      min={0}
                       max={1024}
                       placeholder='Digite a quantidade de variáveis'
                     />

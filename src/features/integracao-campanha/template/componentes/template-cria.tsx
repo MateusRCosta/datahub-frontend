@@ -20,6 +20,7 @@ import {
   templateCriacaoSchema,
 } from '../schema/template.schema';
 import { TemplateConfigForm } from './template-config-form';
+import { ProvedorEnum } from '@/common/schema/provedor.schema';
 
 interface TemplateCriaProps {
   pagination: PaginationApiRequest<string>;
@@ -41,7 +42,7 @@ export function TemplateCria({ pagination, filtros }: TemplateCriaProps) {
     defaultValues: {
       nome: '',
       quantidadeVars: 0,
-      provedor: 'upchat',
+      provedor: ProvedorEnum.UPCHAT,
       integracaoCampanhaId: 0,
       config: templateConfigDefaultValues.upchat,
     },
@@ -123,7 +124,7 @@ export function TemplateCria({ pagination, filtros }: TemplateCriaProps) {
                   name='quantidadeVars'
                   label='Quantidade de variáveis'
                   type='number'
-                  min={1}
+                  min={0}
                   max={1024}
                   placeholder='Digite a quantidade de variáveis'
                 />

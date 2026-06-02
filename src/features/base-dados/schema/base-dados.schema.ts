@@ -1,5 +1,10 @@
-
-import { camposSchema, integracaoApiResponse, integracaoBasicApiResponse, usuarioApiResponse, usuarioBasicApiResponse } from '@/common/schema/relacao.schema';
+import {
+  camposSchema,
+  integracaoApiResponse,
+  integracaoBasicApiResponse,
+  usuarioApiResponse,
+  usuarioBasicApiResponse,
+} from '@/common/schema/relacao.schema';
 import z from 'zod';
 
 const TIPOS_PERMITIDOS = [
@@ -116,11 +121,19 @@ export const basesDadosApiResponseSchema = baseDadosSchema
     integracao: integracaoBasicApiResponse.optional(),
     usuario: usuarioBasicApiResponse.optional(),
     _count: _countSchema,
-    campos: z.array(camposSchema).optional()
-  }).partial({
-    estrutura: true,
   });
 export type BasesDadosApiResponse = z.infer<typeof basesDadosApiResponseSchema>;
+
+export const basesDadosCampanhaApiResponseSchema = basesDadosApiResponseSchema
+  .extend({
+    campos: z.array(camposSchema),
+  })
+  .omit({
+    estrutura: true,
+  });
+export type BasesDadosCampanhaApiResponse = z.infer<
+  typeof basesDadosCampanhaApiResponseSchema
+>;
 
 export const baseDadosApiResponseSchema = baseDadosSchema
   .omit({
@@ -133,6 +146,9 @@ export const baseDadosApiResponseSchema = baseDadosSchema
   });
 export type BaseDadosApiResponse = z.infer<typeof baseDadosApiResponseSchema>;
 
+export type BaseDadosTabelaRow =
+  | BasesDadosApiResponse
+  | BasesDadosCampanhaApiResponse;
 export const baseDadosFiltrosSchema = z.object({
   nome: z.string().optional(),
   id: z.string().optional(),

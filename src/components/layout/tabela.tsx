@@ -195,7 +195,7 @@ export function DataTable<TData, TValue>({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {[5, 10, 20, 50].map((n) => (
+              {[5, 10, 25, 50, 100].map((n) => (
                 <SelectItem key={n} value={n.toString()} className='text-xs'>
                   {n}
                 </SelectItem>

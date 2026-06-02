@@ -46,7 +46,7 @@ export function constroiClienteColunas({
         if (valor == null) {
           return (
             <span className='text-muted-foreground truncate w-1/3'>
-              (sem valor)
+              ---
             </span>
           );
         }

@@ -30,7 +30,7 @@ export const templateSchema = z.object({
     .number()
     .max(1024, 'O número de variáveis aceitas é até 1024')
     .int()
-    .positive(),
+    .min(-1, 'O número tem que ser maior que 0'),
   createdAt: z.date(),
   updatedAt: z.date().optional().nullable(),
   deletedAt: z.date().optional().nullable(),

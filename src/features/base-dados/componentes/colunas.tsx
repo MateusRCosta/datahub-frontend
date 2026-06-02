@@ -3,14 +3,16 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { DialogDeleta } from '@/components/layout/dialog-deleta';
 import { TableModal } from '@/types/util.schema';
-import { BasesDadosApiResponse } from '../schema/base-dados.schema';
+import {
+  BaseDadosTabelaRow,
+} from '../schema/base-dados.schema';
 import { BaseDadosAtualiza } from './base-dados-atualiza';
 import { ClienteTabela } from '../clientes/componentes/cliente-tabela';
 
-export const getColunas = ({
+export const getColunas = <T extends BaseDadosTabelaRow>({
   modoSelecao,
-}: TableModal<BasesDadosApiResponse>): ColumnDef<BasesDadosApiResponse>[] => {
-  const baseCols: ColumnDef<BasesDadosApiResponse>[] = [];
+}: TableModal<T>): ColumnDef<T>[] => {
+  const baseCols: ColumnDef<T>[] = [];
 
   baseCols.push(
     {
@@ -67,12 +69,15 @@ export const getColunas = ({
         return <span className='sr-only'>Ações</span>;
       },
       cell: ({ row }) => {
+   
         return (
           <div className='flex items-center gap-1'>
-            <ClienteTabela
-              baseDadosId={row.original.id}
-              estrutura={row.original.estrutura}
-            />
+            {'estrutura' in row.original && (
+              <ClienteTabela
+                baseDadosId={row.original.id}
+                estrutura={row.original.estrutura}
+              />
+            )}
             <BaseDadosAtualiza id={row.original.id} />
             <DialogDeleta
               id={row.original.id}

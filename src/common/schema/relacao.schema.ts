@@ -24,6 +24,7 @@ export const integracaoCampanhaApiResponse = basicApiResponse.extend({
 
 export const templateIntegracaoCampanhaBasicApiResponse =
   templateBasicApiResponse.extend({
+    quantidadeVars: z.number(),
     integracaoCampanha: integracaoCampanhaApiResponse,
   });
 

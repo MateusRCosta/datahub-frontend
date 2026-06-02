@@ -7,7 +7,7 @@ import { Plus, Trash2 } from 'lucide-react';
 import { TemplateTabela } from '@/features/integracao-campanha/template/componentes/template-tabela';
 import { TemplatesApiResponse } from '@/features/integracao-campanha/template/schema/template.schema';
 import { BaseDadosTabela } from '@/features/base-dados/componentes/base-dados-tabela';
-import { BasesDadosApiResponse } from '@/features/base-dados/schema/base-dados.schema';
+import { BasesDadosCampanhaApiResponse } from '@/features/base-dados/schema/base-dados.schema';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useFormComponents } from '@/hooks/use-form-components';
@@ -15,12 +15,15 @@ import { ViewSelecaoTabela } from '../../view/components/view-selecao-tabela';
 import { CampanhaFormularioInput } from '../schema/campanha-form.schema';
 import { ViewsApiResponse } from '@/features/view/schema/view.schema';
 import { CamposSelecionaveis } from '../types/campanha.types';
+import { ProvedorEnum } from '@/common/schema/provedor.schema';
 
 interface CampanhaFormProps {
   templateNome: string;
   setTemplateQtdVars: (vars: number) => void;
   templateQtdVars: number;
   setTemplateNome: (nome: string) => void;
+  templateProvedor: ProvedorEnum;
+  setTemplateProvedor: (provedor: ProvedorEnum) => void;
   viewNome: string;
   setViewNome: (nome: string) => void;
   baseDadosNome: string;
@@ -32,9 +35,11 @@ interface CampanhaFormProps {
 
 export function CampanhaForm({
   templateNome,
+  setTemplateNome,
   templateQtdVars,
   setTemplateQtdVars,
-  setTemplateNome,
+  templateProvedor,
+  setTemplateProvedor,
   viewNome,
   setViewNome,
   baseDadosNome,
@@ -57,10 +62,38 @@ export function CampanhaForm({
   const { Input, InputSelecaoModal, DatePicker, Select } =
     useFormComponents<CampanhaFormularioInput>();
 
-    const appendVar = () => {
-    if (fields.length > templateQtdVars) return;
+  const appendVar = () => {
+    if (fields.length > templateQtdVars - 1) return;
+    if (templateProvedor === ProvedorEnum.UPCHAT) {
+      append({ variavel: `${fields.length + 1}`, valor: '' });
+      return;
+    }
     append({ variavel: '', valor: '' });
-  }
+  };
+
+  const removeVar = (indexRemove: number) => {
+    if (
+      fields.length > 1 &&
+      templateProvedor === ProvedorEnum.UPCHAT &&
+      fields.length - 1 !== indexRemove
+    ) {
+      fields.forEach((field, index) => {
+        if (index > indexRemove) {
+          form.setValue(
+            `vars.${index}.variavel`,
+            `${Number(field.variavel) - 1}`,
+            {
+              shouldDirty: true,
+              shouldValidate: true,
+            },
+          );
+        }
+      });
+      remove(indexRemove);
+      return;
+    }
+    remove(indexRemove);
+  };
 
   const isValorDaFonteDados = (value: unknown): value is string =>
     typeof value === 'string' && value.startsWith('#');
@@ -140,6 +173,7 @@ export function CampanhaForm({
       shouldDirty: true,
       shouldValidate: true,
     });
+    setTemplateProvedor(template.integracaoCampanha.provedor);
     setTemplateQtdVars(template.quantidadeVars);
     setTemplateNome(template.nome);
   };
@@ -159,7 +193,7 @@ export function CampanhaForm({
     setBaseDadosNome('');
   };
 
-  const selecionarBaseDados = (baseDados: BasesDadosApiResponse) => {
+  const selecionarBaseDados = (baseDados: BasesDadosCampanhaApiResponse) => {
     form.setValue('baseDadosId', baseDados.id, {
       shouldDirty: true,
       shouldValidate: false,
@@ -296,7 +330,9 @@ export function CampanhaForm({
                     name={`vars.${index}.variavel`}
                     label='Nome'
                     placeholder='nome'
-                    disabled={readOnly}
+                    disabled={
+                      readOnly || templateProvedor === ProvedorEnum.UPCHAT
+                    }
                   />
                   <div className='space-y-2'>
                     {(valorBaseDadosPorLinha[field.id] ??
@@ -349,7 +385,7 @@ export function CampanhaForm({
                       variant='ghost'
                       size='icon'
                       disabled={readOnly}
-                      onClick={() => remove(index)}
+                      onClick={() => removeVar(index)}
                       aria-label='Remover variável'
                       className='shrink-0'
                     >

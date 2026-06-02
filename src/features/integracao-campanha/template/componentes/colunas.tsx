@@ -32,7 +32,7 @@ export const getColunas = ({
             <span className='font-medium'>{row.original.nome}</span>
             <span className='text-xs text-muted-foreground'>
               {row.original.integracaoCampanha
-                ? `Criado pelo usuário: ${row.original.integracaoCampanha.nome}`
+                ? `${row.original.integracaoCampanha.nome}`
                 : ''}
             </span>
           </div>

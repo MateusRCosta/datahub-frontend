@@ -44,7 +44,7 @@ const colunas: ColumnDef<ViewsApiResponse>[] = [
 export function ViewSelecaoTabela({ onSelecionar, path }: ViewSelecaoTabelaProps) {
   const [pagination, setPagination] = useState<PaginationApiRequest<string>>({
     page: 1,
-    limit: 10,
+    limit: 25,
     orderBy: 'createdAt',
     order: 'asc',
   });
