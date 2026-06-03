@@ -271,6 +271,7 @@ export function ViewPagina() {
             selectedView={selectedView}
             isPending={isPending}
             dadosModalOpen={dadosModalOpen}
+            viewSelect={selectedView}
             onViewSelect={(view) => {
               void handleSelecionaView(view);
             }}

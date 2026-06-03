@@ -1,12 +1,13 @@
 import { Button } from '@/components/ui/button';
-import { Save } from 'lucide-react';
-import { useEffect, useMemo } from 'react';
+import { Save, Trash, Trash2 } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useFormComponents } from '@/hooks/use-form-components';
 import { type ViewsApiResponse } from '../schema/view.schema';
 import { BasesDadosApiResponse } from '../types';
 import { ViewFiltrosModal } from './filtro/view-filtros-modal';
 import { ViewExecutaModal } from './view-executa/view-executa-modal';
+import { DialogDeleta } from '@/components/layout/dialog-deleta';
 
 type ViewBarProps = {
   views: ViewsApiResponse[];
@@ -14,6 +15,7 @@ type ViewBarProps = {
   isPending: boolean;
   dadosModalOpen: boolean;
   onViewSelect: (view: ViewsApiResponse | null) => void;
+  viewSelect?: ViewsApiResponse | null;
   onCreateView: () => void;
   onSaveView: () => void;
   filtrosModalOpen: boolean;
@@ -26,6 +28,7 @@ export function ViewBar({
   selectedView,
   isPending,
   dadosModalOpen,
+  viewSelect,
   onViewSelect,
   onCreateView,
   onSaveView,
@@ -33,6 +36,7 @@ export function ViewBar({
   filtrosModalOpen,
   setFiltrosModalOpen,
 }: ViewBarProps) {
+  const [open, setOpen] = useState<boolean>(false);
   const hasSelectedView = Boolean(selectedView);
   const selectedViewId = selectedView ? String(selectedView.id) : '';
   const { Select } = useFormComponents();
@@ -100,6 +104,31 @@ export function ViewBar({
               selectedView={selectedView}
               disabled={isPending || dadosModalOpen || !hasSelectedView}
             />
+            {viewSelect && (
+              <>
+                <Button
+                  type='button'
+                  variant='outline'
+                  size='icon'
+                  onClick={() => setOpen(!open)}
+                  disabled={isPending || !hasSelectedView}
+                  aria-label='Salvar visualizacao'
+                  title='Salvar visualizacao'
+                >
+                  <Trash2 aria-hidden='true' className='text-destructive' />
+                </Button>
+                <DialogDeleta
+                  id={viewSelect.id}
+                  objeto='Visualização'
+                  path='views'
+                  nome={viewSelect.nome}
+                  trigger={false}
+                  open={open}
+                  setOpen={setOpen}
+                  onSuccess={() => onViewSelect(null)}
+                />
+              </>
+            )}
           </div>
         </div>
       </div>

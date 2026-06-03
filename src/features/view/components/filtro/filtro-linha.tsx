@@ -69,7 +69,13 @@ export function FiltroLinha({ path, basesDados, onRemove }: FiltroLinhaProps) {
         className='border rounded px-2 py-1 text-sm bg-background w-32'
       />
 
-      <Button type='button' variant='ghost' size='icon' onClick={onRemove}>
+      <Button
+        type='button'
+        variant='ghost'
+        size='icon'
+        onClick={onRemove}
+        className='ml-auto'
+      >
         <Trash2 className='h-4 w-4 text-destructive' />
       </Button>
     </div>

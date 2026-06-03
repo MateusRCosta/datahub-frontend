@@ -36,7 +36,7 @@ export default function useRetornaBasesDados({
 }: {
   enabled: boolean;
   pagination: PaginationApiRequest<string>;
-  path?: 'campanhas';
+  path?: 'campanhas' | 'views';
   filtro?: BaseDadosFiltros;
 }) {
   const { resolvePathApi, isLoading: authLoading } = useAuth();

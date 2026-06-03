@@ -31,6 +31,10 @@ interface DialogDeletaProps {
   nome?: string;
   objeto: string;
   mensagens?: Mensagens;
+  open?: boolean;
+  setOpen?: (open: boolean) => void;
+  onSuccess?: () => void;
+  trigger?: boolean;
 }
 
 export function DialogDeleta({
@@ -39,8 +43,16 @@ export function DialogDeleta({
   nome,
   mensagens,
   objeto,
+  open: openControlado,
+  setOpen: setOpenControlado,
+  onSuccess,
+  trigger = true,
 }: DialogDeletaProps) {
-  const [open, setOpen] = useState(false);
+  const [openInterno, setOpenInterno] = useState(false);
+
+  const isOpen = trigger ? openInterno : openControlado;
+  const setIsOpen = trigger ? setOpenInterno : setOpenControlado;
+
   const { mutateAsync, isPending } = useDeleta({ path, id });
 
   const handleDeleta = async () => {
@@ -56,15 +68,18 @@ export function DialogDeleta({
       return;
     }
     toast.success(mensagens?.sucesso ?? 'Excluído com sucesso.');
-    setOpen(false);
+    onSuccess?.();
+    setIsOpen?.(false);
   };
 
   return (
     <>
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Trash2 className='cursor-pointer text-destructive mr-2 h-4 hover:text-destructive/40 duration-200' />
-        </DialogTrigger>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        {trigger && (
+          <DialogTrigger asChild>
+            <Trash2 className='cursor-pointer text-destructive mr-2 h-4 hover:text-destructive/40 duration-200' />
+          </DialogTrigger>
+        )}
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
@@ -72,7 +87,7 @@ export function DialogDeleta({
               {!nome && `${objeto}`}
             </DialogTitle>
             <DialogDescription>
-              Após a exclusão, não será possivel recuperar os dados.
+              Após a exclusão, não será possível recuperar os dados.
             </DialogDescription>
           </DialogHeader>
           {mensagens?.confirmacao ?? (
