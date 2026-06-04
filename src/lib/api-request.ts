@@ -57,7 +57,7 @@ export const apiRequest = async <T>({
     !AUTH_PATHS_WITHOUT_REFRESH.has(path) &&
     response.status === 401 &&
     url.startsWith(env.BACKEND_URL);
-
+    
   if (shouldTryRefresh) {
     const responseRefresh = await fetch(`${env.BACKEND_URL}/auth/refresh`, {
       method: 'PATCH',
@@ -70,6 +70,7 @@ export const apiRequest = async <T>({
       window.location.href = '/login';
     }
   }
+
   const text = await response.text();
   const data = text ? JSON.parse(text) : {};
 

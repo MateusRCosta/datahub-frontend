@@ -13,7 +13,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useFormComponents } from '@/hooks/use-form-components';
 import { ViewSelecaoTabela } from '../../view/components/view-selecao-tabela';
 import { CampanhaFormularioInput } from '../schema/campanha-form.schema';
-import { ViewsApiResponse } from '@/features/view/schema/view.schema';
+import { ViewsApiResponse, ViewsCampanhaApiResponse } from '@/features/view/schema/view.schema';
 import { CamposSelecionaveis } from '../types/campanha.types';
 import { ProvedorEnum } from '@/common/schema/provedor.schema';
 
@@ -178,7 +178,7 @@ export function CampanhaForm({
     setTemplateNome(template.nome);
   };
 
-  const selecionarView = (view: ViewsApiResponse) => {
+  const selecionarView = (view: ViewsCampanhaApiResponse) => {
     form.setValue('viewId', view.id, {
       shouldDirty: true,
       shouldValidate: false,
@@ -189,7 +189,7 @@ export function CampanhaForm({
     });
     limparCamposEnvio();
     setViewNome(view.nome);
-    setCamposSelecionaveis(view.campos ?? []);
+    setCamposSelecionaveis(view.campos);
     setBaseDadosNome('');
   };
 
@@ -204,7 +204,7 @@ export function CampanhaForm({
     });
     limparCamposEnvio();
     setBaseDadosNome(baseDados.nome);
-    setCamposSelecionaveis(baseDados.campos ?? []);
+    setCamposSelecionaveis(baseDados.campos);
     setViewNome('');
   };
 
@@ -273,7 +273,7 @@ export function CampanhaForm({
             modalContent={(fecharModal) => (
               <BaseDadosTabela
                 modoSelecao
-                path='campanhas'
+                campos={true}
                 onSelecionar={(baseDados) => {
                   selecionarBaseDados(baseDados);
                   fecharModal();

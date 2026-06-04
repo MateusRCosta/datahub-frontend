@@ -42,7 +42,7 @@ export function SelectColuna({
         >
           <Database className='h-4 w-4 shrink-0 mt-0.5' />
           <div className='flex flex-col text-sm flex-1 min-w-0'>
-            <span className='font-medium truncate'>{entry.nome}</span>
+            <span className='font-medium truncate'>{entry.nome} <span className='text-muted-foreground'>#{entry.baseDadosId}</span></span>
             <span className='text-xs text-muted-foreground'>
               {entry.campos.length > 0
                 ? entry.campos.map((campo) => campo.rotulo).join(', ')

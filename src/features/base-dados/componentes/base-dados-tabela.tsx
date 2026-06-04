@@ -12,7 +12,6 @@ import {
   baseDadosFiltroSimplesChavesObjeto,
   baseDadosFiltroSimplesChavesOptions,
   baseDadosFiltrosSchema,
-  BaseDadosTabelaRow,
 } from '../schema/base-dados.schema';
 import { BaseDadosCria } from './base-dados-cria';
 import { BaseDadosFiltro } from './base-dados-filtro';
@@ -20,13 +19,13 @@ import { SkeletonTabela } from '@/components/layout/skeleton-tabela';
 import { BasesDadosCampanhaApiResponse } from '../schema/base-dados.schema';
 
 interface BaseDadosTabelaProps {
-  path?: 'campanhas'
+  campos?: boolean
   modoSelecao?: boolean;
   onSelecionar?: (baseDados: BasesDadosCampanhaApiResponse) => void;
 }
 
 export function BaseDadosTabela({
-  path,
+  campos = false,
   modoSelecao = false,
   onSelecionar,
 }: BaseDadosTabelaProps) {
@@ -40,7 +39,7 @@ export function BaseDadosTabela({
   const { data, isLoading } = useRetornaBasesDados({
     enabled: true,
     pagination,
-    path,
+    campos,
     filtro: {
       ...filtros,
     },

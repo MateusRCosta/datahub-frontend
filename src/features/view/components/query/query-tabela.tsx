@@ -65,10 +65,10 @@ export function QueryTabela({
 
   const selectorTitle =
     selectorTarget === 'from'
-      ? 'Selecionar base From'
+      ? 'Selecionar base de dados de Referência'
       : selectorTarget === 'join'
-        ? 'Selecionar base Join'
-        : 'Selecionar base Select';
+        ? 'Selecionar bases de dados de Junções'
+        : 'Selecionar bases de dados de Seleção';
 
   const handleSelectBaseDados = (baseDadosId: number, nome: string) => {
     if (selectorTarget === 'from') {
@@ -134,7 +134,7 @@ export function QueryTabela({
         title={selectorTitle}
         emptyMessage={
           selectorTarget === 'select'
-            ? 'Adicione uma base em From ou Joins antes de selecionar campos.'
+            ? 'Adicione uma base em Referência ou Joins antes de selecionar campos.'
             : 'Nenhuma base encontrada.'
         }
         basesDados={selectorBasesDados}

@@ -81,7 +81,7 @@ export function ViewBar({
             disabled={isPending}
             className='w-full md:w-fit'
           >
-            {hasSelectedView ? 'Editar visualizacao' : 'Criar visualizacao'}
+            {hasSelectedView ? 'Editar visualização' : 'Criar visualização'}
           </Button>
           <div className='flex flex-row w-full gap-2'>
             <ViewFiltrosModal

@@ -19,7 +19,7 @@ const VIEW_ERROR_MAPPERS: ErrorMapper[] = [
     pattern:
       /Base de dados (\d+) com joinIndex (\d+) nao foi declarada na view/i,
     getMessage: ([, baseDadosId]) =>
-      `A base de dados #${baseDadosId} não está vinculada à visualização.`,
+      `A base de dados com ID ${baseDadosId} não está vinculada à visualização.`,
   },
 
   {
@@ -37,7 +37,7 @@ const VIEW_ERROR_MAPPERS: ErrorMapper[] = [
   {
     pattern: /Estrutura da base de dados (\d+) esta invalida/i,
     getMessage: ([, baseId]) =>
-      `A estrutura da base de dados #${baseId} está inválida.`,
+      `A estrutura da base de dados com ID ${baseId} está inválida.`,
   },
 
   {
@@ -54,12 +54,12 @@ const VIEW_ERROR_MAPPERS: ErrorMapper[] = [
   {
     pattern: /Base de dados (\d+) nao foi carregada/i,
     getMessage: ([, baseDadosId]) =>
-      `A base de dados #${baseDadosId} não pôde ser carregada.`,
+      `A base de dados com ID #${baseDadosId} não pôde ser carregada.`,
   },
 
   {
-    pattern: /Campo "(.+)" nao existe na base de dados (\d+)/i,
-    getMessage: ([, nomeCampo]) => `O campo "${nomeCampo}" não foi encontrado.`,
+    pattern: /Campo "(.*)" nao existe na base de dados (\d+)/i,
+    getMessage: ([, nomeCampo, baseDadosId]) => `O campo "${nomeCampo}" não foi encontrado na base de dados com ID #${baseDadosId}.`,
   },
 
   {

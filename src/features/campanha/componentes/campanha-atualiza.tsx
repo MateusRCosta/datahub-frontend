@@ -85,7 +85,7 @@ export function CampanhaAtualiza({ id, status }: CampanhaAtualizaProps) {
         valor,
       }),
     );
-
+    
     reset(
       {
         nome: campanha.nome,
@@ -104,7 +104,7 @@ export function CampanhaAtualiza({ id, status }: CampanhaAtualizaProps) {
       setViewNome(campanha.view?.nome ?? '');
       setBaseDadosNome(campanha.baseDeDados?.nome ?? '');
       setTemplateQtdVars(campanha.template.quantidadeVars);
-      setCamposSelecionaveis(campanha.campos ?? []);
+      setCamposSelecionaveis(campanha.campos);
     });
   }, [data, reset]);
 

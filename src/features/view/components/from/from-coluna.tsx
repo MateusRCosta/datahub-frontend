@@ -12,14 +12,12 @@ type FromColunaProps = {
 export function FromColuna({ from, onRemove }: FromColunaProps) {
   return (
     <div className='flex flex-col gap-2 min-h-24 border-2 border-dashed rounded-md p-3 transition-colors hover:bg-muted/30'>
-      {from ? (
-        <div className='flex items-center gap-2 bg-primary/10 border border-primary/30 rounded px-3 py-2'>
-          <Database className='h-4 w-4 text-white shrink-0' />
+      {from && from.baseDadosId !== 0 ? (
+        <div className='flex items-center gap-2 bg-secondary/30 border rounded px-3 py-2 cursor-pointer hover:bg-secondary/50 transition-colors'>
+          <Database className='h-4 w-4 shrink-0' />
           <div className='flex flex-col text-sm flex-1 min-w-0'>
-            <span className='font-medium'>{from.nome}</span>
-            <span className='text-xs text-muted-foreground'>
-              ID: {from.baseDadosId}
-            </span>
+            <span className='font-medium'>{from.nome} <span className='text-muted-foreground'>#{from.baseDadosId}</span></span>
+
           </div>
           <Button
             type='button'

@@ -141,7 +141,6 @@ export const viewsApiResponseSchema = viewSchema
   })
   .extend({
     usuario: usuarioBasicApiResponse.optional(),
-    campos: z.array(camposSchema).optional()
   });
 export type ViewsApiResponse = z.infer<typeof viewsApiResponseSchema>;
 
@@ -152,7 +151,20 @@ export const viewApiResponseSchema = viewSchema
   .extend({
     usuario: usuarioApiResponse,
   });
-export type ViewApiResponse = z.infer<typeof viewApiResponseSchema>;
+
+export const viewsCampanhaApiResponseSchema = viewsApiResponseSchema
+  .extend({
+    campos: z.array(camposSchema),
+  });
+export type ViewsCampanhaApiResponse = z.infer<
+  typeof viewsCampanhaApiResponseSchema
+>;
+
+export type ViewTabelaRow =
+  | ViewsApiResponse
+  | ViewsCampanhaApiResponse;
+
+  export type ViewApiResponse = z.infer<typeof viewApiResponseSchema>;
 
 export const viewFiltrosSchema = z.object({
   nome: z.string().optional(),

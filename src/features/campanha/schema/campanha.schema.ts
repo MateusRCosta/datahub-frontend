@@ -49,7 +49,7 @@ export const campanhaResponseSchema = campanhaSchema
     view: viewBasicApiResponse.optional(),
     template: templateIntegracaoCampanhaApiResponse,
     baseDeDados: baseDadosBasicApiResponse.optional(),
-    campos: camposSchema.optional(),
+    campos: z.array(camposSchema),
   });
 
 export type CampanhaResponse = z.infer<typeof campanhaResponseSchema>;

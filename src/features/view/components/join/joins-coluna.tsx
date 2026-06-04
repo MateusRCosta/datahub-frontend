@@ -27,14 +27,14 @@ export function JoinsColuna({ joins, onUpdate, onRemove }: JoinsColunaProps) {
         >
           <Database className='h-4 w-4 shrink-0' />
           <div className='flex flex-col text-sm flex-1 min-w-0'>
-            <span className='font-medium truncate'>{join.nome}</span>
+            <span className='font-medium truncate'>{join.nome} <span className='text-muted-foreground'>#{join.baseDadosIdJoin}</span></span>
             {join.campoFrom && (
               <span className='text-xs text-muted-foreground'>
-                FROM: {join.campoFrom}
+                Referência: {join.campoFrom}
                 <br/>
-                JOIN: {join.campoJoin} 
+                Junção: {join.campoJoin} 
                 <br/>
-                ({join.tipo})
+                Tipo: {join.tipo}
               </span>
             )}
           </div>
@@ -59,7 +59,7 @@ export function JoinsColuna({ joins, onUpdate, onRemove }: JoinsColunaProps) {
         </p>
       ) : (
         <p className='text-xs text-muted-foreground text-center py-2'>
-          Limite de {MAX_JOINS} joins atingido
+          Limite de {MAX_JOINS} junções atingido
         </p>
       )}
 
