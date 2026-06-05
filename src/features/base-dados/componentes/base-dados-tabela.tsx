@@ -16,12 +16,15 @@ import {
 import { BaseDadosCria } from './base-dados-cria';
 import { BaseDadosFiltro } from './base-dados-filtro';
 import { SkeletonTabela } from '@/components/layout/skeleton-tabela';
-import { BasesDadosCampanhaApiResponse } from '../schema/base-dados.schema';
+import {
+  BaseDadosTabelaRow,
+  BasesDadosCampanhaApiResponse,
+} from '../schema/base-dados.schema';
 
 interface BaseDadosTabelaProps {
   campos?: boolean
   modoSelecao?: boolean;
-  onSelecionar?: (baseDados: BasesDadosCampanhaApiResponse) => void;
+  onSelecionar?: (baseDados: BaseDadosTabelaRow) => void;
 }
 
 export function BaseDadosTabela({

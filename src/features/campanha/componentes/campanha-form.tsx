@@ -13,7 +13,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useFormComponents } from '@/hooks/use-form-components';
 import { ViewSelecaoTabela } from '../../view/components/view-selecao-tabela';
 import { CampanhaFormularioInput } from '../schema/campanha-form.schema';
-import { ViewsApiResponse, ViewsCampanhaApiResponse } from '@/features/view/schema/view.schema';
+import { ViewsCampanhaApiResponse } from '@/features/view/schema/view.schema';
 import { CamposSelecionaveis } from '../types/campanha.types';
 import { ProvedorEnum } from '@/common/schema/provedor.schema';
 
@@ -208,6 +208,11 @@ export function CampanhaForm({
     setViewNome('');
   };
 
+  const isBaseDadosCampanha = (
+    baseDados: unknown,
+  ): baseDados is BasesDadosCampanhaApiResponse =>
+    typeof baseDados === 'object' && baseDados !== null && 'campos' in baseDados;
+
   return (
     <div className='space-y-6'>
       <div className='space-y-4'>
@@ -275,6 +280,7 @@ export function CampanhaForm({
                 modoSelecao
                 campos={true}
                 onSelecionar={(baseDados) => {
+                  if (!isBaseDadosCampanha(baseDados)) return;
                   selecionarBaseDados(baseDados);
                   fecharModal();
                 }}

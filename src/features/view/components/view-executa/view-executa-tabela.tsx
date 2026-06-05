@@ -19,7 +19,7 @@ export function ViewExecutaTabela({ viewId }: ViewExecutaTabelaProps) {
     Pick<PaginationApiRequest<string>, 'page' | 'limit'>
   >({
     page: 1,
-    limit: 20,
+    limit: 25,
   });
 
   const { data, isPending, isError, error } = useExecutaView({
@@ -74,11 +74,12 @@ export function ViewExecutaTabela({ viewId }: ViewExecutaTabelaProps) {
     [colunasDisponiveis, colunasSelecionadas],
   );
 
+  const deveMostrar = isError || isPending;
   return (
     <div className='flex flex-col h-full w-full gap-2'>
       <div className='flex shrink-0 items-center justify-between gap-2'>
         <h2 className='text-sm font-semibold'>Resultado da visualização</h2>
-        {!isError && (
+        {!deveMostrar && (
           <SeletorColunas
             colunas={camposMetadados}
             colunasSelecionadas={colunasSelecionadas}
@@ -88,7 +89,7 @@ export function ViewExecutaTabela({ viewId }: ViewExecutaTabelaProps) {
       </div>
       <div className='flex-1 min-h-0 w-full'>
         {isError && <p>Erro ao carregar visualização: {mapViewError(error)}</p>}
-        {isPending && <SkeletonTabela />}
+        {isPending && <SkeletonTabela apenasFiltro={true}/>}
         {!isError && !isPending && data?.data?.data && (
           <DataTable
             columns={colunas}

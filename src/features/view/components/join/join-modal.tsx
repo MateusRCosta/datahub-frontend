@@ -1,10 +1,14 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { DialogCustom } from '@/components/layout/dialog-custom';
 import { FieldError, FieldGroup } from '@/components/ui/field';
 import { useFormComponents } from '@/hooks/use-form-components';
+import {
+  type BasesDadosCampanhaApiResponse,
+} from '@/features/base-dados/schema/base-dados.schema';
 import {
   Join,
   joinsSchema,
@@ -13,11 +17,18 @@ import {
 import { JoinComNome } from '../../types';
 import { TIPO_JOIN_ENUM } from '../../types/enums';
 
+type SelectOption = {
+  label: string;
+  value: string;
+};
+
 type JoinModalProps = {
   open: boolean;
   onClose: () => void;
   onSave: (data: Join) => void;
   initialData: JoinComNome;
+  from: { baseDadosId: number } | null;
+  basesDados: BasesDadosCampanhaApiResponse[];
 };
 
 const tipoJoinOptions = Object.values(TIPO_JOIN_ENUM).map((v) => ({
@@ -30,8 +41,56 @@ export function JoinModal({
   onClose,
   onSave,
   initialData,
+  from,
+  basesDados,
 }: JoinModalProps) {
   const { Input, Select } = useFormComponents<Join>();
+
+  const camposFromOptions = useMemo(() => {
+    const campos =
+      basesDados.find((baseDados) => baseDados.id === from?.baseDadosId)?.campos ??
+      [];
+
+    const options: SelectOption[] = campos.map((campo) => ({
+      label: campo.rotulo ?? campo.campo,
+      value: campo.campo,
+    }));
+
+    if (
+      initialData.campoFrom &&
+      !options.some((option) => option.value === initialData.campoFrom)
+    ) {
+      options.unshift({
+        label: initialData.campoFrom,
+        value: initialData.campoFrom,
+      });
+    }
+
+    return options;
+  }, [basesDados, from?.baseDadosId, initialData.campoFrom]);
+
+  const camposJoinOptions = useMemo(() => {
+    const campos =
+      basesDados.find((baseDados) => baseDados.id === initialData.baseDadosIdJoin)
+        ?.campos ?? [];
+
+    const options: SelectOption[] = campos.map((campo) => ({
+      label: campo.rotulo ?? campo.campo,
+      value: campo.campo,
+    }));
+
+    if (
+      initialData.campoJoin &&
+      !options.some((option) => option.value === initialData.campoJoin)
+    ) {
+      options.unshift({
+        label: initialData.campoJoin,
+        value: initialData.campoJoin,
+      });
+    }
+
+    return options;
+  }, [basesDados, initialData.baseDadosIdJoin, initialData.campoJoin]);
 
   const form = useForm<Join>({
     mode: 'onSubmit',
@@ -70,11 +129,27 @@ export function JoinModal({
         >
           <FieldGroup className='flex flex-col gap-4'>
             <Input name='baseDadosIdJoin' label='Base de Dados ID' disabled />
-            <Input name='campoFrom' label='Campo da base de dados de referência' placeholder='Ex: id' />
-            <Input
+            <Select
+              name='campoFrom'
+              label='Campo da base de dados de referência'
+              placeholder={
+                camposFromOptions.length > 0
+                  ? 'Selecione o campo'
+                  : 'Nenhum campo disponível'
+              }
+              options={camposFromOptions}
+              disabled={camposFromOptions.length === 0}
+            />
+            <Select
               name='campoJoin'
               label='Campo da base de dados da junção'
-              placeholder='Ex: base_dados_id'
+              placeholder={
+                camposJoinOptions.length > 0
+                  ? 'Selecione o campo'
+                  : 'Nenhum campo disponível'
+              }
+              options={camposJoinOptions}
+              disabled={camposJoinOptions.length === 0}
             />
             <Select name='tipo' label='Tipo' options={tipoJoinOptions} />
           </FieldGroup>

@@ -314,6 +314,7 @@ interface InputSelecaoModalProps extends React.InputHTMLAttributes<HTMLInputElem
   nomeDisplay: string; // O nome que vai aparecer para o usuário
   modalTitle: string;
   modalContent: (fecharModal: () => void) => React.ReactNode; // Função que retorna a tabela
+  renderTrigger?: (abrirModal: () => void) => React.ReactNode;
   disabled?: boolean;
 }
 
@@ -323,6 +324,7 @@ export function InputSelecaoModal({
   nomeDisplay,
   modalTitle,
   modalContent,
+  renderTrigger,
   disabled,
   ...rest
 }: InputSelecaoModalProps) {
@@ -335,31 +337,41 @@ export function InputSelecaoModal({
         control={control}
         name={name}
         render={({ fieldState }) => (
-          <Field data-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor={name}>{label}</FieldLabel>
-            <div className='flex gap-2 w-full'>
-              <Input
-                id={name}
-                value={nomeDisplay || ''}
-                readOnly
-                onClick={() => setIsModalOpen(true)}
-                disabled={disabled}
-                placeholder='Clique para selecionar...'
-                className={cn(
-                  'bg-field-background cursor-pointer flex-1',
-                  rest.className,
-                )}
-                {...rest}
-              />
-              <Button
-                type='button'
-                variant='outline'
-                disabled={disabled}
-                onClick={() => setIsModalOpen(true)}
-              >
-                <Search className='w-4 h-4' />
-              </Button>
-            </div>
+          <Field
+            data-invalid={fieldState.invalid}
+            orientation={renderTrigger ? 'horizontal' : 'vertical'}
+            className={cn(renderTrigger && 'w-fit gap-0')}
+          >
+            {renderTrigger ? (
+              renderTrigger(() => setIsModalOpen(true))
+            ) : (
+              <>
+                <FieldLabel htmlFor={name}>{label}</FieldLabel>
+                <div className='flex gap-2 w-fit'>
+                  <Input
+                    id={name}
+                    value={nomeDisplay || ''}
+                    readOnly
+                    onClick={() => setIsModalOpen(true)}
+                    disabled={disabled}
+                    placeholder='Clique para selecionar...'
+                    className={cn(
+                      'bg-field-background cursor-pointer flex-1',
+                      rest.className,
+                    )}
+                    {...rest}
+                  />
+                  <Button
+                    type='button'
+                    variant='outline'
+                    disabled={disabled}
+                    onClick={() => setIsModalOpen(true)}
+                  >
+                    <Search className='w-4 h-4' />
+                  </Button>
+                </div>
+              </>
+            )}
             <FieldError>{fieldState.error?.message}</FieldError>
           </Field>
         )}

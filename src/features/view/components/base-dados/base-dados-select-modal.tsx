@@ -9,14 +9,14 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Database } from 'lucide-react';
-import { type BasesDadosApiResponse } from '@/features/base-dados/schema/base-dados.schema';
+import { type BasesDadosCampanhaApiResponse } from '@/features/base-dados/schema/base-dados.schema';
 
 type BaseDadosSelectModalProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   title: string;
   emptyMessage: string;
-  basesDados: BasesDadosApiResponse[];
+  basesDados: BasesDadosCampanhaApiResponse[];
   onSelect: (baseDadosId: number, nome: string) => void;
 };
 
@@ -56,9 +56,9 @@ export function BaseDadosSelectModal({
             >
               <Database className='h-4 w-4 shrink-0' />
               <span className='flex flex-col items-start min-w-0'>
-                <span className='font-medium truncate'>{baseDados.nome}</span>
-                <span className='text-xs text-muted-foreground'>
-                  {baseDados.estrutura.length} campos
+              <span className='font-medium truncate'>{baseDados.nome}</span>
+              <span className='text-xs text-muted-foreground'>
+                  {baseDados.campos.length} campos
                 </span>
               </span>
             </Button>

@@ -3,18 +3,28 @@
 import { useState } from 'react';
 import { Database, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { type BasesDadosCampanhaApiResponse } from '@/features/base-dados/schema/base-dados.schema';
 import { MAX_JOINS } from '../../constants';
 import { JoinModal } from './join-modal';
 import { type Join } from '../../schema/view.schema';
+import { type FromComNome } from '../../types';
 import { type JoinComNome } from '../../types';
 
 type JoinsColunaProps = {
   joins: JoinComNome[];
   onUpdate: (index: number, data: Join) => void;
   onRemove: (index: number) => void;
+  from: FromComNome | null;
+  basesDados: BasesDadosCampanhaApiResponse[];
 };
 
-export function JoinsColuna({ joins, onUpdate, onRemove }: JoinsColunaProps) {
+export function JoinsColuna({
+  joins,
+  onUpdate,
+  onRemove,
+  from,
+  basesDados,
+}: JoinsColunaProps) {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
   return (
@@ -69,6 +79,8 @@ export function JoinsColuna({ joins, onUpdate, onRemove }: JoinsColunaProps) {
           onClose={() => setEditingIndex(null)}
           onSave={(data) => onUpdate(editingIndex, data)}
           initialData={joins[editingIndex]}
+          from={from}
+          basesDados={basesDados}
         />
       )}
     </div>

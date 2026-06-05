@@ -5,7 +5,7 @@ import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { DialogCustom } from '@/components/layout/dialog-custom';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import { Metadado } from '@/features/base-dados/schema/base-dados.schema';
+import { type BasesDadosCampanhaApiResponse } from '@/features/base-dados/schema/base-dados.schema';
 import { useFormComponents } from '@/hooks/use-form-components';
 import {
   SelectCampo,
@@ -17,11 +17,7 @@ type SelectModalProps = {
   open: boolean;
   onClose: () => void;
   onSave: (campos: SelectCampo[]) => void;
-  baseDados: {
-    id: number;
-    estrutura: Metadado[];
-    nome: string;
-  };
+  baseDados: Pick<BasesDadosCampanhaApiResponse, 'campos' | 'id' | 'nome'>;
   selectedCampos: SelectCampo[];
 };
 
@@ -81,37 +77,37 @@ export function SelectModal({
           onSubmit={form.handleSubmit(handleSave)}
           className='flex flex-col gap-2 py-2'
         >
-          {baseDados.estrutura.map((metadado) => {
+          {baseDados.campos.map((metadado) => {
             const selecionadoIndex = campos.findIndex(
-              (campo) => campo.campo === metadado.cabecalho,
+              (campo) => campo.campo === metadado.campo,
             );
             const selecionado = selecionadoIndex >= 0;
 
             return (
               <div
-                key={metadado.cabecalho}
+                key={metadado.campo}
                 className='flex items-center gap-2 w-full'
               >
                 <Checkbox
-                  id={`campo-${metadado.cabecalho}`}
+                  id={`campo-${metadado.campo}`}
                   checked={selecionado}
-                  onCheckedChange={() => toggle(metadado.cabecalho)}
+                  onCheckedChange={() => toggle(metadado.campo)}
                   className='mt-2'
                 />
                 <div className='flex flex-col gap-1 flex-1 min-w-0 self-center'>
                   <Label
-                    htmlFor={`campo-${metadado.cabecalho}`}
+                    htmlFor={`campo-${metadado.campo}`}
                     className='flex cursor-pointer items-center'
                   >
-                    <span>{metadado.rotulo ?? metadado.cabecalho}</span>
+                    <span>{metadado.rotulo ?? metadado.campo}</span>
                     <span className='text-xs text-muted-foreground'>
-                      ({metadado.cabecalho})
+                      ({metadado.campo})
                     </span>
                   </Label>
                   {selecionado && (
                     <Input
                       name={`campos.${selecionadoIndex}.rotulo`}
-                      placeholder={metadado.cabecalho}
+                      placeholder={metadado.campo}
                     />
                   )}
                 </div>

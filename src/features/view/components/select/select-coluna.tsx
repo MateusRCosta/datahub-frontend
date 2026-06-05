@@ -4,8 +4,7 @@ import { useState } from 'react';
 import { Database, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
-  type BasesDadosApiResponse,
-  type Metadado,
+  type BasesDadosCampanhaApiResponse,
 } from '@/features/base-dados/schema/base-dados.schema';
 import { SelectModal } from './select-modal';
 import { type SelectCampo } from '../../schema/view.schema';
@@ -13,7 +12,7 @@ import { type SelectComNome } from '../../types';
 
 type SelectColunaProps = {
   selects: SelectComNome[];
-  basesDados: BasesDadosApiResponse[];
+  basesDados: BasesDadosCampanhaApiResponse[];
   onUpdate: (index: number, campos: SelectCampo[]) => void;
   onRemove: (index: number) => void;
 };
@@ -26,8 +25,8 @@ export function SelectColuna({
 }: SelectColunaProps) {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
-  const getEstrutura = (baseDadosId: number): Metadado[] => {
-    return basesDados.find((bd) => bd.id === baseDadosId)?.estrutura ?? [];
+  const getCampos = (baseDadosId: number) => {
+    return basesDados.find((bd) => bd.id === baseDadosId)?.campos ?? [];
   };
 
   const editingEntry = editingIndex !== null ? selects[editingIndex] : null;
@@ -69,12 +68,12 @@ export function SelectColuna({
       </p>
 
       {editingIndex !== null && editingEntry !== null && (
-        <SelectModal
+          <SelectModal
           open={editingIndex !== null}
           onClose={() => setEditingIndex(null)}
           onSave={(campos) => onUpdate(editingIndex, campos)}
           baseDados={{
-            estrutura: getEstrutura(editingEntry.baseDadosId),
+            campos: getCampos(editingEntry.baseDadosId),
             id: editingEntry.baseDadosId,
             nome: editingEntry.nome
          }}

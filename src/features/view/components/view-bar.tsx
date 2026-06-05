@@ -1,8 +1,13 @@
 import { Button } from '@/components/ui/button';
-import { Save, Trash, Trash2 } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
-import { useFormComponents } from '@/hooks/use-form-components';
+import { Save, Trash2 } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { type ViewsApiResponse } from '../schema/view.schema';
 import { BasesDadosApiResponse } from '../types';
 import { ViewFiltrosModal } from './filtro/view-filtros-modal';
@@ -38,41 +43,56 @@ export function ViewBar({
 }: ViewBarProps) {
   const [open, setOpen] = useState<boolean>(false);
   const hasSelectedView = Boolean(selectedView);
-  const selectedViewId = selectedView ? String(selectedView.id) : '';
-  const { Select } = useFormComponents();
-  const { setValue } = useFormContext();
-  const viewOptions = useMemo(
-    () => [
-      { label: 'Nova visualização', value: 'nova' },
-      ...views.map((view) => ({
-        label: view.nome,
-        value: String(view.id),
-      })),
-    ],
-    [views],
-  );
+  const selectedViewId = selectedView ? String(selectedView.id) : 'nova';
 
-  useEffect(() => {
-    setValue('view-selector', selectedViewId || 'nova');
-  }, [selectedViewId, setValue]);
+  const viewOptions = useMemo(() => {
+    const options = views.map((view) => ({
+      label: view.nome,
+      value: String(view.id),
+    }));
+
+    if (
+      selectedView &&
+      !options.some((option) => option.value === String(selectedView.id))
+    ) {
+      options.unshift({
+        label: selectedView.nome,
+        value: String(selectedView.id),
+      });
+    }
+
+    return [{ label: 'Nova visualização', value: 'nova' }, ...options];
+  }, [selectedView, views]);
 
   return (
     <div className='flex flex-col md:flex-row w-full gap-2 items-end'>
-      <Select
-        name='view-selector'
-        label='Visualização existente'
-        options={viewOptions}
-        placeholder='Selecione uma visualização'
-        onValueChange={(id) => {
-          if (id === 'nova') {
-            onViewSelect(null);
-            return;
-          }
+      <div className='flex flex-col gap-1 w-full'>
+        <label className='text-xs font-normal'>Visualização existente</label>
+        <Select
+          value={selectedViewId}
+          onValueChange={(id) => {
+            if (id === 'nova') {
+              onViewSelect(null);
+              return;
+            }
 
-          const found = views.find((view) => String(view.id) === id);
-          onViewSelect(found ?? null);
-        }}
-      />
+            const found = views.find((view) => String(view.id) === id);
+            onViewSelect(found ?? null);
+          }}
+        >
+          <SelectTrigger className='w-full bg-field-background dark:bg-input/30 text-sm'>
+            <SelectValue placeholder='Selecione uma visualização' />
+          </SelectTrigger>
+          <SelectContent>
+            {viewOptions.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
       <div className='flex flex-col md:flex-row gap-2 md:items-center w-full'>
         <div className='flex flex-col md:flex-row w-full items-center gap-2'>
           <Button

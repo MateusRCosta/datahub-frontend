@@ -34,6 +34,7 @@ export default function useEditaView(id: number) {
     onSuccess: (response) => {
       if (response.status !== 204) return;
       queryClient.invalidateQueries({ queryKey: [baseUrl], exact: false });
+      queryClient.resetQueries({ queryKey: [baseUrl, id, 'executa'] });
     },
   });
 }
