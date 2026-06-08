@@ -28,17 +28,17 @@ const retornaViews = async ({
 export default function useRetornaViews({
   enabled,
   pagination,
-  path,
+  campos,
   filtro,
 }: {
   enabled: boolean;
   pagination: PaginationApiRequest<string>;
-  path?:'campanhas',
+  campos?:boolean,
   filtro?: ViewFiltros;
 }) {
   const { resolvePathApi, isLoading: authLoading } = useAuth();
   const baseUrl = resolvePathApi('views');
-  const baseUrlFinal = path ? `${baseUrl}/${path}` : baseUrl 
+  const baseUrlFinal = campos ? `${baseUrl}/campos` : baseUrl 
   return useQuery({
     queryKey: [baseUrlFinal, pagination, filtro],
     queryFn: () => retornaViews({ ...pagination, filtro, baseUrl: baseUrlFinal }),

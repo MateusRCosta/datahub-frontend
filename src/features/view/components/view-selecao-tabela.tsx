@@ -20,7 +20,7 @@ import { TableModal } from '@/types/util.schema';
 
 interface ViewSelecaoTabelaProps {
   onSelecionar: (view: ViewsCampanhaApiResponse) => void;
-  path: 'campanhas';
+  campos: boolean;
 }
 
 const getColunas = <T extends ViewTabelaRow>({}: TableModal<T>): ColumnDef<T>[] => {
@@ -51,7 +51,7 @@ const getColunas = <T extends ViewTabelaRow>({}: TableModal<T>): ColumnDef<T>[] 
 
 export function ViewSelecaoTabela({
   onSelecionar,
-  path,
+  campos,
 }: ViewSelecaoTabelaProps) {
   const [pagination, setPagination] = useState<PaginationApiRequest<string>>({
     page: 1,
@@ -63,7 +63,7 @@ export function ViewSelecaoTabela({
   const { data, isLoading } = useRetornaViews({
     enabled: true,
     pagination,
-    path,
+    campos,
     filtro: {
       ...filtros,
     },
