@@ -23,7 +23,9 @@ interface ViewSelecaoTabelaProps {
   campos: boolean;
 }
 
-const getColunas = <T extends ViewTabelaRow>({}: TableModal<T>): ColumnDef<T>[] => {
+const getColunas = <
+  T extends ViewTabelaRow,
+>({}: TableModal<T>): ColumnDef<T>[] => {
   const baseCols: ColumnDef<T>[] = [];
 
   baseCols.push(
@@ -72,8 +74,13 @@ export function ViewSelecaoTabela({
   if (isLoading) {
     return <SkeletonTabela />;
   }
-  const registros = data?.data?.data as ViewsCampanhaApiResponse[] | undefined;
-  const colunas = getColunas<ViewsCampanhaApiResponse>({onSelecionar});
+
+  const registros = data?.data?.data.filter(
+    (view): view is ViewsCampanhaApiResponse =>
+      'campos' in view && view.campos !== null,
+  );
+  
+  const colunas = getColunas<ViewsCampanhaApiResponse>({ onSelecionar });
   return (
     <div className='flex flex-col w-full flex-1 min-h-0 h-full mx-auto gap-2'>
       <div

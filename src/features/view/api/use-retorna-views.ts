@@ -5,7 +5,7 @@ import {
   PaginationApiResponse,
 } from '@/types/api.schema';
 import { useAuth } from '@/features/auth/provider/auth-provider';
-import { ViewFiltros, ViewsApiResponse } from '../schema/view.schema';
+import { ViewFiltros, ViewsApiResponse, ViewTabelaRow } from '../schema/view.schema';
 
 const retornaViews = async ({
   page,
@@ -18,7 +18,7 @@ const retornaViews = async ({
   filtro?: ViewFiltros;
   baseUrl: string;
 }) => {
-  return apiRequest<PaginationApiResponse<ViewsApiResponse[]>>({
+  return apiRequest<PaginationApiResponse<ViewTabelaRow[]>>({
     path: baseUrl,
     method: 'GET',
     query: { page, limit, orderBy, order, ...filtro },
