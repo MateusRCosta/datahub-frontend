@@ -9,10 +9,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { type ViewsApiResponse } from '../schema/view.schema';
-import { BasesDadosApiResponse } from '../types';
 import { ViewFiltrosModal } from './filtro/view-filtros-modal';
 import { ViewExecutaModal } from './view-executa/view-executa-modal';
 import { DialogDeleta } from '@/components/layout/dialog-deleta';
+import { BasesDadosCampanhaApiResponse } from '@/features/base-dados/schema/base-dados.schema';
 
 type ViewBarProps = {
   views: ViewsApiResponse[];
@@ -25,7 +25,7 @@ type ViewBarProps = {
   onSaveView: () => void;
   filtrosModalOpen: boolean;
   setFiltrosModalOpen: (open: boolean) => void;
-  basesDados: BasesDadosApiResponse[];
+  basesDados: BasesDadosCampanhaApiResponse[];
 };
 
 export function ViewBar({

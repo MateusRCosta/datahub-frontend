@@ -77,6 +77,25 @@ export function ViewPagina() {
     [basesDados],
   );
 
+  const getSelectJoinIndex = useCallback(
+    (
+      baseDadosId: number,
+      fromAtual: FromComNome | null,
+      joinsAtuais: JoinComNome[],
+    ) => {
+      if (fromAtual?.baseDadosId === baseDadosId) {
+        return 0;
+      }
+
+      const joinIndex = joinsAtuais.findIndex(
+        (join) => join.baseDadosIdJoin === baseDadosId,
+      );
+
+      return joinIndex >= 0 ? joinIndex + 1 : 0;
+    },
+    [],
+  );
+
   const handleBaseDadosLoad = useCallback(
     (baseDados: BasesDadosCampanhaApiResponse) => {
       setBasesDados((basesDadosAtuais) => {
@@ -168,21 +187,27 @@ export function ViewPagina() {
 
   const loadView = useCallback(
     (view: ViewApiResponse) => {
-      setSelectedView(view);
-      setFrom({
+      const fromSelecionado = {
         ...view.config.from,
         nome: getNomeBaseDados(view.config.from.baseDadosId),
-      });
-      setJoins(
-        view.config.joins.map((join) => ({
-          ...join,
-          nome: getNomeBaseDados(join.baseDadosIdJoin),
-        })),
-      );
+      };
+      const joinsSelecionados = view.config.joins.map((join) => ({
+        ...join,
+        nome: getNomeBaseDados(join.baseDadosIdJoin),
+      }));
+
+      setSelectedView(view);
+      setFrom(fromSelecionado);
+      setJoins(joinsSelecionados);
       setSelects(
         view.config.select.map((select) => ({
           ...select,
           nome: getNomeBaseDados(select.baseDadosId),
+          joinIndex: getSelectJoinIndex(
+            select.baseDadosId,
+            fromSelecionado,
+            joinsSelecionados,
+          ),
         })),
       );
       form.reset({
@@ -191,7 +216,7 @@ export function ViewPagina() {
         config: view.config,
       });
     },
-    [form, getNomeBaseDados],
+    [form, getNomeBaseDados, getSelectJoinIndex],
   );
 
   useEffect(() => {
@@ -259,9 +284,9 @@ export function ViewPagina() {
       campoJoin: join.campoJoin,
       tipo: join.tipo,
     })),
-    select: selects.map((select, index) => ({
+    select: selects.map((select) => ({
       baseDadosId: select.baseDadosId,
-      joinIndex: index,
+      joinIndex: getSelectJoinIndex(select.baseDadosId, from, joins),
       campos: select.campos,
     })),
     groupFilter,
@@ -352,7 +377,14 @@ export function ViewPagina() {
 
     return selectsAtuais
       .filter((select) => basesPermitidas.has(select.baseDadosId))
-      .map((select, index) => ({ ...select, joinIndex: index }));
+      .map((select) => ({
+        ...select,
+        joinIndex: getSelectJoinIndex(
+          select.baseDadosId,
+          proximoFrom,
+          proximosJoins,
+        ),
+      }));
   };
 
   return (
@@ -454,7 +486,7 @@ export function ViewPagina() {
               {
                 baseDadosId,
                 nome,
-                joinIndex: selectsAtuais.length,
+                joinIndex: getSelectJoinIndex(baseDadosId, from, joins),
                 campos: [],
               },
             ])
@@ -470,10 +502,6 @@ export function ViewPagina() {
             setSelects((selectsAtuais) =>
               selectsAtuais
                 .filter((_, selectIndex) => selectIndex !== index)
-                .map((select, selectIndex) => ({
-                  ...select,
-                  joinIndex: selectIndex,
-                })),
             )
           }
         />

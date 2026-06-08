@@ -16,16 +16,16 @@ import {
   OPERADOR_WHERE_ENUM,
   TIPO_FILTRO_ENUM,
 } from '../../types/enums';
-import { type BasesDadosApiResponse } from '@/features/base-dados/schema/base-dados.schema';
+import { type BasesDadosCampanhaApiResponse } from '@/features/base-dados/schema/base-dados.schema';
 import { FiltroLinha } from '../filtro/filtro-linha';
 
 type GroupFilterConstrutorProps = {
-  basesDados: BasesDadosApiResponse[];
+  basesDados: BasesDadosCampanhaApiResponse[];
 };
 
 type NestedGroupFilterProps = {
   path: string;
-  basesDados: BasesDadosApiResponse[];
+  basesDados: BasesDadosCampanhaApiResponse[];
   depth: number;
   onRemove: () => void;
 };
@@ -195,7 +195,7 @@ function FilterActions({
 type GroupFilterItemProps = {
   path: string;
   type: string;
-  basesDados: BasesDadosApiResponse[];
+  basesDados: BasesDadosCampanhaApiResponse[];
   depth: number;
   onRemove: () => void;
 };

@@ -3,13 +3,13 @@
 import { type FieldPath, useFormContext } from 'react-hook-form';
 import { Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { BasesDadosApiResponse } from '@/features/base-dados/schema/base-dados.schema';
+import { BasesDadosCampanhaApiResponse } from '@/features/base-dados/schema/base-dados.schema';
 import { ViewCampanhaCriacao } from '../../schema/view.schema';
 import { OPERADOR_ENUM } from '../../types/enums';
 
 type FiltroLinhaProps = {
   path: string;
-  basesDados: BasesDadosApiResponse[];
+  basesDados: BasesDadosCampanhaApiResponse[];
   onRemove: () => void;
 };
 
@@ -20,9 +20,9 @@ export function FiltroLinha({ path, basesDados, onRemove }: FiltroLinhaProps) {
   const baseDadosIdPath =
     `${path}.baseDadosId` as FieldPath<ViewCampanhaCriacao>;
   const baseDadosId = watch(baseDadosIdPath);
-  const estrutura =
+  const campos =
     basesDados.find((baseDados) => baseDados.id === Number(baseDadosId))
-      ?.estrutura ?? [];
+      ?.campos ?? [];
 
   return (
     <div className='flex flex-wrap items-center gap-2 p-2 border rounded bg-muted/20'>
@@ -45,9 +45,9 @@ export function FiltroLinha({ path, basesDados, onRemove }: FiltroLinhaProps) {
         className='border rounded px-2 py-1 text-sm bg-background'
       >
         <option value=''>Campo</option>
-        {estrutura.map((metadado) => (
-          <option key={metadado.cabecalho} value={metadado.cabecalho}>
-            {metadado.rotulo ?? metadado.cabecalho}
+        {campos.map((metadado) => (
+          <option key={metadado.campo} value={metadado.campo}>
+            {metadado.rotulo ?? metadado.campo}
           </option>
         ))}
       </select>

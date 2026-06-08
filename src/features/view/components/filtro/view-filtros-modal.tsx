@@ -3,13 +3,13 @@
 import { DialogCustom } from '@/components/layout/dialog-custom';
 import { Button } from '@/components/ui/button';
 import { Funnel } from 'lucide-react';
-import { type BasesDadosApiResponse } from '@/features/base-dados/schema/base-dados.schema';
+import { type BasesDadosCampanhaApiResponse } from '@/features/base-dados/schema/base-dados.schema';
 import { GroupFilterConstrutor } from '../group/group-filter-construtor';
 
 type ViewFiltrosModalProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  basesDados: BasesDadosApiResponse[];
+  basesDados: BasesDadosCampanhaApiResponse[];
 };
 
 export function ViewFiltrosModal({

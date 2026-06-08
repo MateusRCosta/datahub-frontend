@@ -42,14 +42,14 @@ export type SelectCamposForm = z.infer<typeof selectCamposFormSchema>;
 
 export const selectSchema = z.object({
   baseDadosId: z.number().int().positive(),
-  joinIndex: z.number().int().positive(),
+  joinIndex: z.number().int().min(0),
   campos: z.array(selectCampoSchema),
 });
 export type Select = z.infer<typeof selectSchema>;
 
 export const filterSchema = z.object({
   baseDadosId: z.number().int().positive(),
-  joinIndex: z.number().int().positive(),
+  joinIndex: z.number().int().min(0),
   campo: z.string(),
   operador: operadorEnumSchema,
   valor: z.union([z.string(), z.number(), z.boolean()]),
