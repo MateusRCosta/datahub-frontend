@@ -102,7 +102,7 @@ export function CampanhaForm({
     () =>
       camposSelecionaveis.map((campo) => ({
         label: campo.rotulo || campo.campo,
-        value: campo.campo,
+        value: campo.rotulo || campo.campo,
       })),
     [camposSelecionaveis],
   );

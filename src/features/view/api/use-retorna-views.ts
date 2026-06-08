@@ -5,7 +5,7 @@ import {
   PaginationApiResponse,
 } from '@/types/api.schema';
 import { useAuth } from '@/features/auth/provider/auth-provider';
-import { ViewFiltros, ViewsApiResponse, ViewTabelaRow } from '../schema/view.schema';
+import { ViewFiltros, ViewTabelaRow } from '../schema/view.schema';
 
 const retornaViews = async ({
   page,

@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
-import { useState } from 'react';
+import { useId, useMemo, useState } from 'react';
 import { Button } from '../ui/button';
 import { ChevronDownIcon, Search } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
@@ -140,6 +140,15 @@ export function SelectGenerico({
   onValueChange,
 }: SelectGenericoProps) {
   const { control } = useFormContext();
+  const selectId = useId();
+  const optionEntries = useMemo(
+    () =>
+      options.map((option, index) => ({
+        option,
+        itemValue: `${selectId}-${name}-${index}`,
+      })),
+    [name, options, selectId],
+  );
 
   return (
     <Controller
@@ -148,11 +157,13 @@ export function SelectGenerico({
       render={({ field: { onChange, value }, fieldState }) => {
         const stringValue =
           value === null || value === undefined ? '' : String(value);
-        const hasMatchingOption = options.some(
-          (option) => String(option.value) === stringValue,
+        const selectedEntry = optionEntries.find(
+          ({ option }) => String(option.value) === stringValue,
         );
-        const selectValue =
-          stringValue && hasMatchingOption ? stringValue : undefined;
+        const selectValue = selectedEntry?.itemValue;
+        const optionValueMap = new Map(
+          optionEntries.map(({ itemValue, option }) => [itemValue, option.value]),
+        );
 
         return (
           <Field data-invalid={fieldState.invalid}>
@@ -162,20 +173,20 @@ export function SelectGenerico({
               </FieldLabel>
             )}
             <Select
-              key={`${name}-${selectValue ?? 'empty'}`}
               onValueChange={(val) => {
                 let finalValue: unknown;
-                if (val === 'true') {
+                const rawValue = optionValueMap.get(val) ?? val;
+                if (rawValue === 'true') {
                   finalValue = true;
-                } else if (val === 'false') {
+                } else if (rawValue === 'false') {
                   finalValue = false;
-                } else if (val === 'todos') {
+                } else if (rawValue === 'todos') {
                   finalValue = undefined;
                 } else {
-                  finalValue = val;
+                  finalValue = rawValue;
                 }
                 onChange(finalValue);
-                onValueChange?.(val);
+                onValueChange?.(String(rawValue));
               }}
               value={selectValue}
               disabled={disabled}
@@ -184,10 +195,10 @@ export function SelectGenerico({
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
               <SelectContent>
-                {options.map((option) => (
+                {optionEntries.map(({ option, itemValue }) => (
                   <SelectItem
-                    key={String(option.value)}
-                    value={String(option.value)}
+                    key={itemValue}
+                    value={itemValue}
                   >
                     {option.label}
                   </SelectItem>
