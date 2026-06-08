@@ -261,7 +261,7 @@ export function CampanhaForm({
             disabled={readOnly}
             modalContent={(fecharModal) => (
               <ViewSelecaoTabela
-                path='campanhas'
+                campos={true}
                 onSelecionar={(view) => {
                   selecionarView(view);
                   fecharModal();

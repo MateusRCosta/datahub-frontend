@@ -9,7 +9,7 @@ import {
 } from 'react-hook-form';
 import { Field, FieldError, FieldGroup, FieldLabel } from '../ui/field';
 import { Input } from '../ui/input';
-import { cn, formatUTC, getUTCTime } from '@/lib/utils';
+import { cn, formataDataUI, getLocalTime } from '@/lib/utils';
 import {
   Select,
   SelectContent,
@@ -457,35 +457,55 @@ export function DatePickerTime<TFieldValues extends FieldValues = FieldValues>({
         const currentDate =
           rawDate && !isNaN(rawDate.getTime()) ? rawDate : undefined;
 
+        const buildUtcIsoFromLocalParts = (
+          date: Date,
+          hours: number,
+          minutes: number,
+          seconds: number,
+        ) =>
+          new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate(),
+            hours,
+            minutes,
+            seconds,
+          ).toISOString();
+
         const handleDateChange = (selectedDate?: Date) => {
           if (!selectedDate) {
             field.onChange(null);
             return;
           }
 
-          const mergedDate = currentDate ? new Date(currentDate) : new Date();
+          const referenceDate = currentDate ?? selectedDate;
+          const localHours = referenceDate.getHours();
+          const localMinutes = referenceDate.getMinutes();
+          const localSeconds = referenceDate.getSeconds();
 
-          mergedDate.setUTCFullYear(
-            selectedDate.getFullYear(),
-            selectedDate.getMonth(),
-            selectedDate.getDate(),
+          field.onChange(
+            buildUtcIsoFromLocalParts(
+              selectedDate,
+              localHours,
+              localMinutes,
+              localSeconds,
+            ),
           );
-
-          field.onChange(mergedDate.toISOString());
         };
 
         const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
           const [hours, minutes, seconds] = e.target.value.split(':');
 
-          const mergedDate = currentDate ? new Date(currentDate) : new Date();
+          const referenceDate = currentDate ?? new Date();
 
-          mergedDate.setUTCHours(
-            Number(hours),
-            Number(minutes),
-            Number(seconds ?? 0),
+          field.onChange(
+            buildUtcIsoFromLocalParts(
+              referenceDate,
+              Number(hours),
+              Number(minutes),
+              Number(seconds ?? 0),
+            ),
           );
-
-          field.onChange(mergedDate.toISOString());
         };
 
         return (
@@ -500,9 +520,7 @@ export function DatePickerTime<TFieldValues extends FieldValues = FieldValues>({
                     className='w-48 justify-between font-normal'
                     disabled={disabled}
                   >
-                    {currentDate
-                      ? formatUTC(currentDate)
-                      : 'Selecione uma data'}
+                    {currentDate ? formataDataUI(currentDate) : 'Selecione uma data'}
 
                     <ChevronDownIcon />
                   </Button>
@@ -533,7 +551,7 @@ export function DatePickerTime<TFieldValues extends FieldValues = FieldValues>({
               <Input
                 type='time'
                 step='1'
-                value={currentDate ? getUTCTime(currentDate) : ''}
+                value={currentDate ? getLocalTime(currentDate) : ''}
                 onChange={handleTimeChange}
                 disabled={disabled}
                 className='appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none'
