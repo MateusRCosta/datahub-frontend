@@ -96,7 +96,7 @@ export function CampanhaAtualiza({ id, status }: CampanhaAtualizaProps) {
         contatoCampo: campanha.contatoCampo,
         vars: vars.length > 0 ? vars : [{ variavel: '', valor: '' }],
       },
-      { keepDefaultValues: false },
+      { keepDefaultValues: true },
     );
     queueMicrotask(() => {
       setTemplateProvedor(campanha.template.integracaoCampanha.provedor);
