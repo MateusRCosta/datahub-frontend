@@ -54,6 +54,25 @@ export function IntegracaoAtualiza({ id }: IntegracaoAtualizaProps) {
   const { mutateAsync, isPending } = useEditaIntegracao(id);
 
   const onSubmit = async (formData: IntegracaoEdicao) => {
+    if (formData.responseScrap) {
+      const nome = formData.responseScrap?.map((response) => {
+        return response.nome;
+      });
+      const nomesRepetidos = nome.filter(
+        (n, index) => nome.indexOf(n) !== index,
+      );
+
+      if (nomesRepetidos.length > 0) {
+        formData.responseScrap.forEach((response, index)=> {
+          if (nomesRepetidos.includes(response.nome)) {
+            form.setError(`responseScrap.${index}.nome`, {
+              message: 'Nome duplicado.'
+            });
+          }
+        })
+        return;
+      }
+    }
     const response = await mutateAsync({ ...formData, id });
     if (response.status === 404) {
       toast.warning('Integração não encontrada.');

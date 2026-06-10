@@ -47,7 +47,7 @@ const defaultValues: CampanhaFormularioInput = {
   baseDadosId: undefined,
   viewId: undefined,
   contatoCampo: '',
-  vars: [{ variavel: '', valor: '' }],
+  vars: [{ variavel: '', valor: '', baseDadoId: undefined }],
 };
 
 export function CampanhaAtualiza({ id, status }: CampanhaAtualizaProps) {
@@ -80,9 +80,10 @@ export function CampanhaAtualiza({ id, status }: CampanhaAtualizaProps) {
 
     const campanha = data.data;
     const vars = Object.entries(campanha.vars ?? {}).map(
-      ([variavel, valor]) => ({
+      ([variavel, varObj]) => ({
         variavel,
-        valor,
+        valor: varObj.nomeCampo,
+        baseDadoId: varObj.baseDadoId,
       }),
     );
     
@@ -94,7 +95,10 @@ export function CampanhaAtualiza({ id, status }: CampanhaAtualizaProps) {
         baseDadosId: campanha.baseDeDados?.id,
         viewId: campanha.view?.id,
         contatoCampo: campanha.contatoCampo,
-        vars: vars.length > 0 ? vars : [{ variavel: '', valor: '' }],
+        vars:
+          vars.length > 0
+            ? vars
+            : [{ variavel: '', valor: '', baseDadoId: undefined }],
       },
       { keepDefaultValues: true },
     );

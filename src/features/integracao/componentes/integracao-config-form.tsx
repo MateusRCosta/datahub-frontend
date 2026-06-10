@@ -111,7 +111,7 @@ function ResponsesFieldArray({ secao }: { secao: SecaoIntegracao }) {
   return (
     <FieldGroup className='gap-3'>
       <div className='flex items-center justify-between gap-2'>
-        <h4 className='text-sm font-medium'>Responses</h4>
+        <h4 className='text-sm font-medium'>Resposta</h4>
         <Button
           type='button'
           size='sm'
@@ -128,7 +128,7 @@ function ResponsesFieldArray({ secao }: { secao: SecaoIntegracao }) {
           className='grid gap-3 rounded-md border p-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto]'
         >
           <InputGenerico name={`${name}.${index}.nome`} label='Nome' />
-          <InputGenerico name={`${name}.${index}.path`} label='Path' />
+          <InputGenerico name={`${name}.${index}.path`} label='Caminho' />
           <SelectGenerico
             name={`${name}.${index}.tipo`}
             label='Tipo'
@@ -308,7 +308,7 @@ function IntegracaoSecaoForm({
             options={metodoOptions}
           />
         </div>
-        <JsonEditorGenerico name={`body${secao}`} label='Body' height='220px' />
+        <JsonEditorGenerico name={`body${secao}`} label='Corpo da requisição' height='220px' />
         <ResponsesFieldArray secao={secao} />
         <HeadersFieldArray secao={secao} />
         <VariaveisFieldArray secao={secao} />

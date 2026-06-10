@@ -120,13 +120,14 @@ export function InputGenerico<TFieldValues extends FieldValues = FieldValues>({
 interface Option {
   label: string;
   value: string;
+  baseDadoId?: number;
 }
 
 interface SelectGenericoProps {
   name: string;
   label?: string;
   options: Option[];
-  onValueChange?: (value: string) => void;
+  onValueChange?: (value: string, option?: Option) => void;
   placeholder?: string;
   disabled?: boolean;
 }
@@ -176,6 +177,9 @@ export function SelectGenerico({
               onValueChange={(val) => {
                 let finalValue: unknown;
                 const rawValue = optionValueMap.get(val) ?? val;
+                const selectedOption = optionEntries.find(
+                  ({ itemValue }) => itemValue === val,
+                )?.option;
                 if (rawValue === 'true') {
                   finalValue = true;
                 } else if (rawValue === 'false') {
@@ -186,7 +190,7 @@ export function SelectGenerico({
                   finalValue = rawValue;
                 }
                 onChange(finalValue);
-                onValueChange?.(String(rawValue));
+                onValueChange?.(String(rawValue), selectedOption);
               }}
               value={selectValue}
               disabled={disabled}

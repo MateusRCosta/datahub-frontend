@@ -1,6 +1,6 @@
 import {
   baseDadosBasicApiResponse,
-  camposSchema,
+  camposDetailSchema,
   templateIntegracaoCampanhaApiResponse,
   templateIntegracaoCampanhaBasicApiResponse,
   usuarioBasicApiResponse,
@@ -9,7 +9,10 @@ import {
 import z from 'zod';
 import { STATUS_CAMPANHA } from '../types/campanha.types';
 
-const varsSchema = z.record(z.string(), z.string());
+const varsSchema = z.record(z.string(), z.object({
+  baseDadoId:z.number().int().optional(),
+  nomeCampo: z.string()
+}));
 const statusEnumSchema = z.enum(STATUS_CAMPANHA);
 export const campanhaSchema = z.object({
   id: z.number(),
@@ -49,7 +52,7 @@ export const campanhaResponseSchema = campanhaSchema
     view: viewBasicApiResponse.optional(),
     template: templateIntegracaoCampanhaApiResponse,
     baseDeDados: baseDadosBasicApiResponse.optional(),
-    campos: z.array(camposSchema),
+    campos: z.array(camposDetailSchema),
   });
 
 export type CampanhaResponse = z.infer<typeof campanhaResponseSchema>;

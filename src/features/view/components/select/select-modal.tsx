@@ -55,6 +55,23 @@ export function SelectModal({
   };
 
   const handleSave = (data: SelectCamposForm) => {
+    const rotulos = data.campos.map((c) => c.rotulo);
+
+    const rotulosRepetidos = rotulos.filter(
+      (rot, index) => rotulos.indexOf(rot) !== index,
+    );
+
+    if (rotulosRepetidos.length > 0) {
+      data.campos.forEach((campo, index) => {
+        if (rotulosRepetidos.includes(campo.rotulo)) {
+          form.setError(`campos.${index}.rotulo`, {
+            message: 'Rótulo duplicado',
+          });
+        }
+      });
+      return; 
+    }
+
     onSave(data.campos);
     onClose();
   };

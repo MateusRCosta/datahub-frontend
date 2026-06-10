@@ -43,6 +43,7 @@ export const CAMPANHA_STATUS_ALTERAVEL = [STATUS_CAMPANHA.PENDENTE] as const;
 export type CamposSelecionaveis = {
   campo: string;
   rotulo?: string | undefined;
+  baseDadoId?: number;
 }[];
 
 export function campanhaPodeEditar(status: STATUS_CAMPANHA) {

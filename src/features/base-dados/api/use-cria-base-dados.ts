@@ -17,11 +17,27 @@ const criaBaseDados = async ({
   formData.append('arquivo', data.arquivo);
   formData.append('estrutura', JSON.stringify(data.estrutura));
 
-  const response = await fetch(`${env.BACKEND_URL}/${baseUrl}`, {
-    method: 'POST',
-    body: formData,
-    credentials: 'include',
-  });
+  const request = async () => {
+    return await fetch(`${env.BACKEND_URL}/${baseUrl}`, {
+      method: 'POST',
+      body: formData,
+      credentials: 'include',
+    });
+  };
+  let response = await request();
+
+  if (response.status === 401) {
+    const responseRefresh = await fetch(`${env.BACKEND_URL}/auth/refresh`, {
+      method: 'PATCH',
+      credentials: 'include',
+    });
+
+    if (responseRefresh.status === 200) {
+      response = await request();
+    } else if (typeof window !== 'undefined') {
+      window.location.href = '/login';
+    }
+  }
 
   const text = await response.text();
   const responseData: string = text ? JSON.parse(text) : '';
@@ -30,8 +46,8 @@ const criaBaseDados = async ({
 };
 
 export default function useCriaBaseDados({
-  filtros,
-  pagination,
+  // filtros,
+  // pagination,
 }: {
   filtros?: BaseDadosFiltros;
   pagination: PaginationApiRequest<string>;

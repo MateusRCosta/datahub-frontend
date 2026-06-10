@@ -45,6 +45,26 @@ export function IntegracaoCria({ pagination, filtros }: IntegracaoCriaProps) {
   const { mutateAsync, isPending } = useCriaIntegracao({ pagination, filtros });
 
   const onSubmit = async (data: IntegracaoCriacao) => {
+    if (data.responseScrap) {
+      const nome = data.responseScrap?.map((response) => {
+        return response.nome;
+      });
+      const nomesRepetidos = nome.filter(
+        (n, index) => nome.indexOf(n) !== index,
+      );
+
+      if (nomesRepetidos.length > 0) {
+        data.responseScrap.forEach((response, index)=> {
+          if (nomesRepetidos.includes(response.nome)) {
+            form.setError(`responseScrap.${index}.nome`, {
+              message: 'Nome duplicado.'
+            });
+          }
+        })
+        return;
+      }
+    }
+
     const response = await mutateAsync(data);
     if (response.status === 201) {
       toast.success('Integração criada com sucesso.');

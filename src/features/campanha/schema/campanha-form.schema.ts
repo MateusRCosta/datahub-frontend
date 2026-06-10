@@ -6,12 +6,16 @@ const varsRecordSchema = campanhaSchema.shape.vars;
 const varItemSchema = z.object({
   variavel: z.string(),
   valor: z.string(),
+  baseDadoId: z.number().int().optional(),
 });
 
 const varsFormularioSchema = z
   .array(varItemSchema)
   .transform((value, ctx) => {
-    const resultado: Record<string, string> = {};
+    const resultado: Record<
+      string,
+      { nomeCampo: string; baseDadoId?: number }
+    > = {};
 
     for (const item of value) {
       const variavel = item.variavel.trim();
@@ -35,7 +39,12 @@ const varsFormularioSchema = z
         return z.NEVER;
       }
 
-      resultado[variavel] = valor;
+      resultado[variavel] = {
+        nomeCampo: valor,
+        ...(item.baseDadoId !== undefined
+          ? { baseDadoId: item.baseDadoId }
+          : {}),
+      };
     }
 
     const result = varsRecordSchema.safeParse(resultado);

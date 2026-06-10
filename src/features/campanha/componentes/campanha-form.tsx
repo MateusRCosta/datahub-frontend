@@ -65,10 +65,14 @@ export function CampanhaForm({
   const appendVar = () => {
     if (fields.length > templateQtdVars - 1) return;
     if (templateProvedor === ProvedorEnum.UPCHAT) {
-      append({ variavel: `${fields.length + 1}`, valor: '' });
+      append({
+        variavel: `${fields.length + 1}`,
+        valor: '',
+        baseDadoId: undefined,
+      });
       return;
     }
-    append({ variavel: '', valor: '' });
+    append({ variavel: '', valor: '', baseDadoId: undefined });
   };
 
   const removeVar = (indexRemove: number) => {
@@ -131,20 +135,27 @@ export function CampanhaForm({
         return {
           label: campo.rotulo ? `${campo.rotulo} (${value})` : value,
           value,
+          baseDadoId: campo.baseDadoId,
         };
       }),
     [camposSelecionaveis],
   );
 
   const camposTokenOptions = useMemo(() => {
-    const valoresFonteDados = (vars ?? [])
-      .map((variavel) => variavel.valor)
-      .filter(isValorDaFonteDados);
+    const valoresFonteDados = (vars ?? []).filter((variavel) =>
+      isValorDaFonteDados(variavel.valor),
+    );
     const options = [...camposTokenOptionsBase];
 
-    valoresFonteDados.forEach((value) => {
+    valoresFonteDados.forEach((variavel) => {
+      const value = variavel.valor;
+
       if (options.some((option) => option.value === value)) return;
-      options.push({ label: value, value });
+      options.push({
+        label: value,
+        value,
+        baseDadoId: variavel.baseDadoId,
+      });
     });
 
     return options;
@@ -160,12 +171,17 @@ export function CampanhaForm({
     });
     form.setValue(
       'vars',
-      form.getValues('vars').map((variavel) => ({ ...variavel, valor: '' })),
+      form.getValues('vars').map((variavel) => ({
+        ...variavel,
+        valor: '',
+        baseDadoId: undefined,
+      })),
       {
         shouldDirty: true,
         shouldValidate: true,
       },
     );
+    setValorBaseDadosPorLinha({});
   };
 
   const selecionarTemplate = (template: TemplatesApiResponse) => {
@@ -353,6 +369,16 @@ export function CampanhaForm({
                         }
                         options={camposTokenOptions}
                         disabled={camposSelecionaveisDisabled}
+                        onValueChange={(_, selectedOption) => {
+                          form.setValue(
+                            `vars.${index}.baseDadoId`,
+                            selectedOption?.baseDadoId,
+                            {
+                              shouldDirty: true,
+                              shouldValidate: true,
+                            },
+                          );
+                        }}
                       />
                     ) : (
                       <Input
@@ -380,6 +406,14 @@ export function CampanhaForm({
                             shouldDirty: true,
                             shouldValidate: true,
                           });
+                          form.setValue(
+                            `vars.${index}.baseDadoId`,
+                            undefined,
+                            {
+                              shouldDirty: true,
+                              shouldValidate: true,
+                            },
+                          );
                         }}
                       />
                       Valor da fonte de dados

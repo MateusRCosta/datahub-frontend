@@ -5,6 +5,10 @@ export const camposSchema = z.object({
   campo: z.string(),
   rotulo: z.string().optional(),
 });
+export const camposDetailSchema = camposSchema.extend({
+  baseDadoId: z.number().int().optional(),
+});
+
 export const basicApiResponse = z.object({
   nome: z.string(),
 });
