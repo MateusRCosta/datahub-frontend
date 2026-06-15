@@ -56,8 +56,8 @@ export function BaseDadosSelectModal({
             >
               <Database className='h-4 w-4 shrink-0' />
               <span className='flex flex-col items-start min-w-0'>
-              <span className='font-medium truncate'>{baseDados.nome}</span>
-              <span className='text-xs text-muted-foreground'>
+                <span className='font-medium truncate'>{baseDados.nome}</span>
+                <span className='text-xs text-muted-foreground'>
                   {baseDados.campos.length} campos
                 </span>
               </span>

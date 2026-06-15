@@ -55,7 +55,11 @@ export function DialogCustom({
               </Button>
             </DialogClose>
             {idForm && (
-              <Button disabled={isPending || disableSubmit} type='submit' form={idForm}>
+              <Button
+                disabled={isPending || disableSubmit}
+                type='submit'
+                form={idForm}
+              >
                 {false && <Loader className='mr-2 h-4 w-4 animate-spin' />}
                 Salvar
               </Button>

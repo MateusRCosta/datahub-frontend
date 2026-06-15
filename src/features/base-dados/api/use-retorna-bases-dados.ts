@@ -41,13 +41,11 @@ export default function useRetornaBasesDados({
 }) {
   const { resolvePathApi, isLoading: authLoading } = useAuth();
   const baseUrl = resolvePathApi('basesDados');
-  const baseUrlFinal =
-    campos === true
-      ? `${baseUrl}/campos`
-      : baseUrl;
+  const baseUrlFinal = campos === true ? `${baseUrl}/campos` : baseUrl;
   return useQuery({
     queryKey: [baseUrlFinal, pagination, filtro],
-    queryFn: () => retornaBasesDados({ ...pagination, filtro, baseUrl: baseUrlFinal }),
+    queryFn: () =>
+      retornaBasesDados({ ...pagination, filtro, baseUrl: baseUrlFinal }),
     enabled: enabled && !authLoading,
   });
 }

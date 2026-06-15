@@ -1,9 +1,7 @@
 'use client';
 
 import { useFormContext } from 'react-hook-form';
-import {
-  IntegracaoCampanhaCriacao,
-} from '../schema/integracao-campanha.schema';
+import { IntegracaoCampanhaCriacao } from '../schema/integracao-campanha.schema';
 import { UpchatForm } from './provedores/upchat-form';
 import { ProvedorEnum } from '@/common/schema/provedor.schema';
 

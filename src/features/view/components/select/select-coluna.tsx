@@ -3,9 +3,7 @@
 import { useState } from 'react';
 import { Database, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import {
-  type BasesDadosCampanhaApiResponse,
-} from '@/features/base-dados/schema/base-dados.schema';
+import { type BasesDadosCampanhaApiResponse } from '@/features/base-dados/schema/base-dados.schema';
 import { SelectModal } from './select-modal';
 import { type SelectCampo } from '../../schema/view.schema';
 import { type SelectComNome } from '../../types';
@@ -41,7 +39,12 @@ export function SelectColuna({
         >
           <Database className='h-4 w-4 shrink-0 mt-0.5' />
           <div className='flex flex-col text-sm flex-1 min-w-0'>
-            <span className='font-medium truncate'>{entry.nome} <span className='text-muted-foreground'>#{entry.baseDadosId}</span></span>
+            <span className='font-medium truncate'>
+              {entry.nome}{' '}
+              <span className='text-muted-foreground'>
+                #{entry.baseDadosId}
+              </span>
+            </span>
             <span className='text-xs text-muted-foreground'>
               {entry.campos.length > 0
                 ? entry.campos.map((campo) => campo.rotulo).join(', ')
@@ -68,15 +71,15 @@ export function SelectColuna({
       </p>
 
       {editingIndex !== null && editingEntry !== null && (
-          <SelectModal
+        <SelectModal
           open={editingIndex !== null}
           onClose={() => setEditingIndex(null)}
           onSave={(campos) => onUpdate(editingIndex, campos)}
           baseDados={{
             campos: getCampos(editingEntry.baseDadosId),
             id: editingEntry.baseDadosId,
-            nome: editingEntry.nome
-         }}
+            nome: editingEntry.nome,
+          }}
           selectedCampos={editingEntry.campos}
         />
       )}

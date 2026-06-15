@@ -58,7 +58,7 @@ export function IntegracaoCampanhaAtualiza({
           provedor: integracaoCampanha.provedor,
           config: integracaoCampanha.config,
         }
-      : undefined, 
+      : undefined,
   });
 
   const { mutateAsync, isPending } = useEditaIntegracaoCampanha(id);

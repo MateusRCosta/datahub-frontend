@@ -1,4 +1,7 @@
-import { usuarioApiResponse, usuarioBasicApiResponse } from '@/common/schema/relacao.schema';
+import {
+  usuarioApiResponse,
+  usuarioBasicApiResponse,
+} from '@/common/schema/relacao.schema';
 import { enumSchema } from '@/features/base-dados/schema/base-dados.schema';
 import z from 'zod';
 

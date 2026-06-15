@@ -33,15 +33,16 @@ export default function useRetornaViews({
 }: {
   enabled: boolean;
   pagination: PaginationApiRequest<string>;
-  campos?:boolean,
+  campos?: boolean;
   filtro?: ViewFiltros;
 }) {
   const { resolvePathApi, isLoading: authLoading } = useAuth();
   const baseUrl = resolvePathApi('views');
-  const baseUrlFinal = campos ? `${baseUrl}/campos` : baseUrl 
+  const baseUrlFinal = campos ? `${baseUrl}/campos` : baseUrl;
   return useQuery({
     queryKey: [baseUrlFinal, pagination, filtro],
-    queryFn: () => retornaViews({ ...pagination, filtro, baseUrl: baseUrlFinal }),
+    queryFn: () =>
+      retornaViews({ ...pagination, filtro, baseUrl: baseUrlFinal }),
     enabled: enabled && !authLoading,
   });
 }

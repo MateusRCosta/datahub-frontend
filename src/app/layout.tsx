@@ -5,12 +5,12 @@ import AppProvider from '../components/providers/app-provider';
 export const metadata: Metadata = {
   title: 'DataHub',
   description: 'Sistema londrinet',
-  icons:{
+  icons: {
     icon: '/images/icon.png',
     shortcut: '/images/icon.png',
     apple: '/images/icon.png',
   },
-  manifest: '/manifest'
+  manifest: '/manifest',
 };
 
 export default function RootLayout({

@@ -89,7 +89,7 @@ export function ViewExecutaTabela({ viewId }: ViewExecutaTabelaProps) {
       </div>
       <div className='flex-1 min-h-0 w-full'>
         {isError && <p>Erro ao carregar visualização: {mapViewError(error)}</p>}
-        {isPending && <SkeletonTabela apenasFiltro={true}/>}
+        {isPending && <SkeletonTabela apenasFiltro={true} />}
         {!isError && !isPending && data?.data?.data && (
           <DataTable
             columns={colunas}

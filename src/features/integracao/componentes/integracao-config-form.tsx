@@ -308,7 +308,11 @@ function IntegracaoSecaoForm({
             options={metodoOptions}
           />
         </div>
-        <JsonEditorGenerico name={`body${secao}`} label='Corpo da requisição' height='220px' />
+        <JsonEditorGenerico
+          name={`body${secao}`}
+          label='Corpo da requisição'
+          height='220px'
+        />
         <ResponsesFieldArray secao={secao} />
         <HeadersFieldArray secao={secao} />
         <VariaveisFieldArray secao={secao} />

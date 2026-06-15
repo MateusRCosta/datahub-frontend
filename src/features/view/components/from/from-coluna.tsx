@@ -16,8 +16,10 @@ export function FromColuna({ from, onRemove }: FromColunaProps) {
         <div className='flex items-center gap-2 bg-secondary/30 border rounded px-3 py-2 cursor-pointer hover:bg-secondary/50 transition-colors'>
           <Database className='h-4 w-4 shrink-0' />
           <div className='flex flex-col text-sm flex-1 min-w-0'>
-            <span className='font-medium'>{from.nome} <span className='text-muted-foreground'>#{from.baseDadosId}</span></span>
-
+            <span className='font-medium'>
+              {from.nome}{' '}
+              <span className='text-muted-foreground'>#{from.baseDadosId}</span>
+            </span>
           </div>
           <Button
             type='button'

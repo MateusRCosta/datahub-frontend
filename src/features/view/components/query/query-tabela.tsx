@@ -3,9 +3,7 @@
 import { useMemo, useState } from 'react';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import {
-  type BasesDadosCampanhaApiResponse,
-} from '@/features/base-dados/schema/base-dados.schema';
+import { type BasesDadosCampanhaApiResponse } from '@/features/base-dados/schema/base-dados.schema';
 import { BaseDadosTabela } from '@/features/base-dados/componentes/base-dados-tabela';
 import { useFormComponents } from '@/hooks/use-form-components';
 import { BaseDadosSelectModal } from '../base-dados/base-dados-select-modal';

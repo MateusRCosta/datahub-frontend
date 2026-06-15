@@ -2,7 +2,6 @@ import { ApiResponseError } from '@/types/api.schema';
 import { MAX_JOINS, MAX_NESTED_GROUP_FILTER } from '../../constants';
 import { ErrorMapper } from '@/types/util.schema';
 
-
 const VIEW_ERROR_MAPPERS: ErrorMapper[] = [
   {
     pattern: /A view permite no maximo \d+ joins/i,
@@ -59,7 +58,8 @@ const VIEW_ERROR_MAPPERS: ErrorMapper[] = [
 
   {
     pattern: /Campo "(.*)" nao existe na base de dados (\d+)/i,
-    getMessage: ([, nomeCampo, baseDadosId]) => `O campo "${nomeCampo}" não foi encontrado na base de dados com ID #${baseDadosId}.`,
+    getMessage: ([, nomeCampo, baseDadosId]) =>
+      `O campo "${nomeCampo}" não foi encontrado na base de dados com ID #${baseDadosId}.`,
   },
 
   {

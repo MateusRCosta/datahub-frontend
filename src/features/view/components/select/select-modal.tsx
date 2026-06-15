@@ -69,7 +69,7 @@ export function SelectModal({
           });
         }
       });
-      return; 
+      return;
     }
 
     onSave(data.campos);

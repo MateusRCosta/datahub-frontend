@@ -3,9 +3,7 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { DialogDeleta } from '@/components/layout/dialog-deleta';
 import { TableModal } from '@/types/util.schema';
-import {
-  BaseDadosTabelaRow,
-} from '../schema/base-dados.schema';
+import { BaseDadosTabelaRow } from '../schema/base-dados.schema';
 import { BaseDadosAtualiza } from './base-dados-atualiza';
 import { ClienteTabela } from '../clientes/componentes/cliente-tabela';
 
@@ -69,7 +67,6 @@ export const getColunas = <T extends BaseDadosTabelaRow>({
         return <span className='sr-only'>Ações</span>;
       },
       cell: ({ row }) => {
-   
         return (
           <div className='flex items-center gap-1'>
             {'estrutura' in row.original && (

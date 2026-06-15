@@ -101,7 +101,6 @@ export function CampanhaAtualiza({ id, status }: CampanhaAtualizaProps) {
     }
   };
 
-
   return (
     <DialogCustom
       titulo='Editar campanha'

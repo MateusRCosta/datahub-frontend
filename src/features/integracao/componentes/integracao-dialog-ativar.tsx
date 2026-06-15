@@ -54,8 +54,8 @@ export function IntegracaoDialogAtivar({
         <DialogHeader>
           <DialogTitle>Executar integração: {nome}</DialogTitle>
           <DialogDescription>
-            Deseja executar a integração? Múltiplas integrações executadas ao mesmo
-            tempo pode ocasionar lentidão ao seu serviço
+            Deseja executar a integração? Múltiplas integrações executadas ao
+            mesmo tempo pode ocasionar lentidão ao seu serviço
           </DialogDescription>
         </DialogHeader>
 

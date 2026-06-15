@@ -45,13 +45,15 @@ const criaBaseDados = async ({
   return { data: responseData, status: response.status };
 };
 
-export default function useCriaBaseDados({
-  // filtros,
-  // pagination,
-}: {
-  filtros?: BaseDadosFiltros;
-  pagination: PaginationApiRequest<string>;
-}) {
+export default function useCriaBaseDados(
+  {
+    // filtros,
+    // pagination,
+  }: {
+    filtros?: BaseDadosFiltros;
+    pagination: PaginationApiRequest<string>;
+  },
+) {
   const queryClient = getQueryClient();
   const { resolvePathApi } = useAuth();
   const baseUrl = resolvePathApi('basesDados');

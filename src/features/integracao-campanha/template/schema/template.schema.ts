@@ -1,7 +1,10 @@
 import { usuarioBasicApiResponse } from '@/lib/schema/usuario.schema';
 import z from 'zod';
 import { upchatTemplateSchema } from './upchat.schema';
-import { ProvedorEnum, provedorEnumSchema } from '@/common/schema/provedor.schema';
+import {
+  ProvedorEnum,
+  provedorEnumSchema,
+} from '@/common/schema/provedor.schema';
 
 export const configUnionSchema = z.union([upchatTemplateSchema]);
 

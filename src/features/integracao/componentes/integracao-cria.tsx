@@ -54,13 +54,13 @@ export function IntegracaoCria({ pagination, filtros }: IntegracaoCriaProps) {
       );
 
       if (nomesRepetidos.length > 0) {
-        data.responseScrap.forEach((response, index)=> {
+        data.responseScrap.forEach((response, index) => {
           if (nomesRepetidos.includes(response.nome)) {
             form.setError(`responseScrap.${index}.nome`, {
-              message: 'Nome duplicado.'
+              message: 'Nome duplicado.',
             });
           }
-        })
+        });
         return;
       }
     }

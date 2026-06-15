@@ -500,8 +500,7 @@ export function ViewPagina() {
           }
           onSelectRemove={(index) =>
             setSelects((selectsAtuais) =>
-              selectsAtuais
-                .filter((_, selectIndex) => selectIndex !== index)
+              selectsAtuais.filter((_, selectIndex) => selectIndex !== index),
             )
           }
         />

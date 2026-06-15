@@ -9,7 +9,10 @@ import {
   TIPO_FILTRO_ENUM,
   TIPO_JOIN_ENUM,
 } from '../types/enums';
-import { camposDetailSchema, camposSchema } from '@/common/schema/relacao.schema';
+import {
+  camposDetailSchema,
+  camposSchema,
+} from '@/common/schema/relacao.schema';
 
 export const tipoJoinEnumSchema = z.enum(TIPO_JOIN_ENUM);
 export const operadorEnumSchema = z.enum(OPERADOR_ENUM);
@@ -151,19 +154,16 @@ export const viewApiResponseSchema = viewSchema
     usuario: usuarioApiResponse,
   });
 
-export const viewsCampanhaApiResponseSchema = viewsApiResponseSchema
-  .extend({
-    campos: z.array(camposDetailSchema),
-  });
+export const viewsCampanhaApiResponseSchema = viewsApiResponseSchema.extend({
+  campos: z.array(camposDetailSchema),
+});
 export type ViewsCampanhaApiResponse = z.infer<
   typeof viewsCampanhaApiResponseSchema
 >;
 
-export type ViewTabelaRow =
-  | ViewsApiResponse
-  | ViewsCampanhaApiResponse;
+export type ViewTabelaRow = ViewsApiResponse | ViewsCampanhaApiResponse;
 
-  export type ViewApiResponse = z.infer<typeof viewApiResponseSchema>;
+export type ViewApiResponse = z.infer<typeof viewApiResponseSchema>;
 
 export const viewFiltrosSchema = z.object({
   nome: z.string().optional(),

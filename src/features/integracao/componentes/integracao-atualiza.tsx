@@ -63,13 +63,13 @@ export function IntegracaoAtualiza({ id }: IntegracaoAtualizaProps) {
       );
 
       if (nomesRepetidos.length > 0) {
-        formData.responseScrap.forEach((response, index)=> {
+        formData.responseScrap.forEach((response, index) => {
           if (nomesRepetidos.includes(response.nome)) {
             form.setError(`responseScrap.${index}.nome`, {
-              message: 'Nome duplicado.'
+              message: 'Nome duplicado.',
             });
           }
-        })
+        });
         return;
       }
     }

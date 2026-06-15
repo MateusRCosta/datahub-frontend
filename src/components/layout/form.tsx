@@ -163,7 +163,10 @@ export function SelectGenerico({
         );
         const selectValue = selectedEntry?.itemValue;
         const optionValueMap = new Map(
-          optionEntries.map(({ itemValue, option }) => [itemValue, option.value]),
+          optionEntries.map(({ itemValue, option }) => [
+            itemValue,
+            option.value,
+          ]),
         );
 
         return (
@@ -200,10 +203,7 @@ export function SelectGenerico({
               </SelectTrigger>
               <SelectContent>
                 {optionEntries.map(({ option, itemValue }) => (
-                  <SelectItem
-                    key={itemValue}
-                    value={itemValue}
-                  >
+                  <SelectItem key={itemValue} value={itemValue}>
                     {option.label}
                   </SelectItem>
                 ))}
@@ -535,7 +535,9 @@ export function DatePickerTime<TFieldValues extends FieldValues = FieldValues>({
                     className='w-48 justify-between font-normal'
                     disabled={disabled}
                   >
-                    {currentDate ? formataDataUI(currentDate) : 'Selecione uma data'}
+                    {currentDate
+                      ? formataDataUI(currentDate)
+                      : 'Selecione uma data'}
 
                     <ChevronDownIcon />
                   </Button>

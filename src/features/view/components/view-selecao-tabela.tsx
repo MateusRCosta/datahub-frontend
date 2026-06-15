@@ -79,7 +79,7 @@ export function ViewSelecaoTabela({
     (view): view is ViewsCampanhaApiResponse =>
       'campos' in view && view.campos !== null,
   );
-  
+
   const colunas = getColunas<ViewsCampanhaApiResponse>({ onSelecionar });
   return (
     <div className='flex flex-col w-full flex-1 min-h-0 h-full mx-auto gap-2'>

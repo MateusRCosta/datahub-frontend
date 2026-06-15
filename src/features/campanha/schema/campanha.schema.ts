@@ -117,13 +117,15 @@ export const campanhaCreateSchema = campanhaSchema.pick({
 
 export type CampanhaCreateRequest = z.infer<typeof campanhaCreateSchema>;
 
-export const campanhaUpdateRequest = campanhaSchema.pick({
-  nome: true,
-  scheduledAt: true,
-  templateId: true,
-  baseDadosId: true,
-  contatoCampo: true,
-  vars: true,
-}).partial();
+export const campanhaUpdateRequest = campanhaSchema
+  .pick({
+    nome: true,
+    scheduledAt: true,
+    templateId: true,
+    baseDadosId: true,
+    contatoCampo: true,
+    vars: true,
+  })
+  .partial();
 
 export type CampanhaUpdateRequest = z.infer<typeof campanhaUpdateRequest>;

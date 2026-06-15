@@ -37,13 +37,18 @@ export function JoinsColuna({
         >
           <Database className='h-4 w-4 shrink-0' />
           <div className='flex flex-col text-sm flex-1 min-w-0'>
-            <span className='font-medium truncate'>{join.nome} <span className='text-muted-foreground'>#{join.baseDadosIdJoin}</span></span>
+            <span className='font-medium truncate'>
+              {join.nome}{' '}
+              <span className='text-muted-foreground'>
+                #{join.baseDadosIdJoin}
+              </span>
+            </span>
             {join.campoFrom && (
               <span className='text-xs text-muted-foreground'>
                 Referência: {join.campoFrom}
-                <br/>
-                Junção: {join.campoJoin} 
-                <br/>
+                <br />
+                Junção: {join.campoJoin}
+                <br />
                 Tipo: {join.tipo}
               </span>
             )}

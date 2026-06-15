@@ -6,9 +6,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { DialogCustom } from '@/components/layout/dialog-custom';
 import { FieldError, FieldGroup } from '@/components/ui/field';
 import { useFormComponents } from '@/hooks/use-form-components';
-import {
-  type BasesDadosCampanhaApiResponse,
-} from '@/features/base-dados/schema/base-dados.schema';
+import { type BasesDadosCampanhaApiResponse } from '@/features/base-dados/schema/base-dados.schema';
 import {
   Join,
   joinsSchema,
@@ -48,8 +46,8 @@ export function JoinModal({
 
   const camposFromOptions = useMemo(() => {
     const campos =
-      basesDados.find((baseDados) => baseDados.id === from?.baseDadosId)?.campos ??
-      [];
+      basesDados.find((baseDados) => baseDados.id === from?.baseDadosId)
+        ?.campos ?? [];
 
     const options: SelectOption[] = campos.map((campo) => ({
       label: campo.rotulo ?? campo.campo,
@@ -71,8 +69,9 @@ export function JoinModal({
 
   const camposJoinOptions = useMemo(() => {
     const campos =
-      basesDados.find((baseDados) => baseDados.id === initialData.baseDadosIdJoin)
-        ?.campos ?? [];
+      basesDados.find(
+        (baseDados) => baseDados.id === initialData.baseDadosIdJoin,
+      )?.campos ?? [];
 
     const options: SelectOption[] = campos.map((campo) => ({
       label: campo.rotulo ?? campo.campo,

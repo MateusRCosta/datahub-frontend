@@ -22,7 +22,7 @@ import {
 } from '../schema/base-dados.schema';
 
 interface BaseDadosTabelaProps {
-  campos?: boolean
+  campos?: boolean;
   modoSelecao?: boolean;
   onSelecionar?: (baseDados: BaseDadosTabelaRow) => void;
 }
@@ -52,9 +52,14 @@ export function BaseDadosTabela({
     return <SkeletonTabela />;
   }
 
-  const registros = data?.data?.data as BasesDadosCampanhaApiResponse[] | undefined;
+  const registros = data?.data?.data as
+    | BasesDadosCampanhaApiResponse[]
+    | undefined;
 
-  const colunas = getColunas<BasesDadosCampanhaApiResponse>({ modoSelecao, onSelecionar });
+  const colunas = getColunas<BasesDadosCampanhaApiResponse>({
+    modoSelecao,
+    onSelecionar,
+  });
 
   return (
     <div className='flex flex-col w-full flex-1 min-h-0 h-full mx-auto gap-2'>

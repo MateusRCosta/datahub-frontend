@@ -1,19 +1,17 @@
 import { Skeleton } from '../ui/skeleton';
 
-interface SkeletonTabelaProps{
+interface SkeletonTabelaProps {
   apenasFiltro?: boolean;
 }
 
-export function SkeletonTabela({apenasFiltro = false}:SkeletonTabelaProps) {
+export function SkeletonTabela({ apenasFiltro = false }: SkeletonTabelaProps) {
   const widths = ['90%', '70%', '82%', '55%'];
 
   return (
     <div className='flex h-full w-full min-h-0 flex-col gap-2'>
       <div className='flex shrink-0 flex-col gap-2 md:flex-row md:self-end'>
         <Skeleton className='h-9 w-full md:w-32' />
-        {!apenasFiltro && (
-          <Skeleton className='h-9 w-full md:w-80' />
-        )}
+        {!apenasFiltro && <Skeleton className='h-9 w-full md:w-80' />}
       </div>
 
       <div className='flex min-h-0 flex-1 flex-col overflow-hidden rounded-md border'>
