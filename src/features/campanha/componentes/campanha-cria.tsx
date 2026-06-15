@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -16,9 +16,7 @@ import {
   campanhaFormularioSchema,
 } from '../schema/campanha-form.schema';
 import { mapCampanhaError } from '../types/erros.constant';
-import { CamposSelecionaveis } from '../types/campanha.types';
 import { CampanhaForm } from './campanha-form';
-import { ProvedorEnum } from '@/common/schema/provedor.schema';
 
 interface CampanhaCriaProps {
   pagination: PaginationApiRequest<string>;
@@ -31,19 +29,12 @@ const defaultValues: CampanhaFormularioInput = {
   templateId: 0,
   baseDadosId: undefined,
   viewId: undefined,
-  contatoCampo: '',
+  contatoCampo: { valor: '', baseDadosId: undefined },
   vars: [],
 };
 
 export function CampanhaCria({ pagination, filtros }: CampanhaCriaProps) {
   const [open, setOpen] = useState(false);
-  const [templateNome, setTemplateNome] = useState('');
-  const [templateQtdVars, setTemplateQtdVars] = useState<number>(0);
-  const [templateProvedor, setTemplateProvedor] = useState<ProvedorEnum>(ProvedorEnum.UPCHAT);
-  const [viewNome, setViewNome] = useState('');
-  const [baseDadosNome, setBaseDadosNome] = useState('');
-  const [camposSelecionaveis, setCamposSelecionaveis] =
-    useState<CamposSelecionaveis>([]);
 
   const form = useForm<CampanhaFormularioInput, unknown, CampanhaFormulario>({
     mode: 'onSubmit',
@@ -53,21 +44,12 @@ export function CampanhaCria({ pagination, filtros }: CampanhaCriaProps) {
 
   const { mutateAsync, isPending } = useCriaCampanha({ pagination, filtros });
 
-  const resetForm = () => {
-    form.reset(defaultValues);
-    setTemplateProvedor(ProvedorEnum.UPCHAT);
-    setTemplateNome('');
-    setViewNome('');
-    setBaseDadosNome('');
-    setCamposSelecionaveis([]);
-  };
-
   const onSubmit = async (data: CampanhaFormulario) => {
     try {
       const response = await mutateAsync(data);
       if (response.status === 201) {
         toast.success('Campanha criada com sucesso.');
-        resetForm();
+        form.reset();
         setOpen(false);
         return;
       }
@@ -83,6 +65,12 @@ export function CampanhaCria({ pagination, filtros }: CampanhaCriaProps) {
     }
   };
 
+  useEffect(() => {
+    if (!open) {
+      form.reset();
+    }
+  }, [form, open]);
+
   return (
     <DialogCustom
       titulo='Nova campanha'
@@ -91,13 +79,7 @@ export function CampanhaCria({ pagination, filtros }: CampanhaCriaProps) {
       open={open}
       setOpen={setOpen}
       trigger={
-        <Button
-          type='button'
-          onClick={() => {
-            resetForm();
-            setOpen(true);
-          }}
-        >
+        <Button type='button' onClick={() => setOpen(true)}>
           Criar campanha
         </Button>
       }
@@ -111,20 +93,7 @@ export function CampanhaCria({ pagination, filtros }: CampanhaCriaProps) {
             className='flex flex-col gap-2 h-full'
           >
             <FieldGroup className='flex flex-col min-h-0 flex-1 gap-6'>
-              <CampanhaForm
-                templateProvedor={templateProvedor}
-                setTemplateProvedor={setTemplateProvedor}
-                templateNome={templateNome}
-                templateQtdVars={templateQtdVars}
-                setTemplateQtdVars={setTemplateQtdVars}
-                setTemplateNome={setTemplateNome}
-                viewNome={viewNome}
-                setViewNome={setViewNome}
-                baseDadosNome={baseDadosNome}
-                setBaseDadosNome={setBaseDadosNome}
-                camposSelecionaveis={camposSelecionaveis}
-                setCamposSelecionaveis={setCamposSelecionaveis}
-              />
+              {open && <CampanhaForm key={String(open)} />}
             </FieldGroup>
           </form>
         </FormProvider>

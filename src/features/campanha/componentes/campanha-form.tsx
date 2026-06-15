@@ -1,8 +1,7 @@
 'use client';
 
-import { useFormContext } from 'react-hook-form';
-import { useFieldArray } from 'react-hook-form';
 import { useMemo, useState } from 'react';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 import { Plus, Trash2 } from 'lucide-react';
 import { TemplateTabela } from '@/features/integracao-campanha/template/componentes/template-tabela';
 import { TemplatesApiResponse } from '@/features/integracao-campanha/template/schema/template.schema';
@@ -14,272 +13,200 @@ import { useFormComponents } from '@/hooks/use-form-components';
 import { ViewSelecaoTabela } from '../../view/components/view-selecao-tabela';
 import { CampanhaFormularioInput } from '../schema/campanha-form.schema';
 import { ViewsCampanhaApiResponse } from '@/features/view/schema/view.schema';
-import { CamposSelecionaveis } from '../types/campanha.types';
 import { ProvedorEnum } from '@/common/schema/provedor.schema';
+import { CampanhaResponse } from '../schema/campanha.schema';
 
 interface CampanhaFormProps {
-  templateNome: string;
-  setTemplateQtdVars: (vars: number) => void;
-  templateQtdVars: number;
-  setTemplateNome: (nome: string) => void;
-  templateProvedor: ProvedorEnum;
-  setTemplateProvedor: (provedor: ProvedorEnum) => void;
-  viewNome: string;
-  setViewNome: (nome: string) => void;
-  baseDadosNome: string;
-  setBaseDadosNome: (nome: string) => void;
-  camposSelecionaveis: CamposSelecionaveis;
+  campanhaInicial?: CampanhaResponse;
   readOnly?: boolean;
-  setCamposSelecionaveis: (campos: CamposSelecionaveis) => void;
 }
 
 export function CampanhaForm({
-  templateNome,
-  setTemplateNome,
-  templateQtdVars,
-  setTemplateQtdVars,
-  templateProvedor,
-  setTemplateProvedor,
-  viewNome,
-  setViewNome,
-  baseDadosNome,
-  setBaseDadosNome,
-  camposSelecionaveis,
-  setCamposSelecionaveis,
+  campanhaInicial,
   readOnly = false,
 }: CampanhaFormProps) {
-  const [valorBaseDadosPorLinha, setValorBaseDadosPorLinha] = useState<
-    Record<string, boolean>
-  >({});
   const form = useFormContext<CampanhaFormularioInput>();
-  const contatoCampo = form.watch('contatoCampo');
   const vars = form.watch('vars');
+
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: 'vars',
   });
 
-  const { Input, InputSelecaoModal, DatePicker, Select } =
-    useFormComponents<CampanhaFormularioInput>();
+  const {
+    Input,
+    InputSelecaoModal,
+    DatePicker,
+    Select: SelectGenerico,
+  } = useFormComponents<CampanhaFormularioInput>();
 
-  const appendVar = () => {
-    if (fields.length > templateQtdVars - 1) return;
-    if (templateProvedor === ProvedorEnum.UPCHAT) {
-      append({
-        variavel: `${fields.length + 1}`,
-        valor: '',
-        baseDadoId: undefined,
-      });
-      return;
-    }
-    append({ variavel: '', valor: '', baseDadoId: undefined });
-  };
 
-  const removeVar = (indexRemove: number) => {
-    if (
-      fields.length > 1 &&
-      templateProvedor === ProvedorEnum.UPCHAT &&
-      fields.length - 1 !== indexRemove
-    ) {
-      fields.forEach((field, index) => {
-        if (index > indexRemove) {
-          form.setValue(
-            `vars.${index}.variavel`,
-            `${Number(field.variavel) - 1}`,
-            {
-              shouldDirty: true,
-              shouldValidate: true,
-            },
-          );
-        }
-      });
-      remove(indexRemove);
-      return;
-    }
-    remove(indexRemove);
-  };
+  const [uiMeta, setUiMeta] = useState({
+    template: {
+      nome: campanhaInicial?.template?.nome ?? '',
+      qtdVars: campanhaInicial?.template?.quantidadeVars ?? 0,
+      provedor: campanhaInicial?.template?.integracaoCampanha?.provedor ?? ProvedorEnum.UPCHAT,
+    },
+    viewNome: campanhaInicial?.view?.nome ?? '',
+    baseDadosNome: campanhaInicial?.baseDeDados?.nome ?? '',
+    camposSelecionaveis: campanhaInicial?.campos ?? [],
+  });
+
+  const [modoSelectPorLinha, setModoSelectPorLinha] = useState<Record<string, boolean>>({});
 
   const isValorDaFonteDados = (value: unknown): value is string =>
     typeof value === 'string' && value.startsWith('#');
 
-  const camposSelecionaveisOptionsBase = useMemo(
+  const camposSelecionaveisOptions = useMemo(
     () =>
-      camposSelecionaveis.map((campo) => ({
-        label: campo.rotulo || campo.campo,
-        value: campo.rotulo || campo.campo,
+      uiMeta.camposSelecionaveis.map((campo) => ({
+        label: campo.rotulo ? `${campo.rotulo} (${campo.campo})` : campo.campo,
+        value: campo.campo,
+        baseDadosId: campo.baseDadosId,
       })),
-    [camposSelecionaveis],
+    [uiMeta.camposSelecionaveis],
   );
 
-  const camposSelecionaveisOptions = useMemo(() => {
-    if (
-      !contatoCampo ||
-      camposSelecionaveisOptionsBase.some(
-        (option) => option.value === contatoCampo,
-      )
-    ) {
-      return camposSelecionaveisOptionsBase;
-    }
-
-    return [
-      ...camposSelecionaveisOptionsBase,
-      { label: contatoCampo, value: contatoCampo },
-    ];
-  }, [camposSelecionaveisOptionsBase, contatoCampo]);
-
-  const camposTokenOptionsBase = useMemo(
+  const camposTokenOptions = useMemo(
     () =>
-      camposSelecionaveis.map((campo) => {
+      uiMeta.camposSelecionaveis.map((campo) => {
         const value = `#${campo.campo}`;
-
         return {
           label: campo.rotulo ? `${campo.rotulo} (${value})` : value,
           value,
-          baseDadoId: campo.baseDadoId,
+          baseDadosId: campo.baseDadosId,
         };
       }),
-    [camposSelecionaveis],
+    [uiMeta.camposSelecionaveis],
   );
 
-  const camposTokenOptions = useMemo(() => {
-    const valoresFonteDados = (vars ?? []).filter((variavel) =>
-      isValorDaFonteDados(variavel.valor),
-    );
-    const options = [...camposTokenOptionsBase];
-
-    valoresFonteDados.forEach((variavel) => {
-      const value = variavel.valor;
-
-      if (options.some((option) => option.value === value)) return;
-      options.push({
-        label: value,
-        value,
-        baseDadoId: variavel.baseDadoId,
-      });
-    });
-
-    return options;
-  }, [camposTokenOptionsBase, vars]);
-
-  const camposSelecionaveisDisabled =
-    readOnly || camposSelecionaveisOptions.length === 0;
+  const camposSelecionaveisDisabled = readOnly || camposSelecionaveisOptions.length === 0;
 
   const limparCamposEnvio = () => {
-    form.setValue('contatoCampo', '', {
-      shouldDirty: true,
-      shouldValidate: false,
-    });
+    form.setValue('contatoCampo', { valor: '', baseDadosId: undefined }, { shouldDirty: true });
     form.setValue(
       'vars',
       form.getValues('vars').map((variavel) => ({
         ...variavel,
         valor: '',
-        baseDadoId: undefined,
+        baseDadosId: undefined,
       })),
-      {
-        shouldDirty: true,
-        shouldValidate: true,
-      },
+      { shouldDirty: true, shouldValidate: true },
     );
-    setValorBaseDadosPorLinha({});
+    setModoSelectPorLinha({});
   };
 
-  const selecionarTemplate = (template: TemplatesApiResponse) => {
-    form.setValue('templateId', template.id, {
-      shouldDirty: true,
-      shouldValidate: true,
-    });
-    setTemplateProvedor(template.integracaoCampanha.provedor);
-    setTemplateQtdVars(template.quantidadeVars);
-    setTemplateNome(template.nome);
+  const appendVar = () => {
+    if (fields.length > uiMeta.template.qtdVars - 1) return;
+    if (uiMeta.template.provedor === ProvedorEnum.UPCHAT) {
+      append({ variavel: `${fields.length + 1}`, valor: '', baseDadosId: undefined });
+      return;
+    }
+    append({ variavel: '', valor: '', baseDadosId: undefined });
   };
 
-  const selecionarView = (view: ViewsCampanhaApiResponse) => {
-    form.setValue('viewId', view.id, {
-      shouldDirty: true,
-      shouldValidate: false,
-    });
-    form.setValue('baseDadosId', undefined, {
-      shouldDirty: true,
-      shouldValidate: true,
-    });
+  const removeVar = (indexRemove: number) => {
+    if (
+      fields.length > 1 &&
+      uiMeta.template.provedor === ProvedorEnum.UPCHAT &&
+      fields.length - 1 !== indexRemove
+    ) {
+      fields.forEach((field, index) => {
+        if (index > indexRemove) {
+          form.setValue(`vars.${index}.variavel`, `${Number(field.variavel) - 1}`, {
+            shouldDirty: true,
+            shouldValidate: true,
+          });
+        }
+      });
+    }
+    remove(indexRemove);
+  };
+
+  // Funções semânticas para quando o usuário seleciona algo nos modais
+  const handleSelecionarTemplate = (t: TemplatesApiResponse) => {
+    form.setValue('templateId', t.id, { shouldDirty: true, shouldValidate: true });
+    setUiMeta((prev) => ({
+      ...prev,
+      template: { nome: t.nome, qtdVars: t.quantidadeVars, provedor: t.integracaoCampanha.provedor },
+    }));
+  };
+
+  const handleSelecionarView = (view: ViewsCampanhaApiResponse) => {
+    form.setValue('viewId', view.id, { shouldDirty: true });
+    form.setValue('baseDadosId', undefined, { shouldDirty: true, shouldValidate: true });
     limparCamposEnvio();
-    setViewNome(view.nome);
-    setCamposSelecionaveis(view.campos);
-    setBaseDadosNome('');
+    setUiMeta((prev) => ({
+      ...prev,
+      viewNome: view.nome,
+      baseDadosNome: '',
+      camposSelecionaveis: view.campos,
+    }));
   };
 
-  const selecionarBaseDados = (baseDados: BasesDadosCampanhaApiResponse) => {
-    form.setValue('baseDadosId', baseDados.id, {
-      shouldDirty: true,
-      shouldValidate: false,
-    });
-    form.setValue('viewId', undefined, {
-      shouldDirty: true,
-      shouldValidate: true,
-    });
+  const handleSelecionarBaseDados = (baseDados: unknown) => {
+    const isBaseDados = (b: unknown): b is BasesDadosCampanhaApiResponse => typeof b === 'object' && b !== null && 'campos' in b;
+    if (!isBaseDados(baseDados)) return;
+
+    form.setValue('baseDadosId', baseDados.id, { shouldDirty: true });
+    form.setValue('viewId', undefined, { shouldDirty: true, shouldValidate: true });
     limparCamposEnvio();
-    setBaseDadosNome(baseDados.nome);
-    setCamposSelecionaveis(baseDados.campos);
-    setViewNome('');
+    setUiMeta((prev) => ({
+      ...prev,
+      baseDadosNome: baseDados.nome,
+      viewNome: '',
+      camposSelecionaveis: baseDados.campos,
+    }));
   };
 
-  const isBaseDadosCampanha = (
-    baseDados: unknown,
-  ): baseDados is BasesDadosCampanhaApiResponse =>
-    typeof baseDados === 'object' && baseDados !== null && 'campos' in baseDados;
+  const handleToggleModoValor = (fieldId: string, index: number, isChecked: boolean) => {
+    setModoSelectPorLinha((prev) => ({ ...prev, [fieldId]: isChecked }));
+    form.setValue(`vars.${index}.valor`, '', { shouldDirty: true, shouldValidate: true });
+    form.setValue(`vars.${index}.baseDadosId`, undefined, { shouldDirty: true, shouldValidate: true });
+  };
 
   return (
     <div className='space-y-6'>
       <div className='space-y-4'>
         <h3 className='text-sm font-semibold'>Informações básicas</h3>
-        <Input
-          name='nome'
-          label='Nome'
-          placeholder='Digite o nome da campanha'
-          disabled={readOnly}
-        />
-        <DatePicker
-          name='scheduledAt'
-          label='Agendamento'
-          disabled={readOnly}
-        />
+        <Input name='nome' label='Nome' placeholder='Digite o nome da campanha' disabled={readOnly} />
+        <DatePicker name='scheduledAt' label='Agendamento' disabled={readOnly} />
+        
         <InputSelecaoModal
           name='templateId'
           label='Template'
-          nomeDisplay={templateNome}
+          nomeDisplay={uiMeta.template.nome}
           modalTitle='Selecionar template'
           disabled={readOnly}
           modalContent={(fecharModal) => (
             <TemplateTabela
               modoSelecao
-              onSelecionar={(template) => {
-                selecionarTemplate(template);
+              onSelecionar={(t) => {
+                handleSelecionarTemplate(t);
                 fecharModal();
               }}
             />
           )}
         />
       </div>
+
       <div className='space-y-4'>
         <div>
           <h3 className='text-sm font-semibold'>Fonte de dados</h3>
-          <p className='text-xs text-muted-foreground'>
-            Selecione uma visualização ou uma base de dados.
-          </p>
+          <p className='text-xs text-muted-foreground'>Selecione uma visualização ou uma base de dados.</p>
         </div>
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+        <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
           <InputSelecaoModal
             name='viewId'
             label='Visualização'
-            nomeDisplay={viewNome}
+            nomeDisplay={uiMeta.viewNome}
             modalTitle='Selecionar visualização'
             disabled={readOnly}
             modalContent={(fecharModal) => (
               <ViewSelecaoTabela
                 campos={true}
                 onSelecionar={(view) => {
-                  selecionarView(view);
+                  handleSelecionarView(view);
                   fecharModal();
                 }}
               />
@@ -288,7 +215,7 @@ export function CampanhaForm({
           <InputSelecaoModal
             name='baseDadosId'
             label='Base de dados'
-            nomeDisplay={baseDadosNome}
+            nomeDisplay={uiMeta.baseDadosNome}
             modalTitle='Selecionar base de dados'
             disabled={readOnly}
             modalContent={(fecharModal) => (
@@ -296,8 +223,7 @@ export function CampanhaForm({
                 modoSelecao
                 campos={true}
                 onSelecionar={(baseDados) => {
-                  if (!isBaseDadosCampanha(baseDados)) return;
-                  selecionarBaseDados(baseDados);
+                  handleSelecionarBaseDados(baseDados);
                   fecharModal();
                 }}
               />
@@ -305,135 +231,102 @@ export function CampanhaForm({
           />
         </div>
       </div>
+
       <div className='space-y-4'>
         <h3 className='text-sm font-semibold'>Envio</h3>
-        <Select
-          name='contatoCampo'
+        <SelectGenerico
+          name='contatoCampo.valor'
           label='Campo de contato'
-          placeholder={
-            camposSelecionaveisOptions.length > 0
-              ? 'Selecione o campo de contato'
-              : 'Selecione uma fonte de dados'
-          }
+          placeholder='Selecione um campo'
           options={camposSelecionaveisOptions}
           disabled={camposSelecionaveisDisabled}
+          onValueChange={(value, selectedOption) => {
+            form.setValue(
+              'contatoCampo',
+              { valor: value, baseDadosId: selectedOption?.baseDadosId },
+              { shouldDirty: true, shouldValidate: true },
+            );
+          }}
         />
+
         <div className='space-y-3'>
           <div className='flex items-center justify-between gap-2'>
             <div>
               <p className='text-sm font-medium'>Variáveis</p>
-              <p className='text-xs text-muted-foreground'>
-                Adicione pares de variável e valor para o envio.
-              </p>
+              <p className='text-xs text-muted-foreground'>Adicione pares de variável e valor para o envio.</p>
             </div>
-            <Button
-              type='button'
-              variant='outline'
-              size='sm'
-              disabled={readOnly}
-              onClick={appendVar}
-            >
-              <Plus className='h-4 w-4' />
-              Adicionar
+            <Button type='button' variant='outline' size='sm' disabled={readOnly} onClick={appendVar}>
+              <Plus className='h-4 w-4' /> Adicionar
             </Button>
           </div>
+
           <div className='space-y-3'>
             {fields.length === 0 ? (
               <p className='rounded-md border border-dashed px-3 py-4 text-center text-xs text-muted-foreground'>
                 Nenhuma variável adicionada.
               </p>
             ) : (
-              fields.map((field, index) => (
-                <div
-                  key={field.id}
-                  className='grid grid-cols-1 gap-3 rounded-md border p-3 md:grid-cols-[1fr_1fr_auto]'
-                >
-                  <Input
-                    name={`vars.${index}.variavel`}
-                    label='Nome'
-                    placeholder='nome'
-                    disabled={
-                      readOnly || templateProvedor === ProvedorEnum.UPCHAT
-                    }
-                  />
-                  <div className='space-y-2'>
-                    {(valorBaseDadosPorLinha[field.id] ??
-                    isValorDaFonteDados(vars?.[index]?.valor)) ? (
-                      <Select
-                        name={`vars.${index}.valor`}
-                        label='Valor'
-                        placeholder={
-                          camposTokenOptions.length > 0
-                            ? 'Selecione o campo'
-                            : 'Selecione uma fonte de dados'
-                        }
-                        options={camposTokenOptions}
-                        disabled={camposSelecionaveisDisabled}
-                        onValueChange={(_, selectedOption) => {
-                          form.setValue(
-                            `vars.${index}.baseDadoId`,
-                            selectedOption?.baseDadoId,
-                            {
+              fields.map((field, index) => {
+                const usaSelect = modoSelectPorLinha[field.id] ?? isValorDaFonteDados(vars?.[index]?.valor);
+                
+                return (
+                  <div key={field.id} className='grid grid-cols-1 gap-3 rounded-md border p-3 md:grid-cols-[1fr_1fr_auto]'>
+                    <Input
+                      name={`vars.${index}.variavel`}
+                      label='Nome'
+                      placeholder='nome'
+                      disabled={readOnly || uiMeta.template.provedor === ProvedorEnum.UPCHAT}
+                    />
+                    
+                    <div className='space-y-2'>
+                      {usaSelect ? (
+                        <SelectGenerico
+                          name={`vars.${index}.valor`}
+                          label='Valor'
+                          placeholder={camposTokenOptions.length > 0 ? 'Selecione o campo' : 'Selecione uma fonte de dados'}
+                          options={camposTokenOptions}
+                          disabled={camposSelecionaveisDisabled}
+                          onValueChange={(_, selectedOption) => {
+                            form.setValue(`vars.${index}.baseDadosId`, selectedOption?.baseDadosId, {
                               shouldDirty: true,
                               shouldValidate: true,
-                            },
-                          );
-                        }}
-                      />
-                    ) : (
-                      <Input
-                        name={`vars.${index}.valor`}
-                        label='Valor'
-                        placeholder='Digite um valor'
-                        disabled={readOnly}
-                      />
-                    )}
-                    <label className='flex items-center gap-2 text-xs text-muted-foreground'>
-                      <Checkbox
-                        checked={
-                          valorBaseDadosPorLinha[field.id] ??
-                          isValorDaFonteDados(vars?.[index]?.valor)
-                        }
-                        disabled={readOnly || camposTokenOptions.length === 0}
-                        onCheckedChange={(checked) => {
-                          const isChecked = checked === true;
+                            });
+                          }}
+                        />
+                      ) : (
+                        <Input
+                          name={`vars.${index}.valor`}
+                          label='Valor'
+                          placeholder='Digite um valor'
+                          disabled={readOnly}
+                        />
+                      )}
+                      
+                      <label className='flex items-center gap-2 text-xs text-muted-foreground'>
+                        <Checkbox
+                          checked={usaSelect}
+                          disabled={readOnly || camposTokenOptions.length === 0}
+                          onCheckedChange={(checked) => handleToggleModoValor(field.id, index, checked === true)}
+                        />
+                        Valor da fonte de dados
+                      </label>
+                    </div>
 
-                          setValorBaseDadosPorLinha((current) => ({
-                            ...current,
-                            [field.id]: isChecked,
-                          }));
-                          form.setValue(`vars.${index}.valor`, '', {
-                            shouldDirty: true,
-                            shouldValidate: true,
-                          });
-                          form.setValue(
-                            `vars.${index}.baseDadoId`,
-                            undefined,
-                            {
-                              shouldDirty: true,
-                              shouldValidate: true,
-                            },
-                          );
-                        }}
-                      />
-                      Valor da fonte de dados
-                    </label>
+                    <div className='flex items-end'>
+                      <Button
+                        type='button'
+                        variant='ghost'
+                        size='icon'
+                        disabled={readOnly}
+                        onClick={() => removeVar(index)}
+                        className='shrink-0'
+                      >
+                        <Trash2 className='h-4 w-4 text-destructive' />
+                      </Button>
+                    </div>
                   </div>
-                  <div className='flex items-end'>
-                    <Button
-                      type='button'
-                      variant='ghost'
-                      size='icon'
-                      disabled={readOnly}
-                      onClick={() => removeVar(index)}
-                      aria-label='Remover variável'
-                      className='shrink-0'
-                    >
-                      <Trash2 className='h-4 w-4 text-destructive' />
-                    </Button>
-                  </div>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
         </div>

@@ -9,10 +9,17 @@ import {
 import z from 'zod';
 import { STATUS_CAMPANHA } from '../types/campanha.types';
 
-const varsSchema = z.record(z.string(), z.object({
-  baseDadoId:z.number().int().optional(),
-  nomeCampo: z.string()
-}));
+const varsSchema = z.object({
+  baseDadosId: z.number().int().optional(),
+  variavel: z.string(),
+  valor: z.string(),
+});
+
+const contatoSchema = z.object({
+  baseDadosId: z.number().int().optional(),
+  valor: z.string(),
+});
+
 const statusEnumSchema = z.enum(STATUS_CAMPANHA);
 export const campanhaSchema = z.object({
   id: z.number(),
@@ -28,10 +35,8 @@ export const campanhaSchema = z.object({
   baseDadosId: z.number().int().optional(),
   viewId: z.number().int().optional(),
   usuarioId: z.number().int(),
-  contatoCampo: z
-    .string()
-    .max(120, 'O contato campo deve ter no máximo 120 caracteres'),
-  vars: varsSchema,
+  contatoCampo: contatoSchema,
+  vars: z.array(varsSchema),
   createdAt: z.date(),
   updatedAt: z.date().optional(),
   deletedAt: z.date().optional(),

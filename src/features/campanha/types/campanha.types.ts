@@ -43,17 +43,13 @@ export const CAMPANHA_STATUS_ALTERAVEL = [STATUS_CAMPANHA.PENDENTE] as const;
 export type CamposSelecionaveis = {
   campo: string;
   rotulo?: string | undefined;
-  baseDadoId?: number;
+  baseDadosId?: number;
 }[];
 
 export function campanhaPodeEditar(status: STATUS_CAMPANHA) {
   return CAMPANHA_STATUS_ALTERAVEL.includes(
     status as (typeof CAMPANHA_STATUS_ALTERAVEL)[number],
   );
-}
-
-export function campanhaPodeAbrirEdicao() {
-  return true;
 }
 
 export function campanhaPodeExcluir(status: STATUS_CAMPANHA) {

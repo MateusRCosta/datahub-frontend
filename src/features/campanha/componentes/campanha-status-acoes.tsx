@@ -43,7 +43,7 @@ export function CampanhaStatusAcoes({
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button variant='ghost' size='icon' disabled className='h-7 w-7'>
+            <Button variant='ghost' size='icon' className='h-7 w-7 opacity-50'>
               <MoreHorizontal className='h-4 w-4' />
             </Button>
           </TooltipTrigger>

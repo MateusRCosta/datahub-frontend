@@ -9,7 +9,7 @@ import {
   TIPO_FILTRO_ENUM,
   TIPO_JOIN_ENUM,
 } from '../types/enums';
-import { camposSchema } from '@/common/schema/relacao.schema';
+import { camposDetailSchema, camposSchema } from '@/common/schema/relacao.schema';
 
 export const tipoJoinEnumSchema = z.enum(TIPO_JOIN_ENUM);
 export const operadorEnumSchema = z.enum(OPERADOR_ENUM);
@@ -87,7 +87,6 @@ export const viewSchema = z.object({
     .max(100, 'O nome deve ter no máximo 100 caracteres'),
   descricao: z
     .string()
-    .min(1, 'A descrição deve ter no mínimo 3 caracteres')
     .max(100, 'A descrição deve ter no máximo 100 caracteres'),
   config: configSchema,
   createdAt: z.date(),
@@ -154,7 +153,7 @@ export const viewApiResponseSchema = viewSchema
 
 export const viewsCampanhaApiResponseSchema = viewsApiResponseSchema
   .extend({
-    campos: z.array(camposSchema),
+    campos: z.array(camposDetailSchema),
   });
 export type ViewsCampanhaApiResponse = z.infer<
   typeof viewsCampanhaApiResponseSchema

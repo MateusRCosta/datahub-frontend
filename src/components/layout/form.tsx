@@ -120,7 +120,7 @@ export function InputGenerico<TFieldValues extends FieldValues = FieldValues>({
 interface Option {
   label: string;
   value: string;
-  baseDadoId?: number;
+  baseDadosId?: number;
 }
 
 interface SelectGenericoProps {

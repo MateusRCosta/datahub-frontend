@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { PenBox } from 'lucide-react';
 import { toast } from 'sonner';
@@ -10,12 +10,6 @@ import { FieldError, FieldGroup } from '@/components/ui/field';
 import { DialogCustom } from '@/components/layout/dialog-custom';
 import { RegistroInfoCard } from '@/components/layout/registro-info-card';
 import { ApiResponseError } from '@/types/api.schema';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import { formataDataUI } from '@/lib/utils';
 import useEditaCampanha from '../api/use-edita-campanha';
 import useRetornaCampanha from '../api/use-retorna-campanha';
@@ -28,89 +22,52 @@ import { mapCampanhaError } from '../types/erros.constant';
 import {
   STATUS_CAMPANHA,
   STATUS_CAMPANHA_LABEL,
-  CamposSelecionaveis,
-  campanhaPodeAbrirEdicao,
   campanhaPodeEditar,
 } from '../types/campanha.types';
 import { CampanhaForm } from './campanha-form';
-import { ProvedorEnum } from '@/common/schema/provedor.schema';
 
 interface CampanhaAtualizaProps {
   id: number;
   status: STATUS_CAMPANHA;
 }
 
-const defaultValues: CampanhaFormularioInput = {
-  nome: '',
-  scheduledAt: '',
-  templateId: 0,
-  baseDadosId: undefined,
-  viewId: undefined,
-  contatoCampo: '',
-  vars: [{ variavel: '', valor: '', baseDadoId: undefined }],
-};
-
 export function CampanhaAtualiza({ id, status }: CampanhaAtualizaProps) {
   const [open, setOpen] = useState(false);
-  const [templateNome, setTemplateNome] = useState('');
-  const [templateQtdVars, setTemplateQtdVars] = useState<number>(0);
-  const [templateProvedor, setTemplateProvedor] = useState<ProvedorEnum>(ProvedorEnum.UPCHAT);
-  const [viewNome, setViewNome] = useState('');
-  const [baseDadosNome, setBaseDadosNome] = useState('');
-  const [camposSelecionaveis, setCamposSelecionaveis] =
-    useState<CamposSelecionaveis>([]);
   const podeEditar = campanhaPodeEditar(status);
-  const podeAbrirEdicao = campanhaPodeAbrirEdicao();
 
   const { isError, error, data } = useRetornaCampanha({
-    enabled: open && podeAbrirEdicao,
+    enabled: open,
     id,
   });
+
+  const campanha = data?.data;
 
   const form = useForm<CampanhaFormularioInput, unknown, CampanhaFormulario>({
     mode: 'onSubmit',
     resolver: zodResolver(campanhaFormularioSchema),
-    defaultValues,
+    values: campanha
+      ? {
+          nome: campanha.nome,
+          scheduledAt: campanha.scheduledAt,
+          templateId: campanha.template.id,
+          baseDadosId: campanha.baseDeDados?.id,
+          viewId: campanha.view?.id,
+          contatoCampo: campanha.contatoCampo || {
+            valor: '',
+            baseDadosId: undefined,
+          },
+          vars: campanha.vars || [],
+        }
+      : {
+          nome: '',
+          scheduledAt: '',
+          templateId: 0,
+          baseDadosId: undefined,
+          viewId: undefined,
+          contatoCampo: { valor: '', baseDadosId: undefined },
+          vars: [{ variavel: '', valor: '', baseDadosId: undefined }],
+        },
   });
-
-  const { reset } = form;
-
-  useEffect(() => {
-    if (!data?.data) return;
-
-    const campanha = data.data;
-    const vars = Object.entries(campanha.vars ?? {}).map(
-      ([variavel, varObj]) => ({
-        variavel,
-        valor: varObj.nomeCampo,
-        baseDadoId: varObj.baseDadoId,
-      }),
-    );
-    
-    reset(
-      {
-        nome: campanha.nome,
-        scheduledAt: campanha.scheduledAt,
-        templateId: campanha.template.id,
-        baseDadosId: campanha.baseDeDados?.id,
-        viewId: campanha.view?.id,
-        contatoCampo: campanha.contatoCampo,
-        vars:
-          vars.length > 0
-            ? vars
-            : [{ variavel: '', valor: '', baseDadoId: undefined }],
-      },
-      { keepDefaultValues: true },
-    );
-    queueMicrotask(() => {
-      setTemplateProvedor(campanha.template.integracaoCampanha.provedor);
-      setTemplateNome(campanha.template.nome);
-      setViewNome(campanha.view?.nome ?? '');
-      setBaseDadosNome(campanha.baseDeDados?.nome ?? '');
-      setTemplateQtdVars(campanha.template.quantidadeVars);
-      setCamposSelecionaveis(campanha.campos);
-    });
-  }, [data, reset]);
 
   const { mutateAsync, isPending } = useEditaCampanha(id);
 
@@ -121,7 +78,7 @@ export function CampanhaAtualiza({ id, status }: CampanhaAtualizaProps) {
       const response = await mutateAsync({ ...formData, id });
       if (response.status === 204) {
         toast.success('Campanha editada com sucesso.');
-        form.reset(defaultValues);
+        form.reset();
         setOpen(false);
         return;
       }
@@ -133,7 +90,7 @@ export function CampanhaAtualiza({ id, status }: CampanhaAtualizaProps) {
 
       if (apiError.statusCode === 404) {
         toast.warning('Campanha não encontrada.');
-        form.reset(defaultValues);
+        form.reset();
         setOpen(false);
         return;
       }
@@ -144,20 +101,6 @@ export function CampanhaAtualiza({ id, status }: CampanhaAtualizaProps) {
     }
   };
 
-  if (!podeAbrirEdicao) {
-    return (
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <PenBox className='mr-2 h-4 text-muted-foreground opacity-50' />
-          </TooltipTrigger>
-          <TooltipContent>
-            <span>Somente campanhas pendentes podem ser editadas.</span>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-    );
-  }
 
   return (
     <DialogCustom
@@ -175,15 +118,15 @@ export function CampanhaAtualiza({ id, status }: CampanhaAtualizaProps) {
           <div className='flex flex-1 w-full'>
             <RegistroInfoCard
               dados={{
-                ID: data?.data?.id,
-                Status: data?.data?.status
-                  ? STATUS_CAMPANHA_LABEL[data.data.status]
+                ID: campanha?.id,
+                Status: campanha?.status
+                  ? STATUS_CAMPANHA_LABEL[campanha.status]
                   : undefined,
-                'Criado por': data?.data?.usuario?.nome,
-                'Criado em': formataDataUI(data?.data?.createdAt),
-                'Atualizado em': formataDataUI(data?.data?.updatedAt),
-                'Finalizada em': formataDataUI(data?.data?.finishedAt),
-                'Executada em': formataDataUI(data?.data?.executedAt),
+                'Criado por': campanha?.usuario?.nome,
+                'Criado em': formataDataUI(campanha?.createdAt),
+                'Atualizado em': formataDataUI(campanha?.updatedAt),
+                'Finalizada em': formataDataUI(campanha?.finishedAt),
+                'Executada em': formataDataUI(campanha?.executedAt),
               }}
             />
           </div>
@@ -212,20 +155,9 @@ export function CampanhaAtualiza({ id, status }: CampanhaAtualizaProps) {
                   Erro ao carregar campanha: {error?.message}
                 </div>
               )}
-              {data && !isError && (
+              {campanha && !isError && (
                 <CampanhaForm
-                  templateProvedor={templateProvedor}
-                  setTemplateProvedor={setTemplateProvedor}
-                  templateNome={templateNome}
-                  setTemplateNome={setTemplateNome}
-                  templateQtdVars={templateQtdVars}
-                  setTemplateQtdVars={setTemplateQtdVars}
-                  viewNome={viewNome}
-                  setViewNome={setViewNome}
-                  baseDadosNome={baseDadosNome}
-                  setBaseDadosNome={setBaseDadosNome}
-                  camposSelecionaveis={camposSelecionaveis}
-                  setCamposSelecionaveis={setCamposSelecionaveis}
+                  campanhaInicial={campanha}
                   readOnly={!podeEditar}
                 />
               )}

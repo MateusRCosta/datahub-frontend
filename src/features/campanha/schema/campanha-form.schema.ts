@@ -1,63 +1,13 @@
 import z from 'zod';
 import { campanhaSchema } from './campanha.schema';
 
-const varsRecordSchema = campanhaSchema.shape.vars;
-
 const varItemSchema = z.object({
   variavel: z.string(),
   valor: z.string(),
-  baseDadoId: z.number().int().optional(),
+  baseDadosId: z.number().int().optional(),
 });
 
-const varsFormularioSchema = z
-  .array(varItemSchema)
-  .transform((value, ctx) => {
-    const resultado: Record<
-      string,
-      { nomeCampo: string; baseDadoId?: number }
-    > = {};
-
-    for (const item of value) {
-      const variavel = item.variavel.trim();
-      const valor = item.valor;
-
-      if (!variavel && !valor) continue;
-
-      if (!variavel) {
-        ctx.addIssue({
-          code: 'custom',
-          message: 'Informe o nome da variável.',
-        });
-        return z.NEVER;
-      }
-
-      if (variavel in resultado) {
-        ctx.addIssue({
-          code: 'custom',
-          message: `A variável "${variavel}" foi informada mais de uma vez.`,
-        });
-        return z.NEVER;
-      }
-
-      resultado[variavel] = {
-        nomeCampo: valor,
-        ...(item.baseDadoId !== undefined
-          ? { baseDadoId: item.baseDadoId }
-          : {}),
-      };
-    }
-
-    const result = varsRecordSchema.safeParse(resultado);
-    if (!result.success) {
-      ctx.addIssue({
-        code: 'custom',
-        message: 'As variáveis devem ser pares de texto.',
-      });
-      return z.NEVER;
-    }
-
-    return result.data;
-  });
+const varsFormularioSchema = z.array(varItemSchema);
 
 const dataAgendamentoSchema = z
   .union([z.string().min(1, 'Agendamento obrigatório'), z.date()])
@@ -98,10 +48,7 @@ export const campanhaFormularioSchema = campanhaSchema
   .extend({
     scheduledAt: dataAgendamentoSchema,
     templateId: z.number().int().positive('Selecione um template.'),
-    contatoCampo: campanhaSchema.shape.contatoCampo.min(
-      1,
-      'Informe o campo de contato.',
-    ),
+    contatoCampo: campanhaSchema.shape.contatoCampo,
     vars: varsFormularioSchema,
   })
   .and(campanhaFonteDadosSchema);
