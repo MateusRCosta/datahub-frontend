@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { DialogTrigger } from '@/components/ui/dialog';
@@ -19,7 +19,10 @@ import {
 import useEditaIntegracaoCampanha from '../api/use-edita-integracao-campanha';
 import useRetornaIntegracaoCampanha from '../api/use-retorna-integracao-campanha';
 import { IntegracaoCampanhaConfigForm } from './integracao-campanha-config-form';
-import { provedorEnumSchema } from '@/common/schema/provedor.schema';
+import {
+  ProvedorEnum,
+  provedorEnumSchema,
+} from '@/common/schema/provedor.schema';
 
 interface IntegracaoCampanhaAtualizaProps {
   id: number;
@@ -39,34 +42,24 @@ export function IntegracaoCampanhaAtualiza({
     id,
   });
   const { Input, Select } = useFormComponents<IntegracaoCampanhaEdicao>();
+  const integracaoCampanha = data?.data;
 
   const form = useForm<IntegracaoCampanhaEdicao>({
     mode: 'onSubmit',
     resolver: zodResolver(integracaoCampanhaEdicaoSchema),
     defaultValues: {
       nome: '',
-      provedor: 'upchat',
+      provedor: ProvedorEnum.UPCHAT,
       config: integracaoCampanhaConfigDefaultValues.upchat,
     },
+    values: integracaoCampanha
+      ? {
+          nome: integracaoCampanha.nome,
+          provedor: integracaoCampanha.provedor,
+          config: integracaoCampanha.config,
+        }
+      : undefined, 
   });
-
-  const { reset } = form;
-
-  useEffect(() => {
-    if (data?.data) {
-      reset(
-        {
-          nome: data.data.nome,
-          provedor: data.data.provedor,
-          config: {
-            ...integracaoCampanhaConfigDefaultValues[data.data.provedor],
-            ...data.data.config,
-          },
-        },
-        { keepDefaultValues: false },
-      );
-    }
-  }, [data, reset]);
 
   const { mutateAsync, isPending } = useEditaIntegracaoCampanha(id);
 
@@ -116,10 +109,10 @@ export function IntegracaoCampanhaAtualiza({
           <div className='flex flex-1 w-full'>
             <RegistroInfoCard
               dados={{
-                ID: data?.data?.id,
-                'Criado por': data?.data?.usuario?.nome,
-                'Criado em': formataDataUI(data?.data?.createdAt),
-                'Atualizado em': formataDataUI(data?.data?.updatedAt),
+                ID: integracaoCampanha?.id,
+                'Criado por': integracaoCampanha?.usuario?.nome,
+                'Criado em': formataDataUI(integracaoCampanha?.createdAt),
+                'Atualizado em': formataDataUI(integracaoCampanha?.updatedAt),
               }}
             />
           </div>

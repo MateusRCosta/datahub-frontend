@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { PenBox } from 'lucide-react';
@@ -35,39 +35,27 @@ export function TemplateAtualiza({ id }: TemplateAtualizaProps) {
   const [open, setOpen] = useState(false);
   const { isError, error, data } = useRetornaTemplate({ enabled: open, id });
   const { Input } = useFormComponents<TemplateEdicao>();
-  const integracaoCampanhaNome = data?.data?.integracaoCampanha.nome ?? '';
 
+  const integracaoCampanhaNome = data?.data?.integracaoCampanha.nome ?? '';
+  const template = data?.data;
   const form = useForm<TemplateEdicao>({
     mode: 'onSubmit',
     resolver: zodResolver(templateEdicaoSchema),
+    values: template
+      ? {
+          nome: template.nome,
+          quantidadeVars: template.quantidadeVars,
+          provedor: template.integracaoCampanha.provedor,
+          config: template.config,
+        }
+      : undefined,
     defaultValues: {
       nome: '',
-      quantidadeVars: undefined,
+      quantidadeVars: 0,
       provedor: ProvedorEnum.UPCHAT,
       config: templateConfigDefaultValues.upchat,
     },
   });
-
-  const { reset } = form;
-
-  useEffect(() => {
-    if (data?.data) {
-      const provedor = data.data.integracaoCampanha.provedor;
-
-      reset(
-        {
-          nome: data.data.nome,
-          quantidadeVars: data.data.quantidadeVars,
-          provedor,
-          config: {
-            ...templateConfigDefaultValues[provedor],
-            ...data.data.config,
-          },
-        },
-        { keepDefaultValues: false },
-      );
-    }
-  }, [data, reset]);
 
   const { mutateAsync, isPending } = useEditaTemplate(id);
 
