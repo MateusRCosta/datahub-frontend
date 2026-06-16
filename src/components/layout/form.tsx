@@ -94,7 +94,7 @@ export function InputGenerico<TFieldValues extends FieldValues = FieldValues>({
               id={name}
               type={rest.type}
               {...field}
-              {...(!isFileInput ? { value } : {})}
+              {...(!isFileInput ? { value: value ?? '' } : {})}
               {...rest}
               onChange={(e) => {
                 const val = e.target.value;

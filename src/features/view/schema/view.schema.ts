@@ -9,10 +9,7 @@ import {
   TIPO_FILTRO_ENUM,
   TIPO_JOIN_ENUM,
 } from '../types/enums';
-import {
-  camposDetailSchema,
-  camposSchema,
-} from '@/common/schema/relacao.schema';
+import { camposDetailSchema } from '@/common/schema/relacao.schema';
 
 export const tipoJoinEnumSchema = z.enum(TIPO_JOIN_ENUM);
 export const operadorEnumSchema = z.enum(OPERADOR_ENUM);

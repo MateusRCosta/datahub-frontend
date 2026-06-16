@@ -1,14 +1,13 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm, FormProvider, useFieldArray } from 'react-hook-form';
 import { toast } from 'sonner';
 import { FieldError, FieldGroup } from '@/components/ui/field';
 import { DialogCustom } from '@/components/layout/dialog-custom';
 
 import {
-  BaseDadosCriacao,
   BaseDadosEdicao,
   baseDadosEdicaoSchema,
   enumSchema,
@@ -35,8 +34,8 @@ export function BaseDadosAtualiza({ id }: BaseDadosAtualizaProps) {
   const [open, setOpen] = useState(false);
   const { isError, error, data } = useRetornaBaseDados({ enabled: open, id });
 
-  const { Input, Select, Switch } = useFormComponents<BaseDadosCriacao>();
-
+  const { Input, Select, Switch } = useFormComponents<BaseDadosEdicao>();
+  const base = data?.data;
   const form = useForm<
     z.input<typeof baseDadosEdicaoSchema>,
     unknown,
@@ -48,21 +47,16 @@ export function BaseDadosAtualiza({ id }: BaseDadosAtualizaProps) {
       nome: '',
       estrutura: [],
     },
+    values: base
+      ? {
+          nome: base.nome,
+          estrutura: base.estrutura.map((estrutura) => ({
+            ...estrutura,
+            rotulo: estrutura.rotulo ?? '',
+          })),
+        }
+      : undefined,
   });
-
-  const { reset } = form;
-
-  useEffect(() => {
-    if (data?.data) {
-      reset(
-        {
-          nome: data.data.nome,
-          estrutura: data.data.estrutura,
-        },
-        { keepDefaultValues: false },
-      );
-    }
-  }, [data, reset]);
 
   const { fields: estruturaFields } = useFieldArray({
     control: form.control,

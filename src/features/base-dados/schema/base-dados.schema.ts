@@ -26,24 +26,6 @@ export const enumSchema = z.enum([
   'TELEFONE',
 ]);
 
-const textoOpcionalComTamanho = ({
-  min,
-  max,
-  mensagemMin,
-  mensagemMax,
-}: {
-  min: number;
-  max: number;
-  mensagemMin: string;
-  mensagemMax: string;
-}) =>
-  z
-    .union([
-      z.literal(''),
-      z.string().min(min, mensagemMin).max(max, mensagemMax),
-    ])
-    .optional()
-    .transform((value) => (value === '' ? undefined : value));
 
 export const metadadoSchema = z.object({
   tipo: enumSchema,
@@ -55,13 +37,9 @@ export const metadadoSchema = z.object({
     .string()
     .min(1, 'O cabeçalho deve ter no mínimo 1 caracter')
     .max(100, 'O cabeçalho deve ter no máximo 100 caracteres'),
-  rotulo: textoOpcionalComTamanho({
-    min: 3,
-    max: 100,
-    mensagemMin: 'O rótulo deve ter no mínimo 3 caracteres',
-    mensagemMax: 'O rótulo deve ter no máximo 100 caracteres',
-  }),
+  rotulo: z.string().max(100, 'O cabeçalho deve ter no máximo 100 caracteres').optional(),
 });
+
 export type Metadado = z.infer<typeof metadadoSchema>;
 
 export const estururaSchema = z.array(metadadoSchema);
@@ -100,10 +78,9 @@ export const baseDadosEdicaoSchema = baseDadosSchema
     createdAt: true,
     updatedAt: true,
     deletedAt: true,
-  })
-  .partial({
+  }).partial({
     nome: true,
-    estrutura: true,
+    estrutura: true
   });
 export type BaseDadosEdicao = z.input<typeof baseDadosEdicaoSchema>;
 
