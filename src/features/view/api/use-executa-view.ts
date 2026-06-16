@@ -41,7 +41,7 @@ export default function useExecutaView({
     ApiResponse<PaginationApiResponse<ViewExecutaLinha[]>>,
     ApiResponseError
   >({
-    queryKey: [baseUrl, id, 'executa'],
+    queryKey: [baseUrl, id, 'executa', pagination.page, pagination.limit],
     queryFn: () => executaView({ ...pagination, id, baseUrl }),
     enabled: enabled && id > 0 && !authLoading,
   });

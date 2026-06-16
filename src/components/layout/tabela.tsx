@@ -35,7 +35,7 @@ interface DataTableProps<TData, TValue> {
   limit: number;
   pageCount: number;
   onPageChange: (page: number) => void;
-  onPageLimitChange: (limit: number) => void;
+  onPageLimitChange: (limit: number, page: number) => void;
   totalItens: number;
   onSelecionar?: (row: TData) => void;
 }
@@ -79,7 +79,9 @@ export function DataTable<TData, TValue>({
   }
 
   function handlePageSizeChange(newSize: number) {
-    onPageLimitChange?.(newSize);
+    const nextTotalPages = Math.max(Math.ceil(totalItens / newSize), 1);
+    const nextPage = Math.min(page, nextTotalPages);
+    onPageLimitChange?.(newSize, nextPage);
   }
 
   const totalPages = Math.max(pageCount, totalItens > 0 ? 1 : 0);

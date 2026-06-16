@@ -74,7 +74,7 @@ export function ViewExecutaTabela({ viewId }: ViewExecutaTabelaProps) {
     [colunasDisponiveis, colunasSelecionadas],
   );
 
-  const deveMostrar = isError || isPending;
+  const deveMostrar = isError || (isPending && !data);
   return (
     <div className='flex flex-col h-full w-full gap-2'>
       <div className='flex shrink-0 items-center justify-between gap-2'>
@@ -89,7 +89,7 @@ export function ViewExecutaTabela({ viewId }: ViewExecutaTabelaProps) {
       </div>
       <div className='flex-1 min-h-0 w-full'>
         {isError && <p>Erro ao carregar visualização: {mapViewError(error)}</p>}
-        {isPending && <SkeletonTabela apenasFiltro={true} />}
+        {isPending && !data && <SkeletonTabela apenasFiltro={true} />}
         {!isError && !isPending && data?.data?.data && (
           <DataTable
             columns={colunas}
@@ -97,8 +97,13 @@ export function ViewExecutaTabela({ viewId }: ViewExecutaTabelaProps) {
             limit={pagination.limit}
             page={pagination.page}
             pageCount={data.data.meta.totalPages || 0}
-            onPageChange={(page) => setPagination({ ...pagination, page })}
-            onPageLimitChange={(limit) => setPagination({ page: 1, limit })}
+            onPageChange={(page) =>
+              setPagination((currentPagination) => ({
+                ...currentPagination,
+                page,
+              }))
+            }
+            onPageLimitChange={(limit, page) => setPagination({ page, limit })}
             totalItens={data.data.meta.total || 0}
           />
         )}

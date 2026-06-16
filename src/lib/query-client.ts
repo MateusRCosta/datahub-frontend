@@ -1,6 +1,7 @@
 import {
   defaultShouldDehydrateQuery,
   isServer,
+  keepPreviousData,
   QueryClient,
 } from '@tanstack/react-query';
 
@@ -9,6 +10,7 @@ function makeQueryClient() {
     defaultOptions: {
       queries: {
         refetchOnWindowFocus: true,
+        placeholderData: keepPreviousData,
         refetchOnMount: true,
         retry: false,
       },

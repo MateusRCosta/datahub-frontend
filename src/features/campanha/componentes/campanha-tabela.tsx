@@ -33,7 +33,7 @@ export function CampanhaTabela() {
     },
   });
 
-  if (isLoading) {
+  if (isLoading && !data) {
     return <SkeletonTabela />;
   }
 
@@ -70,7 +70,13 @@ export function CampanhaTabela() {
           page={pagination.page}
           pageCount={data?.data?.meta?.totalPages || 0}
           onPageChange={(page) => setPagination({ ...pagination, page })}
-          onPageLimitChange={(limit) => setPagination({ ...pagination, limit })}
+          onPageLimitChange={(limit, page) =>
+            setPagination((currentPagination) => ({
+              ...currentPagination,
+              limit,
+              page,
+            }))
+          }
           totalItens={data?.data?.meta.total || 0}
         />
       </div>
