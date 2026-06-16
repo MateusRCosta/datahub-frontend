@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Save, Trash2 } from 'lucide-react';
+import { File, Save, Trash2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import {
   Select,
@@ -13,6 +13,9 @@ import { ViewFiltrosModal } from './filtro/view-filtros-modal';
 import { ViewExecutaModal } from './view-executa/view-executa-modal';
 import { DialogDeleta } from '@/components/layout/dialog-deleta';
 import { BasesDadosCampanhaApiResponse } from '@/features/base-dados/schema/base-dados.schema';
+import { env } from '@/lib/env';
+import Link from 'next/link';
+import { Route } from 'next';
 
 type ViewBarProps = {
   views: ViewsApiResponse[];
@@ -124,8 +127,25 @@ export function ViewBar({
               selectedView={selectedView}
               disabled={isPending || dadosModalOpen || !hasSelectedView}
             />
+
             {viewSelect && (
               <>
+                <Button
+                  variant='outline'
+                  size='icon'
+                  disabled={isPending || dadosModalOpen || !hasSelectedView}
+                  asChild
+                >
+                  <Link
+                    href={`${env.BACKEND_URL}/views/${viewSelect.id}/csv` as Route}
+                    hrefLang='pt-br'
+                    download
+                    aria-label='Baixar CSV'
+                    title='Baixar CSV'
+                  >
+                    <File aria-hidden='true' />
+                  </Link>
+                </Button>
                 <Button
                   type='button'
                   variant='outline'
