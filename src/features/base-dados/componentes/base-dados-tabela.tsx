@@ -60,7 +60,7 @@ export function BaseDadosTabela({
     modoSelecao,
     onSelecionar,
   });
-
+  
   return (
     <div className='flex flex-col w-full flex-1 min-h-0 h-full mx-auto gap-2'>
       <div

@@ -37,7 +37,7 @@ export function constroiClienteColunas({
       accessorKey: `dados.${est.cabecalho}`,
       header: () => (
         <span className='font-semibold'>
-          {est.rotulo ?? est.cabecalho.replaceAll('_', ' ')}
+          {est.rotulo?.trim() || est.cabecalho}
         </span>
       ),
       cell: ({ getValue }) => {

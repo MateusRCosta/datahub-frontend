@@ -116,7 +116,7 @@ export function SelectModal({
                     htmlFor={`campo-${metadado.campo}`}
                     className='flex cursor-pointer items-center'
                   >
-                    <span>{metadado.rotulo ?? metadado.campo}</span>
+                    <span>{metadado.rotulo?.trim() || metadado.campo}</span>
                     <span className='text-xs text-muted-foreground'>
                       ({metadado.campo})
                     </span>

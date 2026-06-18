@@ -50,7 +50,7 @@ export function JoinModal({
         ?.campos ?? [];
 
     const options: SelectOption[] = campos.map((campo) => ({
-      label: campo.rotulo ?? campo.campo,
+      label: campo.rotulo?.trim() || campo.campo,
       value: campo.campo,
     }));
 
@@ -74,7 +74,7 @@ export function JoinModal({
       )?.campos ?? [];
 
     const options: SelectOption[] = campos.map((campo) => ({
-      label: campo.rotulo ?? campo.campo,
+      label: campo.rotulo?.trim() || campo.campo,
       value: campo.campo,
     }));
 

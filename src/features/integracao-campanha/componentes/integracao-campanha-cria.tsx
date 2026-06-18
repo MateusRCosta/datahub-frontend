@@ -18,7 +18,7 @@ import {
 import z from 'zod';
 import useCriaIntegracaoCampanha from '../api/use-cria-integracao-campanha';
 import { IntegracaoCampanhaConfigForm } from './integracao-campanha-config-form';
-import { provedorEnumSchema } from '@/common/schema/provedor.schema';
+import { ProvedorEnum, provedorEnumSchema } from '@/common/schema/provedor.schema';
 
 interface IntegracaoCampanhaCriaProps {
   pagination: PaginationApiRequest<string>;
@@ -46,7 +46,7 @@ export function IntegracaoCampanhaCria({
     resolver: zodResolver(integracaoCampanhaCriacaoSchema),
     defaultValues: {
       nome: '',
-      provedor: 'upchat',
+      provedor: ProvedorEnum.UPCHAT,
       config: integracaoCampanhaConfigDefaultValues.upchat,
     },
   });

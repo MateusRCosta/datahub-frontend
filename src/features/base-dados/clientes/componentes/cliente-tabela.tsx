@@ -40,7 +40,7 @@ export function ClienteTabela({ baseDadosId, estrutura }: ClienteTabelaProps) {
   const camposMetadados = useMemo(() => {
     return estrutura?.map((est) => ({
       key: est.cabecalho,
-      label: est.rotulo ?? est.cabecalho.replaceAll('_', ' '),
+      label: est.rotulo?.trim() || est.cabecalho,
     }));
   }, [estrutura]);
 

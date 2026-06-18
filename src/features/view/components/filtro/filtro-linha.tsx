@@ -47,7 +47,7 @@ export function FiltroLinha({ path, basesDados, onRemove }: FiltroLinhaProps) {
         <option value=''>Campo</option>
         {campos.map((metadado) => (
           <option key={metadado.campo} value={metadado.campo}>
-            {metadado.rotulo ?? metadado.campo}
+            {metadado.rotulo?.trim() || metadado.campo}
           </option>
         ))}
       </select>

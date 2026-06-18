@@ -47,7 +47,9 @@ export function SelectColuna({
             </span>
             <span className='text-xs text-muted-foreground'>
               {entry.campos.length > 0
-                ? entry.campos.map((campo) => campo.rotulo).join(', ')
+                ? entry.campos
+                    .map((campo) => campo.rotulo?.trim() || campo.campo)
+                    .join(', ')
                 : 'Nenhum campo selecionado'}
             </span>
           </div>
