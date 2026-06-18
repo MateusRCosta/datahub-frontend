@@ -29,9 +29,15 @@ type JoinModalProps = {
   basesDados: BasesDadosCampanhaApiResponse[];
 };
 
-const tipoJoinOptions = Object.values(TIPO_JOIN_ENUM).map((v) => ({
-  label: v.toUpperCase(),
-  value: v,
+const tipoJoinLabels: Record<TIPO_JOIN_ENUM, string> = {
+  [TIPO_JOIN_ENUM.INNER]: 'Junção interna',
+  [TIPO_JOIN_ENUM.LEFT]: 'Junção à esquerda',
+  [TIPO_JOIN_ENUM.RIGHT]: 'Junção à direita',
+};
+
+const tipoJoinOptions = Object.values(TIPO_JOIN_ENUM).map((value) => ({
+  label: tipoJoinLabels[value],
+  value,
 }));
 
 export function JoinModal({

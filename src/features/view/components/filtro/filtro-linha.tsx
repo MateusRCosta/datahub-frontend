@@ -12,8 +12,20 @@ type FiltroLinhaProps = {
   basesDados: BasesDadosCampanhaApiResponse[];
   onRemove: () => void;
 };
-
+ 
 const operadorOptions = Object.values(OPERADOR_ENUM);
+const operadorLabels: Record<OPERADOR_ENUM, string> = {
+  [OPERADOR_ENUM.EQUAL]: 'Igual',
+  [OPERADOR_ENUM.DIFFERENT]: 'Diferente',
+  [OPERADOR_ENUM.GREATER]: 'Maior que',
+  [OPERADOR_ENUM.LESS]: 'Menor que',
+  [OPERADOR_ENUM.GREATER_EQUAL]: 'Maior ou igual',
+  [OPERADOR_ENUM.LESS_EQUAL]: 'Menor ou igual',
+  [OPERADOR_ENUM.CONTAINS]: 'Contém',
+  [OPERADOR_ENUM.START_WITH]: 'Começa com',
+  [OPERADOR_ENUM.IS_NULL]: 'É nulo',
+  [OPERADOR_ENUM.IS_NOT_NULL]: 'Não é nulo',
+};
 
 export function FiltroLinha({ path, basesDados, onRemove }: FiltroLinhaProps) {
   const { register, watch } = useFormContext<ViewCampanhaCriacao>();
@@ -32,7 +44,9 @@ export function FiltroLinha({ path, basesDados, onRemove }: FiltroLinhaProps) {
         })}
         className='border rounded px-2 py-1 text-sm bg-background'
       >
-        <option value=''>Base</option>
+        <option value='' disabled>
+          Base
+        </option>
         {basesDados.map((baseDados) => (
           <option key={baseDados.id} value={baseDados.id}>
             {baseDados.nome}
@@ -44,7 +58,9 @@ export function FiltroLinha({ path, basesDados, onRemove }: FiltroLinhaProps) {
         {...register(`${path}.campo` as Parameters<typeof register>[0])}
         className='border rounded px-2 py-1 text-sm bg-background'
       >
-        <option value=''>Campo</option>
+        <option value='' disabled>
+          Campo
+        </option>
         {campos.map((metadado) => (
           <option key={metadado.campo} value={metadado.campo}>
             {metadado.rotulo?.trim() || metadado.campo}
@@ -58,7 +74,7 @@ export function FiltroLinha({ path, basesDados, onRemove }: FiltroLinhaProps) {
       >
         {operadorOptions.map((operador) => (
           <option key={operador} value={operador}>
-            {operador}
+            {operadorLabels[operador]}
           </option>
         ))}
       </select>

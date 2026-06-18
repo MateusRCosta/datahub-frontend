@@ -23,4 +23,6 @@ export enum OPERADOR_WHERE_ENUM {
 
 export enum TIPO_JOIN_ENUM {
   INNER = 'INNER',
+  LEFT = 'LEFT',
+  RIGHT = 'RIGHT',
 }

@@ -76,7 +76,7 @@ export const configSchema = z.object({
   from: fromSchema,
   joins: z.array(joinsSchema),
   select: z.array(selectSchema),
-  groupFilter: z.array(groupFilterSchema),
+  groupFilter: groupFilterSchema,
 });
 
 export const viewSchema = z.object({

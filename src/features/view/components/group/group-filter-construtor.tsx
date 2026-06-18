@@ -27,10 +27,14 @@ type NestedGroupFilterProps = {
   path: string;
   basesDados: BasesDadosCampanhaApiResponse[];
   depth: number;
-  onRemove: () => void;
+  onRemove?: () => void;
 };
 
 const operadorWhereOptions = Object.values(OPERADOR_WHERE_ENUM);
+const operadorWhereLabels: Record<OPERADOR_WHERE_ENUM, string> = {
+  [OPERADOR_WHERE_ENUM.AND]: 'E',
+  [OPERADOR_WHERE_ENUM.OR]: 'OU',
+};
 
 const createFilter = () => ({
   type: TIPO_FILTRO_ENUM.FILTER,
@@ -61,34 +65,12 @@ const createGroup = () => ({
 export function GroupFilterConstrutor({
   basesDados,
 }: GroupFilterConstrutorProps) {
-  const { control } = useFormContext<ViewCampanhaCriacao>();
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'config.groupFilter',
-  });
-
   return (
-    <div className='flex flex-col gap-2 border rounded-md p-3'>
-      <FilterActions
-        title='Filtros'
-        onAddFilter={() => append(createFilter())}
-        onAddGroup={() => append(createGroup())}
-        canAddGroup
-      />
-
-      <div className='flex flex-col gap-2'>
-        {fields.map((field, index) => (
-          <GroupFilterItem
-            key={field.id}
-            path={`config.groupFilter.${index}`}
-            type={field.type}
-            basesDados={basesDados}
-            depth={0}
-            onRemove={() => remove(index)}
-          />
-        ))}
-      </div>
-    </div>
+    <NestedGroupFilter
+      path='config.groupFilter'
+      basesDados={basesDados}
+      depth={0}
+    />
   );
 }
 
@@ -124,7 +106,7 @@ function NestedGroupFilter({
           >
             {operadorWhereOptions.map((op) => (
               <option key={op} value={op}>
-                {op.toUpperCase()}
+                {operadorWhereLabels[op]}
               </option>
             ))}
           </select>
@@ -144,22 +126,24 @@ function NestedGroupFilter({
         </div>
       </div>
 
-      <Button
-        type='button'
-        variant='ghost'
-        size='icon'
-        className='absolute top-2 right-2'
-        onClick={onRemove}
-      >
-        <Trash2 className='h-4 w-4 text-destructive' />
-      </Button>
+      {onRemove && (
+        <Button
+          type='button'
+          variant='ghost'
+          size='icon'
+          className='absolute top-2 right-2'
+          onClick={onRemove}
+        >
+          <Trash2 className='h-4 w-4 text-destructive' />
+        </Button>
+      )}
     </div>
   );
 }
 
 type FilterActionsProps = {
   title: string;
-  onAddFilter: () => void;
+  onAddFilter?: () => void;
   onAddGroup: () => void;
   canAddGroup: boolean;
   children?: ReactNode;
@@ -178,10 +162,12 @@ function FilterActions({
         {title}
       </span>
       {children}
-      <Button type='button' variant='outline' size='sm' onClick={onAddFilter}>
-        <Plus className='h-3 w-3 mr-1' />
-        Filtro
-      </Button>
+      {onAddFilter && (
+        <Button type='button' variant='outline' size='sm' onClick={onAddFilter}>
+          <Plus className='h-3 w-3 mr-1' />
+          Filtro
+        </Button>
+      )}
       {canAddGroup && (
         <Button type='button' variant='outline' size='sm' onClick={onAddGroup}>
           <Plus className='h-3 w-3 mr-1' />

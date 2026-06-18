@@ -26,6 +26,7 @@ type ViewBarProps = {
   viewSelect?: ViewsApiResponse | null;
   onCreateView: () => void;
   onSaveView: () => void;
+  onSaveFilters: () => Promise<boolean>;
   filtrosModalOpen: boolean;
   setFiltrosModalOpen: (open: boolean) => void;
   basesDados: BasesDadosCampanhaApiResponse[];
@@ -40,6 +41,7 @@ export function ViewBar({
   onViewSelect,
   onCreateView,
   onSaveView,
+  onSaveFilters,
   basesDados,
   filtrosModalOpen,
   setFiltrosModalOpen,
@@ -110,6 +112,9 @@ export function ViewBar({
             <ViewFiltrosModal
               open={filtrosModalOpen}
               onOpenChange={setFiltrosModalOpen}
+              onSave={onSaveFilters}
+              isPending={isPending}
+              canSave={hasSelectedView}
               basesDados={basesDados}
             />
             <Button

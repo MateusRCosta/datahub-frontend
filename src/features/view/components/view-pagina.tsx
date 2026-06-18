@@ -172,6 +172,14 @@ export function ViewPagina() {
     [from, joins],
   );
 
+  const basesDadosFiltros = useMemo(
+    () =>
+      basesDados.filter((baseDados) =>
+        basesDadosContextoIds.includes(baseDados.id),
+      ),
+    [basesDados, basesDadosContextoIds],
+  );
+
   const basesDadosContextoQueries = useRetornaBasesDadosCampos({
     enabled: basesDadosContextoIds.length > 0,
     pagination: {
@@ -336,7 +344,7 @@ export function ViewPagina() {
   });
 
   const handleSalvaView = async () => {
-    if (!selectedView) return;
+    if (!selectedView) return false;
     const config = buildQuery(groupFilterWatched);
     const response = await editaView({
       id: selectedView.id,
@@ -349,20 +357,21 @@ export function ViewPagina() {
       setSelectedView((viewAtual) =>
         viewAtual ? { ...viewAtual, config } : viewAtual,
       );
-      return;
+      return true;
     }
     if (response.status === 400) {
       toast.warning(
         'Erro ao salvar registro: verifique se os dados estão salvos corretamente',
       );
-      return;
+      return false;
     }
     if (response.status > 500) {
       toast.error(
         'Erro ao salvar registro: erro interno de servidor, por favor tente novamente mais tarde',
       );
-      return;
+      return false;
     }
+    return false;
   };
 
   const removeSelectsForaDasBasesPermitidas = (
@@ -401,9 +410,10 @@ export function ViewPagina() {
           }}
           onCreateView={() => setDadosModalOpen(true)}
           onSaveView={handleSalvaView}
+          onSaveFilters={handleSalvaView}
           filtrosModalOpen={filtrosModalOpen}
           setFiltrosModalOpen={setFiltrosModalOpen}
-          basesDados={basesDados}
+          basesDados={basesDadosFiltros}
         />
 
         <ViewDadosModal
