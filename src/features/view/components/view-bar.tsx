@@ -114,7 +114,6 @@ export function ViewBar({
               onOpenChange={setFiltrosModalOpen}
               onSave={onSaveFilters}
               isPending={isPending}
-              canSave={hasSelectedView}
               basesDados={basesDados}
             />
             <Button

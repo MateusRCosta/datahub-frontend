@@ -35,7 +35,6 @@ type ViewFiltrosModalProps = {
   onOpenChange: (open: boolean) => void;
   onSave: () => Promise<boolean>;
   isPending: boolean;
-  canSave: boolean;
   basesDados: BasesDadosCampanhaApiResponse[];
 };
 
@@ -44,7 +43,6 @@ export function ViewFiltrosModal({
   onOpenChange,
   onSave,
   isPending,
-  canSave,
   basesDados,
 }: ViewFiltrosModalProps) {
   const { control, getValues, setValue } =
@@ -81,7 +79,7 @@ export function ViewFiltrosModal({
       descricao={<p>Configure os filtros da visualização.</p>}
       titulo='Filtros'
       idForm='form-filtros-view'
-      disableSubmit={!podeSalvar || !canSave}
+      disableSubmit={!podeSalvar}
       trigger={
         <Button
           type='button'
@@ -98,7 +96,7 @@ export function ViewFiltrosModal({
         id='form-filtros-view'
         onSubmit={async (event) => {
           event.preventDefault();
-          if (!podeSalvar || !canSave) return;
+          if (!podeSalvar) return;
           if (!(await onSave())) return;
           salvando.current = true;
           onOpenChange(false);

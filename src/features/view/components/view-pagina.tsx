@@ -6,7 +6,10 @@ import { toast } from 'sonner';
 import { QueryTabela } from './query/query-tabela';
 import { ViewDadosModal } from './view-dados-modal';
 import { ViewBar } from './view-bar';
-import { useViewForm } from '../hooks/use-view-form';
+import {
+  createDefaultViewFormValues,
+  useViewForm,
+} from '../hooks/use-view-form';
 import useRetornaView from '../api/use-retorna-view';
 import useRetornaViews from '../api/use-retorna-views';
 import useCriaView from '../api/use-cria-view';
@@ -242,7 +245,7 @@ export function ViewPagina() {
     setFrom(null);
     setJoins([]);
     setSelects([]);
-    form.reset();
+    form.reset(createDefaultViewFormValues());
   };
 
   useEffect(() => {
@@ -344,7 +347,7 @@ export function ViewPagina() {
   });
 
   const handleSalvaView = async () => {
-    if (!selectedView) return false;
+    if (!selectedView) return true;
     const config = buildQuery(groupFilterWatched);
     const response = await editaView({
       id: selectedView.id,
