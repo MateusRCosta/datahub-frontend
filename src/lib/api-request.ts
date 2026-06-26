@@ -74,6 +74,9 @@ export const apiRequest = async <T>({
   const text = await response.text();
   const data = text ? JSON.parse(text) : {};
 
-  if (response.status >= 400) throw data as ApiResponseError;
+  if (response.status >= 400 && method === 'GET') {
+    throw data as ApiResponseError;
+  }
+
   return { data, status: response.status };
 };
