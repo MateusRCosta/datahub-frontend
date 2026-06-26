@@ -68,7 +68,9 @@ const normalizaMetodo = (
   fallback: IntegracaoMetodo,
 ): IntegracaoMetodo => {
   const metodo =
-    typeof value === 'string' ? value.toUpperCase() : String(value ?? '');
+    typeof value === 'string'
+      ? value.trim().toUpperCase()
+      : String(value ?? '');
   return (integracaoMetodoSchema.options as readonly string[]).includes(metodo)
     ? (metodo as IntegracaoMetodo)
     : fallback;

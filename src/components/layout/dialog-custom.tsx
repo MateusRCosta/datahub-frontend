@@ -37,7 +37,7 @@ export function DialogCustom({
   disableSubmit = false,
 }: OrganizacaoDialogProps) {
   return (
-    <Dialog open={open} onOpenChange={() => setOpen(!open)}>
+    <Dialog open={open} onOpenChange={setOpen}>
       {trigger}
       <DialogContent className='min-w-[90dvw] max-w-[90dvw] md:min-w-[85dvw] md:max-w-[85dvw] max-h-[90dvh] h-full overflow-hidden flex flex-col'>
         <DialogHeader>
