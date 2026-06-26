@@ -80,12 +80,11 @@ export function Dashboard() {
     dashboard.usuarios !== undefined ||
     dashboard.alertas !== undefined;
 
-  const alertPath = (tipo: 'JOB_ERRO' | 'CAMPANHA_ATRASADA'): Route =>
-    `/${
-      tipo === 'JOB_ERRO'
-        ? RESOURCE_CONFIG.integracoes.pathFront
-        : RESOURCE_CONFIG.campanhas.pathFront
-    }` as Route;
+  const jobErrorAlerts =
+    dashboard.alertas?.filter((alerta) => alerta.tipo === 'JOB_ERRO') ?? [];
+
+  const alertPath = (): Route =>
+    `/${RESOURCE_CONFIG.integracoes.pathFront}` as Route;
 
   return (
     <>
@@ -259,16 +258,16 @@ export function Dashboard() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  {dashboard.alertas.length === 0 ? (
+                  {jobErrorAlerts.length === 0 ? (
                     <p className='text-muted-foreground'>Nenhum alerta.</p>
                   ) : (
                     <ul className='space-y-2'>
-                      {dashboard.alertas.map((alerta) => (
+                      {jobErrorAlerts.map((alerta) => (
                         <li
                           key={`${alerta.tipo}-${alerta.recursoId}-${alerta.ocorridoEm}`}
                         >
                           <Link
-                            href={alertPath(alerta.tipo)}
+                            href={alertPath()}
                             className='flex flex-col gap-2 rounded-lg border p-3 transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:flex-row sm:items-center'
                           >
                             <Badge
